@@ -1,0 +1,162 @@
+/* Sic Studio: one stylesheet for every page. System fonts and colours, light and dark, nothing
+   loaded from other sites. */
+
+:root {
+  color-scheme: light dark;
+  --text: #1d1d1f;
+  --secondary: #6e6e73;
+  --background: #ffffff;
+  --surface: #f5f5f7;
+  --separator: #d2d2d7;
+  --link: #0066cc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f5f5f7;
+    --secondary: #a1a1a6;
+    --background: #000000;
+    --surface: #1c1c1e;
+    --separator: #38383a;
+    --link: #2997ff;
+  }
+}
+
+html {
+  font-size: 106.25%; /* 17 px, the body text of iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* On iPhone and iPad the text follows the size chosen in Settings. */
+@supports (font: -apple-system-body) and (-webkit-touch-callout: none) {
+  html {
+    font: -apple-system-body;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  margin: 2.25rem 0 0.5rem;
+}
+
+p,
+ul {
+  margin: 0 0 1rem;
+}
+
+ul {
+  padding-left: 1.25rem;
+}
+
+li {
+  margin: 0.25rem 0;
+}
+
+li > ul {
+  margin: 0.25rem 0 0;
+}
+
+/* A link to a part of the page leaves some room above it. */
+[id] {
+  scroll-margin-top: 1.5rem;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+.lead {
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.secondary {
+  color: var(--secondary);
+}
+
+/* The way back, above the title. */
+.crumbs {
+  font-size: 0.875rem;
+  color: var(--secondary);
+  margin: 0 0 1.5rem;
+}
+
+.crumbs a {
+  text-decoration: none;
+}
+
+/* The link to the other language of a page. */
+.language {
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem;
+}
+
+/* A link that is a whole card, as an app in a list. */
+.card {
+  display: block;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.875rem;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.card strong {
+  display: block;
+  font-size: 1.125rem;
+}
+
+.card span {
+  display: block;
+  color: var(--secondary);
+}
+
+.card:hover strong,
+.card:focus-visible strong {
+  color: var(--link);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--separator);
+  margin: 3rem 0;
+}
+
+.site-footer {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2.5rem;
+  border-top: 1px solid var(--separator);
+  font-size: 0.875rem;
+  color: var(--secondary);
+}
+
+.site-footer p {
+  margin: 0;
+}
