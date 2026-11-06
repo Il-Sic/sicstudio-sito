@@ -11,6 +11,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/"/>
   </url>
   <url>
+    <loc>https://sicstudio.app/studio/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/studio/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/studio/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/en/studio/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/studio/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/studio/"/>
+  </url>
+  <url>
     <loc>https://sicstudio.app/argonauta/</loc>
     <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/"/>

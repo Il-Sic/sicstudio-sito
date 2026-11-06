@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><style>.fondo{fill:#08739A}.sagoma{fill:#FFFFFF;stroke:#FFFFFF}@media (prefers-color-scheme:dark){.fondo{fill:#2B9FC4}}</style><rect class="fondo" width="256" height="256" rx="56"/><g class="sagoma" transform="translate(25.8 62.9) scale(0.7569)"><path d="M50 126C100 136 160 136 208 124L214 130C216 138 218 142 222 144L238 149C240.5 150 240.5 153.5 237 154L216 156C180 170 100 172 58 158C46 154 40 142 42 132Z"/><path d="M75 49L181 49C183 68 184 88 185 106Q128 120 71 106C72 88 73 68 75 49Z"/><rect x="125" y="22" width="6" height="112"/><path d="M60 133C42 132 34 118 35 104C36 88 47 78 59 79C68 80 72 89 66 97" fill="none" stroke-width="9" stroke-linecap="round"/><path d="M209 137C215 127 220 117 223 106" fill="none" stroke-width="7" stroke-linecap="round"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<style>
+.f { fill: #FAF7F0; } .v { fill: none; stroke: #1E1B17; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; } .s { fill: #D99A1E; }
+@media (prefers-color-scheme: dark) { .f { fill: #0C1015; } .v { stroke: #F0EBE1; } .s { fill: #F2C14E; } }
+</style>
+<rect class="f" width="64" height="64" rx="14"/>
+<path class="v" d="M12 53H40A7 7 0 0 0 40 39H21A7 7 0 0 1 21 25H34"/>
+<path class="s" d="M48 8L49.94 13.33L55.61 13.53L51.14 17.02L52.7 22.47L48 19.3L43.3 22.47L44.86 17.02L40.39 13.53L46.06 13.33Z"/>
+</svg>
