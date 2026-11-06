@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://sicstudio.app/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/en/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/argonauta/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/en/argonauta/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/argonauta/il-mito/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/il-mito/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/the-myth/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/en/argonauta/the-myth/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/il-mito/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/the-myth/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/argonauta/aiuto/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/aiuto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/help/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/en/argonauta/help/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/aiuto/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/help/"/>
+  </url>
+  <url>
+    <loc>https://sicstudio.app/argonauta/privacy/</loc>
+  </url>
+</urlset>

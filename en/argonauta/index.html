@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- testa:inizio -->
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Argonauta · Sic Studio</title>
+<meta name="description" content="Argonauta is an app to explore, play and dream: routes to follow, cards to collect and the ship Argo that grows with you. Support is here too.">
+<link rel="canonical" href="https://sicstudio.app/en/argonauta/">
+<link rel="alternate" hreflang="it" href="https://sicstudio.app/argonauta/">
+<link rel="alternate" hreflang="en" href="https://sicstudio.app/en/argonauta/">
+<link rel="alternate" hreflang="x-default" href="https://sicstudio.app/argonauta/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sic Studio">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Argonauta · Sic Studio">
+<meta property="og:description" content="Argonauta is an app to explore, play and dream: routes to follow, cards to collect and the ship Argo that grows with you. Support is here too.">
+<meta property="og:url" content="https://sicstudio.app/en/argonauta/">
+<meta property="og:image" content="https://sicstudio.app/img/anteprima.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The ship Argo at sea, by day.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/img/icona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/style.css">
+<!-- testa:fine -->
+</head>
+<body>
+<!-- testata:inizio -->
+<a class="salta" href="#contenuto">Skip to content</a>
+<header class="testata">
+  <div class="contenitore">
+    <a class="marchio" href="/en/" aria-label="Sic Studio, home page"><svg class="marchio-nave" viewBox="20 6 230 176" aria-hidden="true" focusable="false"><g class="marchio-sagoma"><path d="M50 126C100 136 160 136 208 124L214 130C216 138 218 142 222 144L238 149C240.5 150 240.5 153.5 237 154L216 156C180 170 100 172 58 158C46 154 40 142 42 132Z"/><path d="M75 49L181 49C183 68 184 88 185 106Q128 120 71 106C72 88 73 68 75 49Z"/><rect x="125" y="22" width="6" height="112"/><path d="M60 133C42 132 34 118 35 104C36 88 47 78 59 79C68 80 72 89 66 97" fill="none" stroke-width="9" stroke-linecap="round"/><path d="M209 137C215 127 220 117 223 106" fill="none" stroke-width="7" stroke-linecap="round"/></g></svg><span>Sic Studio</span></a>
+    <nav aria-label="Main">
+      <ul class="menu">
+        <li><a href="/en/argonauta/" aria-current="page">Argonauta</a></li>
+        <li><a href="/en/argonauta/help/">Help</a></li>
+        <li><a href="/en/argonauta/#support">Support</a></li>
+        <li class="lingua"><a href="/argonauta/" hreflang="it" lang="it">Italiano</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- testata:fine -->
+<main id="contenuto">
+
+  <section class="copertina" aria-labelledby="titolo">
+    <div class="contenitore copertina-testo">
+      <span class="etichetta">An app by Sic Studio</span>
+      <h1 id="titolo">Argonauta</h1>
+      <p class="motto">“an app to explore, play and dream”</p>
+      <p class="introduzione">It goes with you to real places: it guides you along the routes, tells you about what you
+        meet, remembers every outing and grows with you. Every outing adds a discovery to your story as an explorer.</p>
+      <p class="azioni">
+        <a class="pulsante" href="#support">Support</a>
+        <a class="pulsante leggero" href="/en/argonauta/help/">Help and questions</a>
+      </p>
+      <p class="stato"><span class="numero">Today</span> Argonauta is in testing, on iPhone and iPad. The screenshots on this page show the app in Italian.</p>
+    </div>
+    <div class="contenitore">
+      <div class="cornice-scena">
+        <svg class="sc-scena" xmlns="http://www.w3.org/2000/svg" viewBox="-60 -15 520 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+        <defs>
+        <linearGradient id="sc-g-cielo" gradientUnits="userSpaceOnUse" x1="0" y1="-15" x2="0" y2="285"><stop offset="0" class="sc-cielo-0"/><stop offset=".42" class="sc-cielo-1"/><stop offset=".62" class="sc-cielo-2"/><stop offset="1" class="sc-cielo-3"/></linearGradient>
+        <linearGradient id="sc-g-mare" gradientUnits="userSpaceOnUse" x1="0" y1="199" x2="0" y2="270"><stop offset="0" class="sc-mare-0"/><stop offset="1" class="sc-mare-1"/></linearGradient>
+        <linearGradient id="sc-g-ombra" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="270"><stop offset="0" class="sc-ombra-0"/><stop offset="1" class="sc-ombra-1"/></linearGradient>
+        <radialGradient id="sc-g-caldo" gradientUnits="userSpaceOnUse" cx="387.2" cy="0" r="170"><stop offset="0" class="sc-caldo-0"/><stop offset="1" class="sc-caldo-1"/></radialGradient>
+        <radialGradient id="sc-g-sole" gradientUnits="userSpaceOnUse" cx="371.6" cy="54" r="58"><stop offset="0" class="sc-alone-sole-0"/><stop offset="1" class="sc-alone-sole-1"/></radialGradient>
+        <radialGradient id="sc-g-luna" gradientUnits="userSpaceOnUse" cx="371.6" cy="54" r="50"><stop offset="0" class="sc-alone-luna-0"/><stop offset="1" class="sc-alone-luna-1"/></radialGradient>
+        <radialGradient id="sc-g-vello" gradientUnits="userSpaceOnUse" cx="382" cy="158" r="26"><stop offset="0" class="sc-lume-0"/><stop offset="1" class="sc-lume-1"/></radialGradient>
+        <radialGradient id="sc-g-lanterna" gradientUnits="userSpaceOnUse" cx="64" cy="106.6" r="15"><stop offset="0" class="sc-lume-0"/><stop offset="1" class="sc-lume-1"/></radialGradient>
+        <linearGradient id="sc-g-legno" gradientUnits="userSpaceOnUse" x1="0" y1="124" x2="0" y2="170"><stop offset="0" class="sc-legno-0"/><stop offset=".45" class="sc-legno-1"/><stop offset="1" class="sc-legno-2"/></linearGradient>
+        <clipPath id="sc-c-scafo"><path d="M50 126C100 136 160 136 208 124L214 130C216 138 218 142 222 144L238 149C240.5 150 240.5 153.5 237 154L216 156C180 170 100 172 58 158C46 154 40 142 42 132Z"/></clipPath>
+        <clipPath id="sc-c-murata"><rect x="-60" y="-120" width="400" height="253"/></clipPath>
+        <linearGradient id="sc-g-tela" gradientUnits="userSpaceOnUse" x1="0" y1="49" x2="0" y2="122"><stop offset="0" class="sc-tela-0"/><stop offset=".7" class="sc-tela-1"/><stop offset="1" class="sc-tela-2"/></linearGradient>
+        <clipPath id="sc-c-vela"><path d="M75 49L181 49C183 68 184 88 185 106Q128 120 71 106C72 88 73 68 75 49Z"/></clipPath>
+        </defs>
+        <rect fill="url(#sc-g-cielo)" x="-60" y="-15" width="520" height="300"/>
+        <g class="sc-solo-notte">
+         <g class="sc-stelle">
+          <g class="sc-stelle-1">
+           <circle cx="423.6" cy="21.6" r="1"/>
+           <circle cx="-28.8" cy="32.4" r="1"/>
+           <circle cx="12.8" cy="81" r=".8"/>
+           <circle cx="148" cy="16.2" r="1"/>
+          </g>
+          <g class="sc-stelle-2">
+           <circle cx="444.4" cy="81" r=".7"/>
+           <circle cx="231.2" cy="27" r="1.1"/>
+           <circle cx="-44.4" cy="108" r=".8"/>
+           <circle cx="189.6" cy="67.5" r=".8"/>
+          </g>
+          <g class="sc-stelle-3">
+           <circle cx="101.2" cy="54" r=".7"/>
+           <circle cx="272.8" cy="89.1" r=".7"/>
+           <circle cx="304" cy="13.5" r=".9"/>
+           <circle cx="54.4" cy="21.6" r="1.2"/>
+          </g>
+         </g>
+        </g>
+        <g class="sc-solo-giorno">
+         <circle fill="url(#sc-g-caldo)" cx="387.2" cy="0" r="170"/>
+         <circle fill="url(#sc-g-sole)" cx="371.6" cy="54" r="58"/>
+         <circle class="sc-sole" cx="371.6" cy="54" r="22"/>
+        </g>
+        <path class="sc-monti-lontani" d="M-60 285L-60 162Q-60 162-28.8 143.1Q2.4 124.2 28.4 136.3Q54.4 148.5 90.8 117.5Q127.2 86.4 158.4 110.7Q189.6 135 220.8 121.5Q252 108 283.2 126.9Q314.4 145.8 350.8 124.2Q387.2 102.6 423.6 118.8L460 135L460 285Z"/>
+        <path class="sc-monti-vicini" d="M-60 285L-60 189Q-60 189-34 175.5Q-8 162 33.6 171.4Q75.2 180.9 116.8 162Q158.4 143.1 194.8 160.7Q231.2 178.2 267.6 166.1Q304 153.9 345.6 167.4Q387.2 180.9 423.6 171.4L460 162L460 285Z"/>
+        <path class="sc-v-prato" d="M-60 199L-60 194Q-26 191 0 186Q26 180 50 184Q62 188 70 199Z"/>
+        <path class="sc-v-tronchi" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M13 199L13 170M40 199L40 178"/>
+        <path class="sc-v-chioma-scura" d="M13 136Q30 138 30 154Q30 172 13 172Q-4 172-4 154Q-4 138 13 136Z"/>
+        <path class="sc-v-chioma" d="M40 148Q55 150 55 164Q55 180 40 180Q25 180 25 164Q25 150 40 148Z"/>
+        <path class="sc-v-prato" d="M330 199Q352 188 376 188Q392 188 400 190Q430 196 460 196L460 199Z"/>
+        <path class="sc-v-quercia" d="M366 199Q369 178 367 158Q365 150 356 142L360 139Q368 145 372 152Q377 145 389 141L391 144Q380 150 377 158Q375 178 378 199Z"/>
+        <path class="sc-v-chioma" d="M342 128Q338 108 354 100Q364 88 380 94Q396 90 403 106Q410 122 398 132Q392 142 378 140Q366 146 354 140Q342 140 342 128Z"/>
+        <path class="sc-v-chioma-scura" d="M344 132Q354 142 366 140Q378 146 390 138Q398 132 401 124Q396 134 384 136Q372 140 360 136Q350 136 344 132Z"/>
+        <path class="sc-v-serpente" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" d="M345 197Q351 189 359 193Q367 197 375 191Q381 187 387 191"/>
+        <path class="sc-v-serpente-testa" d="M386 191Q390 186 395 188Q394 192 388 192Z"/>
+        <g class="sc-solo-giorno">
+         <path class="sc-vello" d="M371 145Q382 141 393 145L394 150Q397 158 395 166L397 172L392 169Q388 173 383 170Q378 174 373 169L368 172L370 166Q368 158 371 150Z"/>
+         <path class="sc-vello-luce" d="M374 149Q382 146 389 149Q386 153 382 155Q377 154 374 149Z"/>
+        </g>
+        <rect fill="url(#sc-g-mare)" x="-60" y="199" width="520" height="86"/>
+        <path class="sc-onda sc-onde-dietro" d="M-60 285V201l4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8 4 .5 4 .2 4-.2 4-.5 4-.8 4-.9 4-.9 4-.8 4-.5 4-.2 4 .2 4 .5 4 .8 4 .9 4 .9 4 .8V285Z"/>
+        <g class="sc-solo-giorno">
+         <g class="sc-gabbiano" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M115 58Q117.5 54.2 120 58Q122.5 54.2 125 58"/>
+          <path d="M245 82Q247.5 81.1 250 82Q252.5 81.1 255 82"/>
+         </g>
+        </g>
+        <g class="sc-su-giu">
+         <g class="sc-nave">
+          <g transform="translate(29.5 -2) scale(1.3)">
+           <g clip-path="url(#sc-c-murata)">
+            <path class="sc-sartie" stroke-width="1.3" d="M128 26L216 112M128 26L36 100"/>
+            <rect class="sc-albero" x="125" y="22" width="6" height="112" rx="2"/>
+            <path fill="url(#sc-g-tela)" d="M75 49L181 49C183 68 184 88 185 106Q128 120 71 106C72 88 73 68 75 49Z"/>
+            <g clip-path="url(#sc-c-vela)">
+             <rect class="sc-blu" x="60" y="58" width="140" height="9"/>
+             <path class="sc-blu" d="M60 97Q128 112 196 97L196 108Q128 123 60 108Z"/>
+             <path class="sc-imbrogli" stroke-width="1.4" opacity=".9" d="M93 51L93 126M110 51L110 126M146 51L146 126M163 51L163 126"/>
+            </g>
+            <path class="sc-pennone" stroke-width="5" stroke-linecap="round" d="M70 48Q128 40 186 48"/>
+            <path class="sc-blu sc-stendardo" d="M125 24L96 28.5L104 32L96 35.5L125 40Z"/>
+            <circle class="sc-oro" cx="128" cy="22" r="3.6"/>
+           </g>
+           <g class="sc-solo-giorno">
+            <g transform="translate(100 134)">
+             <g transform="translate(0 4.6)">
+              <g class="sc-orfeo-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-30)"/>
+              </g>
+              <path class="sc-orfeo-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-orfeo-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <g transform="translate(.3 -17.2) rotate(6)">
+               <rect class="sc-orfeo-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <circle class="sc-orfeo-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-orfeo-capelli" d="M-4.4-3.4C-5.4-9.6 3.6-11.6 4.9-6.2C3.8-7.6 1-8.2-.4-6.8C-1.4-5.6-2-4-2.6-2.6C-3.4-2-4.2-2.4-4.4-3.4Z"/>
+               <circle class="sc-orfeo-capelli" cx="-3.3" cy="-7.6" r="1.5"/>
+               <circle class="sc-orfeo-capelli" cx="-1.4" cy="-9.4" r="1.5"/>
+               <circle class="sc-orfeo-capelli" cx="1.2" cy="-9.8" r="1.4"/>
+               <circle class="sc-orfeo-capelli" cx="3.4" cy="-8.6" r="1.2"/>
+               <ellipse class="sc-orfeo-alloro" cx="-2.6" cy="-10" rx="1.4" ry=".6" transform="rotate(-30 -2.6 -10)"/>
+               <ellipse class="sc-orfeo-alloro" cx="-.2" cy="-10.9" rx="1.4" ry=".6" transform="rotate(-8 -.2 -10.9)"/>
+               <ellipse class="sc-orfeo-alloro" cx="2.3" cy="-10.6" rx="1.4" ry=".6" transform="rotate(18 2.3 -10.6)"/>
+               <ellipse class="sc-orfeo-alloro" cx="4.1" cy="-9" rx="1.4" ry=".6" transform="rotate(40 4.1 -9)"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <g transform="translate(4.6 -9.4) rotate(-16)">
+               <ellipse class="sc-lira" cx="0" cy="0" rx="2.4" ry="1.3"/>
+               <path class="sc-lira-oro" stroke-width="1" stroke-linecap="round" d="M-2-.5C-3.5-2.7-2.8-5.9-1.3-7.3M2-.5C3.5-2.7 2.8-5.9 1.3-7.3"/>
+               <path class="sc-lira-oro" stroke-width=".9" d="M-1.9-6.3L1.9-6.3"/>
+               <path class="sc-lira-corde" stroke-width=".35" d="M-.8-.6L-.8-6.3M0-.6L0-6.3M.8-.6L.8-6.3"/>
+              </g>
+              <g transform="translate(.3 -15.4) rotate(-38)">
+               <path class="sc-orfeo-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-orfeo-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+            <g transform="translate(85 132.8)">
+             <g class="sc-tifi-ombra" stroke-linecap="round">
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+              <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(62)"/>
+             </g>
+             <path class="sc-tifi-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+             <path class="sc-tifi-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+             <g transform="translate(.3 -17.2)">
+              <rect class="sc-tifi-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+              <circle class="sc-tifi-pelle" cx=".2" cy="-4.6" r="4.6"/>
+              <path class="sc-tifi-capelli" d="M-4.5-2.8C-5.2-8.6 3.4-10.4 4.8-6.4C3.4-7.2.6-7.4-.6-6.2C-1.6-5-2.2-3.6-2.8-2.2Z"/>
+              <path class="sc-tifi-barba" d="M-1-2.4C-.4 1 4.2 1.4 5-3.4C3.8-2.2 1.6-2-1-2.4Z"/>
+              <path class="sc-tifi-berretto" d="M-4.9-6.6L.5-13.6L5.1-6.4Q.2-5.2-4.9-6.6Z"/>
+              <path class="sc-tifi-tesa" stroke-width="1" stroke-linecap="round" d="M-5.3-6.5Q.2-4.9 5.5-6.3"/>
+              <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+              <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+             </g>
+             <g transform="translate(.3 -15.4) rotate(-16)">
+              <path class="sc-tifi-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+              <circle class="sc-tifi-pelle" cx="0" cy="6.3" r="1.1"/>
+             </g>
+            </g>
+            <g transform="translate(198 127.9)">
+             <path class="sc-mopso-bastone" stroke-width="1.15" stroke-linecap="round" d="M-3.6.4L-3.6-22.4C-3.6-25.8.4-25.8 0-22.8"/>
+             <g class="sc-mopso-ombra" stroke-linecap="round">
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+              <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(24)"/>
+             </g>
+             <path class="sc-mopso-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+             <path class="sc-mopso-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+             <g transform="translate(.3 -17.2)">
+              <rect class="sc-mopso-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+              <path class="sc-mopso-bianco" d="M-4.7-4C-5.6-.8-4.8 1.8-2.6 2L-1.6-2Z"/>
+              <circle class="sc-mopso-pelle" cx=".2" cy="-4.6" r="4.6"/>
+              <path class="sc-mopso-bianco" d="M-4.5-3.2C-5.4-9.8 3.8-11.4 4.9-6.6C3.2-7.6.4-7.8-.8-6.2C-1.6-5-2-3.8-2.6-2.6Z"/>
+              <path class="sc-mopso-barba" stroke-width=".4" stroke-linecap="round" d="M-.9-2.8C-.6 2.2 2.4 4.4 4.3 1.8C5 .4 5-1.8 4.8-3.6C3.6-2.2 1.4-2.2-.9-2.8Z"/>
+              <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+              <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+             </g>
+             <g transform="translate(.3 -15.4) rotate(-12)">
+              <path class="sc-mopso-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+              <circle class="sc-mopso-pelle" cx="0" cy="6.3" r="1.1"/>
+             </g>
+            </g>
+            <g transform="translate(154 133.9)">
+             <g class="sc-linceo-ombra" stroke-linecap="round">
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+              <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(150)"/>
+             </g>
+             <path class="sc-linceo-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+             <path class="sc-linceo-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+             <g transform="translate(.3 -17.2) rotate(-4)">
+              <rect class="sc-linceo-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+              <circle class="sc-linceo-pelle" cx=".2" cy="-4.6" r="4.6"/>
+              <path class="sc-linceo-capelli" d="M-4.4-3.4C-5.2-9.4 3.6-11 4.8-6.6C3.4-7.8.6-8-.6-6.6C-1.4-5.6-2-4.2-2.6-3Z"/>
+              <path class="sc-linceo-fascia" d="M-4.6-6.9Q0-9.4 4.8-6.7L4.8-5.5Q0-8-4.5-5.7Z"/>
+              <path class="sc-linceo-fascia" d="M-4.4-6.4L-7-4.8L-6.5-4L-4.2-5.4Z"/>
+              <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+              <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+             </g>
+             <g transform="translate(.3 -15.4) rotate(-167)">
+              <path class="sc-linceo-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+              <circle class="sc-linceo-pelle" cx="0" cy="6.3" r="1.1"/>
+             </g>
+            </g>
+            <g transform="translate(177 131.5) scale(-1.2 1.2)">
+             <g transform="translate(0 4.6) rotate(-14 0 -6.8)">
+              <path class="sc-eracle-clava" d="M-4.2-2.6L-2.4-3.2L.2-19.6C.5-22.2-3.3-22.6-3.4-19.8Z"/>
+              <g class="sc-eracle-nodi">
+               <circle cx="-1.4" cy="-17.6" r=".8"/>
+               <circle cx="-2.6" cy="-14" r=".8"/>
+               <circle cx="-.9" cy="-12.4" r=".8"/>
+              </g>
+              <g class="sc-eracle-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-76)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-84)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-66)"/>
+              </g>
+              <path class="sc-eracle-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-eracle-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <path class="sc-eracle-leone" d="M-4.3-17.2Q0-19.6 4.6-16.6L4.3-14.3Q0-15.6-4.5-14.2Z"/>
+              <circle class="sc-eracle-leone-scuro" cx="2.7" cy="-15.1" r="1.1"/>
+              <g transform="translate(.3 -17.2) rotate(4)">
+               <rect class="sc-eracle-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <path class="sc-eracle-leone" d="M-5.8 1.6C-6.8-6-4.6-11.8.4-12.2C4.6-12.4 6.2-9 5.8-6.2L2.4-7.4C.4-8.6-2.4-7.6-3-5.2C-3.4-3.2-3-.6-2 1.6Z"/>
+               <circle class="sc-eracle-leone-scuro" cx="-2.6" cy="-11.3" r="1.4"/>
+               <circle class="sc-eracle-leone-scuro" cx="1.6" cy="-12" r="1.4"/>
+               <circle class="sc-eracle-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-eracle-barba" d="M-1.4-2.8C-.8 1.6 4.6 1.8 5.2-3.2C4-2 1.6-2-1.4-2.8Z"/>
+               <path class="sc-eracle-leone" d="M-2.6-6.2C-1.2-8.8 3.2-9 5.6-6L5.4-5.1C3.2-7.4-.6-7.5-2.2-5.4Z"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <path class="sc-remo" stroke-width="2" stroke-linecap="round" d="M6.4-13.7L11-1"/>
+              <g transform="translate(.3 -15.4) rotate(-74)">
+               <path class="sc-eracle-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-eracle-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+           </g>
+           <g class="sc-solo-notte">
+            <g transform="translate(100 134)">
+             <g transform="translate(0 4.6)">
+              <g class="sc-orfeo-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-6)"/>
+              </g>
+              <path class="sc-orfeo-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-orfeo-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <g transform="translate(.3 -17.2) rotate(18)">
+               <rect class="sc-orfeo-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <circle class="sc-orfeo-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-orfeo-capelli" d="M-4.4-3.4C-5.4-9.6 3.6-11.6 4.9-6.2C3.8-7.6 1-8.2-.4-6.8C-1.4-5.6-2-4-2.6-2.6C-3.4-2-4.2-2.4-4.4-3.4Z"/>
+               <circle class="sc-orfeo-capelli" cx="-3.3" cy="-7.6" r="1.5"/>
+               <circle class="sc-orfeo-capelli" cx="-1.4" cy="-9.4" r="1.5"/>
+               <circle class="sc-orfeo-capelli" cx="1.2" cy="-9.8" r="1.4"/>
+               <circle class="sc-orfeo-capelli" cx="3.4" cy="-8.6" r="1.2"/>
+               <ellipse class="sc-orfeo-alloro" cx="-2.6" cy="-10" rx="1.4" ry=".6" transform="rotate(-30 -2.6 -10)"/>
+               <ellipse class="sc-orfeo-alloro" cx="-.2" cy="-10.9" rx="1.4" ry=".6" transform="rotate(-8 -.2 -10.9)"/>
+               <ellipse class="sc-orfeo-alloro" cx="2.3" cy="-10.6" rx="1.4" ry=".6" transform="rotate(18 2.3 -10.6)"/>
+               <ellipse class="sc-orfeo-alloro" cx="4.1" cy="-9" rx="1.4" ry=".6" transform="rotate(40 4.1 -9)"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <g transform="translate(.3 -15.4) rotate(6)">
+               <path class="sc-orfeo-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-orfeo-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+            <g transform="translate(85 132.8)">
+             <g class="sc-tifi-ombra" stroke-linecap="round">
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+              <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+              <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(62)"/>
+             </g>
+             <path class="sc-tifi-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+             <path class="sc-tifi-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+             <g transform="translate(.3 -17.2) rotate(-26)">
+              <rect class="sc-tifi-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+              <circle class="sc-tifi-pelle" cx=".2" cy="-4.6" r="4.6"/>
+              <path class="sc-tifi-capelli" d="M-4.5-2.8C-5.2-8.6 3.4-10.4 4.8-6.4C3.4-7.2.6-7.4-.6-6.2C-1.6-5-2.2-3.6-2.8-2.2Z"/>
+              <path class="sc-tifi-barba" d="M-1-2.4C-.4 1 4.2 1.4 5-3.4C3.8-2.2 1.6-2-1-2.4Z"/>
+              <path class="sc-tifi-berretto" d="M-4.9-6.6L.5-13.6L5.1-6.4Q.2-5.2-4.9-6.6Z"/>
+              <path class="sc-tifi-tesa" stroke-width="1" stroke-linecap="round" d="M-5.3-6.5Q.2-4.9 5.5-6.3"/>
+              <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+              <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+             </g>
+             <g transform="translate(.3 -15.4) rotate(-16)">
+              <path class="sc-tifi-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+              <circle class="sc-tifi-pelle" cx="0" cy="6.3" r="1.1"/>
+             </g>
+            </g>
+            <g transform="translate(198 127.9)">
+             <g transform="translate(0 4.6)">
+              <path class="sc-mopso-bastone" stroke-width="1.15" stroke-linecap="round" d="M-3.6.4L-3.6-22.4C-3.6-25.8.4-25.8 0-22.8"/>
+              <g class="sc-mopso-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-6)"/>
+              </g>
+              <path class="sc-mopso-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-mopso-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <g transform="translate(.3 -17.2) rotate(18)">
+               <rect class="sc-mopso-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <path class="sc-mopso-bianco" d="M-4.7-4C-5.6-.8-4.8 1.8-2.6 2L-1.6-2Z"/>
+               <circle class="sc-mopso-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-mopso-bianco" d="M-4.5-3.2C-5.4-9.8 3.8-11.4 4.9-6.6C3.2-7.6.4-7.8-.8-6.2C-1.6-5-2-3.8-2.6-2.6Z"/>
+               <path class="sc-mopso-barba" stroke-width=".4" stroke-linecap="round" d="M-.9-2.8C-.6 2.2 2.4 4.4 4.3 1.8C5 .4 5-1.8 4.8-3.6C3.6-2.2 1.4-2.2-.9-2.8Z"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <g transform="translate(.3 -15.4) rotate(6)">
+               <path class="sc-mopso-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-mopso-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+            <g transform="translate(154 133.9)">
+             <g transform="translate(0 4.6)">
+              <g class="sc-linceo-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-6)"/>
+              </g>
+              <path class="sc-linceo-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-linceo-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <g transform="translate(.3 -17.2) rotate(18)">
+               <rect class="sc-linceo-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <circle class="sc-linceo-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-linceo-capelli" d="M-4.4-3.4C-5.2-9.4 3.6-11 4.8-6.6C3.4-7.8.6-8-.6-6.6C-1.4-5.6-2-4.2-2.6-3Z"/>
+               <path class="sc-linceo-fascia" d="M-4.6-6.9Q0-9.4 4.8-6.7L4.8-5.5Q0-8-4.5-5.7Z"/>
+               <path class="sc-linceo-fascia" d="M-4.4-6.4L-7-4.8L-6.5-4L-4.2-5.4Z"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <g transform="translate(.3 -15.4) rotate(6)">
+               <path class="sc-linceo-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-linceo-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+            <g transform="translate(177 131.5) scale(-1.2 1.2)">
+             <g transform="translate(0 4.6)">
+              <path class="sc-eracle-clava" d="M-4.2-2.6L-2.4-3.2L.2-19.6C.5-22.2-3.3-22.6-3.4-19.8Z"/>
+              <g class="sc-eracle-nodi">
+               <circle cx="-1.4" cy="-17.6" r=".8"/>
+               <circle cx="-2.6" cy="-14" r=".8"/>
+               <circle cx="-.9" cy="-12.4" r=".8"/>
+              </g>
+              <g class="sc-eracle-ombra" stroke-linecap="round">
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+               <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+               <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-6)"/>
+              </g>
+              <path class="sc-eracle-tunica" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+              <path class="sc-eracle-cintura" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+              <path class="sc-eracle-leone" d="M-4.3-17.2Q0-19.6 4.6-16.6L4.3-14.3Q0-15.6-4.5-14.2Z"/>
+              <circle class="sc-eracle-leone-scuro" cx="2.7" cy="-15.1" r="1.1"/>
+              <g transform="translate(.3 -17.2) rotate(18)">
+               <rect class="sc-eracle-pelle" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+               <path class="sc-eracle-leone" d="M-5.8 1.6C-6.8-6-4.6-11.8.4-12.2C4.6-12.4 6.2-9 5.8-6.2L2.4-7.4C.4-8.6-2.4-7.6-3-5.2C-3.4-3.2-3-.6-2 1.6Z"/>
+               <circle class="sc-eracle-leone-scuro" cx="-2.6" cy="-11.3" r="1.4"/>
+               <circle class="sc-eracle-leone-scuro" cx="1.6" cy="-12" r="1.4"/>
+               <circle class="sc-eracle-pelle" cx=".2" cy="-4.6" r="4.6"/>
+               <path class="sc-eracle-barba" d="M-1.4-2.8C-.8 1.6 4.6 1.8 5.2-3.2C4-2 1.6-2-1.4-2.8Z"/>
+               <path class="sc-eracle-leone" d="M-2.6-6.2C-1.2-8.8 3.2-9 5.6-6L5.4-5.1C3.2-7.4-.6-7.5-2.2-5.4Z"/>
+               <circle class="sc-e-occhio" cx="2.5" cy="-5.1" r=".6"/>
+               <circle class="sc-e-guancia" cx="2.7" cy="-3.3" r=".9"/>
+              </g>
+              <g transform="translate(.3 -15.4) rotate(6)">
+               <path class="sc-eracle-braccio" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+               <circle class="sc-eracle-pelle" cx="0" cy="6.3" r="1.1"/>
+              </g>
+             </g>
+            </g>
+           </g>
+           <path class="sc-scafo" d="M62 134.5L60 134.5L58.1 134.4L56.2 134.2L54.5 133.9L52.8 133.5L51.2 133L49.7 132.4L48.3 131.7L46.9 130.9L45.7 130.1L44.5 129.2L43.3 128.1L42.3 127.1L41.3 125.9L40.3 124.6L39.5 123.3L38.7 121.9L38 120.4L37.4 118.8L36.9 117.2L36.5 115.5L36.2 113.7L36 111.9L35.8 110L35.8 108.1L35.9 106.3L36.1 104.5L36.4 102.8L36.7 101.2L37.2 99.6L37.7 98.1L38.3 96.6L39 95.3L39.8 94L40.6 92.8L41.5 91.6L42.4 90.5L43.4 89.5L44.5 88.6L45.6 87.8L46.7 87L47.9 86.3L49.2 85.7L50.5 85.2L51.8 84.8L53.2 84.5L54.6 84.3L56 84.2L57.1 84.1L58.1 84.2L59.1 84.3L59.9 84.6L60.7 84.8L61.4 85.1L62.1 85.5L62.7 85.9L63.2 86.4L63.7 86.9L64.1 87.4L64.4 88L64.7 88.6L64.9 89.2L65 89.8L65.1 90.5L65.1 91.2L65 91.9L64.8 92.5L64.6 93.2L64.2 93.9L63.8 94.6L63.2 95.3L62.5 96A2.5 2.5 0 0 0 65.5 100L65.5 100L66.7 99.1L67.7 98.1L68.7 97.1L69.5 95.9L70.1 94.7L70.6 93.5L71 92.2L71.2 90.8L71.3 89.5L71.2 88.2L71 86.8L70.6 85.5L70.1 84.2L69.4 83L68.6 81.8L67.7 80.7L66.6 79.7L65.4 78.8L64.1 78L62.7 77.3L61.2 76.7L59.5 76.3L57.8 76L56 75.8L54 75.8L51.9 76L49.9 76.3L48 76.7L46 77.3L44.1 78L42.3 78.8L40.5 79.8L38.8 80.9L37.1 82.1L35.5 83.4L34 84.9L32.6 86.5L31.3 88.1L30.1 89.9L28.9 91.8L27.9 93.8L27 95.9L26.2 98L25.5 100.3L25 102.6L24.6 105L24.3 107.5L24.2 110L24.2 112.6L24.3 115.1L24.6 117.6L25 120L25.6 122.4L26.3 124.8L27.2 127.1L28.2 129.3L29.4 131.4L30.7 133.5L32.1 135.5L33.7 137.4L35.4 139.1L37.3 140.8L39.2 142.3L41.3 143.7L43.6 145L45.9 146.1L48.4 147.1L50.9 147.9L53.5 148.5L56.3 149L59.1 149.3L62 149.5Z"/>
+           <path class="sc-oro" d="M62 134.5L60 134.5L58.1 134.4L56.2 134.2L54.5 133.9L52.8 133.5L51.2 133L49.7 132.4L48.3 131.7L46.9 130.9L45.7 130.1L44.5 129.2L43.3 128.1L42.3 127.1L41.3 125.9L40.3 124.6L39.5 123.3L38.7 121.9L38 120.4L37.4 118.8L36.9 117.2L36.5 115.5L36.2 113.7L36 111.9L35.8 110L35.8 108.1L35.9 106.3L36.1 104.5L36.4 102.8L36.7 101.2L37.2 99.6L37.7 98.1L38.3 96.6L39 95.3L39.8 94L40.6 92.8L41.5 91.6L42.4 90.5L43.4 89.5L44.5 88.6L45.6 87.8L46.7 87L47.9 86.3L49.2 85.7L50.5 85.2L51.8 84.8L53.2 84.5L54.6 84.3L56 84.2L57.1 84.1L58.1 84.2L59.1 84.3L59.9 84.6L60.7 84.8L61.4 85.1L62.1 85.5L62.7 85.9L63.2 86.4L63.7 86.9L64.1 87.4L64.4 88L64.7 88.6L64.9 89.2L65 89.8L65.1 90.5L65.1 91.2L65 91.9L64.8 92.5L64.6 93.2L64.2 93.9L63.8 94.6L63.2 95.3L62.5 96A2.5 2.5 0 0 0 65.5 100L65.5 100L66.7 99.1L67.7 98.1L68.7 97.1L69.5 95.9L70.1 94.7L70.6 93.5L71 92.2L71.2 90.8L71.3 89.5L71.2 88.2L71 86.8L70.6 85.5L70.1 84.2L69.4 83L68.6 81.8L67.7 80.7L66.6 79.7L65.4 78.8L64.1 78L62.7 77.3L61.2 76.7L59.5 76.3L57.8 76L56 75.8L54 75.8L51.9 76L49.9 76.3L48 76.7L46 77.3L44.1 78L42.3 78.8L40.5 79.8L38.8 80.9L37.1 82.1L35.5 83.4L34 84.9L32.6 86.5L31.3 88.1L30.1 89.9L28.9 91.8L27.9 93.8L27 95.9L26.2 98L25.5 100.3L25 102.6L24.6 105L24.3 107.5L24.2 110L24.2 112.6L24.3 115.1L24.6 117.6L25 120L25.6 122.4L26.3 124.8L27.2 127.1L28.2 129.3L29.4 131.4L30.7 133.5L32.1 135.5L33.7 137.4L35.4 139.1L37.3 140.8L39.2 142.3L41.3 143.7L43.6 145L45.9 146.1L48.4 147.1L50.9 147.9L53.5 148.5L56.3 149L59.1 149.3L62 149.5Z"/>
+           <path fill="url(#sc-g-legno)" d="M50 126C100 136 160 136 208 124L214 130C216 138 218 142 222 144L238 149C240.5 150 240.5 153.5 237 154L216 156C180 170 100 172 58 158C46 154 40 142 42 132Z"/>
+           <g clip-path="url(#sc-c-scafo)">
+            <path class="sc-fasciame" stroke-width="1.8" opacity=".6" d="M40 141C100 151 170 151 226 145M46 151C100 161 170 161 222 154"/>
+            <path class="sc-bordo" stroke-width="2.4" d="M50 127.5C100 137.5 160 137.5 209 125.5"/>
+            <path class="sc-oro-tratto" stroke-width="3.2" d="M56 131.5C100 141 160 141 207 129.5"/>
+            <g class="sc-oro">
+             <circle cx="62.1" cy="137.7" r="1.5"/>
+             <circle cx="74.8" cy="139.9" r="1.5"/>
+             <circle cx="88.1" cy="141.5" r="1.5"/>
+             <circle cx="101.9" cy="142.6" r="1.5"/>
+             <circle cx="116" cy="143.3" r="1.5"/>
+             <circle cx="130.4" cy="143.4" r="1.5"/>
+             <circle cx="144.8" cy="143" r="1.5"/>
+             <circle cx="159.1" cy="142" r="1.5"/>
+             <circle cx="173.3" cy="140.6" r="1.5"/>
+             <circle cx="187.1" cy="138.6" r="1.5"/>
+             <circle cx="200.5" cy="136" r="1.5"/>
+            </g>
+           </g>
+           <g class="sc-scalmi">
+            <circle cx="84" cy="145.4" r="2.3"/>
+            <circle cx="100" cy="145.7" r="2.3"/>
+            <circle cx="116" cy="145.9" r="2.3"/>
+            <circle cx="132" cy="146" r="2.3"/>
+            <circle cx="148" cy="146" r="2.3"/>
+            <circle cx="164" cy="145.9" r="2.3"/>
+            <circle cx="180" cy="145.7" r="2.3"/>
+            <circle cx="196" cy="145.4" r="2.3"/>
+           </g>
+           <path class="sc-scafo" d="M207.6 138.7L208.3 137.6L209 136.5L209.7 135.5L210.4 134.4L211.1 133.3L211.7 132.3L212.3 131.2L212.9 130.1L213.5 129.1L214 128L214.6 127L215.1 125.9L215.7 124.8L216.2 123.8L216.7 122.8L217.2 121.7L217.7 120.7L218.1 119.6L218.6 118.6L219.1 117.6L219.5 116.5L220 115.5L220.5 114.5L220.9 113.5L221.3 112.5L221.6 111.6L221.8 110.6L222 109.7L222.1 108.8L222.1 107.9L222.1 107.1L222 106.2L221.8 105.4L221.5 104.7L221.2 103.9L220.7 103.2L220.2 102.6L219.6 102.1L219 101.6L218.2 101.2L217.5 101L216.7 100.9L215.8 100.8L215 100.9L214.3 101.1L213.5 101.4L212.7 101.8L212 102.3A2 2 0 0 0 214 105.7L214 105.7L214.5 105.5L214.9 105.4L215.3 105.3L215.6 105.3L215.8 105.4L216 105.4L216.1 105.5L216.1 105.6L216.2 105.7L216.2 105.8L216.2 105.9L216.3 106L216.3 106.2L216.3 106.4L216.3 106.6L216.3 106.9L216.3 107.3L216.3 107.7L216.2 108.1L216 108.5L215.9 109L215.7 109.5L215.4 110L215.1 110.5L214.5 111.5L214 112.5L213.5 113.5L212.9 114.4L212.4 115.4L211.8 116.4L211.2 117.3L210.7 118.3L210.1 119.2L209.5 120.2L209 121.2L208.4 122.1L207.8 123L207.2 124L206.6 124.9L205.9 125.9L205.3 126.8L204.6 127.7L204 128.7L203.3 129.6L202.6 130.5L201.9 131.5L201.1 132.4L200.4 133.3Z"/>
+           <path class="sc-occhio" d="M192 138.5Q200 132.5 208 138.5Q200 144 192 138.5Z"/>
+           <path class="sc-occhio-bordo" stroke-width="1.2" d="M192 138.5Q200 132.5 208 138.5Q200 144 192 138.5Z"/>
+           <circle class="sc-pupilla" cx="201" cy="138.4" r="2.6"/>
+           <path class="sc-timone" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" d="M78.2 120L72 132L46 186"/>
+           <ellipse class="sc-timone-pala" cx="49" cy="180" rx="10" ry="3.8" transform="rotate(115.7 49 180)"/>
+           <path class="sc-remo" stroke-width="3" stroke-linecap="round" d="M84 146L67 182M100 146L83 182M116 146L99 182M132 146L115 182M148 146L131 182M164 146L147 182M180 146L163 182M196 146L179 182"/>
+           <g class="sc-remo-pala">
+            <ellipse cx="69" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 69 177.7)"/>
+            <ellipse cx="85" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 85 177.7)"/>
+            <ellipse cx="101" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 101 177.7)"/>
+            <ellipse cx="117" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 117 177.7)"/>
+            <ellipse cx="133" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 133 177.7)"/>
+            <ellipse cx="149" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 149 177.7)"/>
+            <ellipse cx="165" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 165 177.7)"/>
+            <ellipse cx="181" cy="177.7" rx="7" ry="2.8" transform="rotate(115.3 181 177.7)"/>
+           </g>
+          </g>
+         </g>
+        </g>
+        <path class="sc-onda-mare sc-onde-davanti" d="M-60 285V210l4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0 4-.4 4-.7 4-1 4-1 4-.7 4-.4 4 0 4 .4 4 .7 4 1 4 1 4 .7 4 .4 4 0V285Z"/>
+        <path class="sc-onda sc-onde-basse" d="M-60 285V236l4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1 4.5 .5 4.5 .6 4.5 .9 4.5 .9 4.5 .9 4.5 .9 4.5 .6 4.5 .5 4.5 .1 4.5-.1 4.5-.5 4.5-.6 4.5-.9 4.5-.9 4.5-.9 4.5-.9 4.5-.6 4.5-.5 4.5-.1 4.5 .1V285Z"/>
+        <rect fill="url(#sc-g-ombra)" x="-60" y="150" width="520" height="135"/>
+        <g class="sc-solo-notte">
+         <rect class="sc-velo" x="-60" y="-15" width="520" height="300"/>
+         <circle fill="url(#sc-g-luna)" cx="371.6" cy="54" r="50"/>
+         <circle class="sc-luna" cx="371.6" cy="54" r="18"/>
+         <circle fill="url(#sc-g-vello)" opacity=".7" cx="382" cy="158" r="26"/>
+         <path class="sc-vello" d="M371 145Q382 141 393 145L394 150Q397 158 395 166L397 172L392 169Q388 173 383 170Q378 174 373 169L368 172L370 166Q368 158 371 150Z"/>
+         <path class="sc-vello-luce" d="M374 149Q382 146 389 149Q386 153 382 155Q377 154 374 149Z"/>
+        </g>
+        <g class="sc-su-giu">
+         <g class="sc-nave">
+          <g transform="translate(29.5 -2) scale(1.3)">
+           <path class="sc-gancio" stroke-width=".8" d="M64 97.5L64 103.4"/>
+           <g class="sc-solo-notte">
+            <circle class="sc-lanterna" fill="url(#sc-g-lanterna)" cx="64" cy="106.6" r="15"/>
+           </g>
+           <rect class="sc-lanterna-corpo" x="61.6" y="103.4" width="4.8" height="6.2" rx="1"/>
+           <rect class="sc-lanterna-bordo" x="61.6" y="103.4" width="4.8" height="6.2" rx="1" stroke-width=".8"/>
+           <g class="sc-solo-notte">
+            <rect class="sc-lanterna-accesa" x="61.6" y="103.4" width="4.8" height="6.2" rx="1"/>
+           </g>
+           <path class="sc-lanterna-tetto" d="M61.2 103.6L64 101.6L66.8 103.6Z"/>
+          </g>
+         </g>
+        </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="contenitore percorso">
+
+    <section class="tappa parte" id="guides-you" aria-labelledby="guides-you-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C16 25 4 45 10 60S14 90 10 100"/></svg>
+      <div class="parte-testo">
+        <span class="etichetta">Guides you</span>
+        <h2 id="guides-you-title">Odyssey, the map and the routes</h2>
+        <p>In Odyssey you see the routes on the map and pick one. Before you set off you can see it whole, with its
+          stages, its kilometres and its elevation profile. The map is inside the app and opens even offline.</p>
+        <p>When you start the route, Argonauta follows you from stage to stage, even with the screen locked. It tells
+          you when you reach a stage and when you go off route, and the Lock Screen shows you the next stage.</p>
+      </div>
+      <figure class="schermata">
+        <div class="telefono">
+          <picture>
+            <source srcset="/img/schermate/rotta-scuro.jpg" media="(prefers-color-scheme: dark)">
+            <img src="/img/schermate/rotta-chiaro.jpg" alt="Odyssey with a route chosen on the map: its name, the Start button and the map credits, in Italian." width="780" height="1696" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <figcaption>A route in Odyssey, before you set off.</figcaption>
+      </figure>
+    </section>
+
+    <section class="tappa parte" id="tells-you" aria-labelledby="tells-you-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C4 30 16 50 10 70S6 92 10 100"/></svg>
+      <div class="parte-testo">
+        <span class="etichetta">Tells you</span>
+        <h2 id="tells-you-title">The Atlas, myths and legends, Argo</h2>
+        <p>The Atlas collects places, animals, plants and history: every card has its source. Cards can always be read,
+          and routes add them to your collection.</p>
+        <p>Along some routes Argo tells you a myth or a legend of the place, with the label “Myth” or “Legend” and its
+          source. And if you have a question, ask Argo: it answers from the cards of the Atlas.</p>
+      </div>
+      <figure class="schermata">
+        <div class="telefono">
+          <picture>
+            <source srcset="/img/schermate/leggenda-scuro.jpg" media="(prefers-color-scheme: dark)">
+            <img src="/img/schermate/leggenda-chiaro.jpg" alt="A legend told by Argo, with the Legend label and its source, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <figcaption>A legend along the route, with its source.</figcaption>
+      </figure>
+    </section>
+
+    <section class="tappa parte" id="remembers" aria-labelledby="remembers-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C15 20 5 40 10 55S16 85 10 100"/></svg>
+      <div class="parte-testo">
+        <span class="etichetta">Remembers</span>
+        <h2 id="remembers-title">The Explorer's Journal, badges and levels</h2>
+        <p>The Explorer's Journal keeps your story, day by day: the routes you started and completed, the stages, the
+          new cards, the heroes who come aboard.</p>
+        <p>Every card that joins your collection gets its stamp: the day and the route on which you found it.</p>
+        <img class="timbro" src="/img/timbro.svg" alt="A round stamp in the app's blue, with the Italian words “Nella collezione” and “Diario di bordo”: in the collection, logbook." width="120" height="120" loading="lazy">
+        <p>Badges come with routes, missions and new cards. Every stage you reach and every route you complete bring
+          experience points, and with the points a level with a name, from Apprentice to Argonaut.</p>
+      </div>
+      <figure class="schermata">
+        <div class="telefono">
+          <picture>
+            <source srcset="/img/schermate/diario-scuro.jpg" media="(prefers-color-scheme: dark)">
+            <img src="/img/schermate/diario-chiaro.jpg" alt="The Explorer's Journal with the day's routes, badges, heroes come aboard and new cards, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <figcaption>The Explorer's Journal.</figcaption>
+      </figure>
+    </section>
+
+    <section class="tappa parte" id="grows-with-you" aria-labelledby="grows-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C5 25 15 45 10 65S5 90 10 100"/></svg>
+      <div class="parte-testo">
+        <span class="etichetta">Grows with you</span>
+        <h2 id="grows-title">The ship, the Heroes, the voyage</h2>
+        <p>On Argo's cover there's your ship, and it grows only with routes you really complete. The heroes of the
+          Argonautica come aboard, and every route you complete brings Argo to the next landfall, toward the golden
+          fleece.</p>
+        <p>Nothing left to chance and no hurry: if the app stays closed, the ship waits for you as it was.</p>
+      </div>
+      <figure class="schermata">
+        <div class="telefono">
+          <picture>
+            <source srcset="/img/schermate/argo-scuro.jpg" media="(prefers-color-scheme: dark)">
+            <img src="/img/schermate/argo-chiaro.jpg" alt="Argo's cover with the complete ship and the heroes aboard; below, the Heroes and the Voyage of Argo, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+          </picture>
+        </div>
+        <figcaption>Argo's cover after five routes.</figcaption>
+      </figure>
+    </section>
+
+    <section class="tappa" id="the-ship" aria-labelledby="the-ship-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C16 30 4 50 10 70S14 92 10 100"/></svg>
+      <span class="etichetta oro">The ship that grows</span>
+      <h2 id="the-ship-title">Four states, with the routes you complete</h2>
+      <p class="colonna">The ship grows only with the routes you really complete. Each time it changes, the app tells
+        you once.</p>
+      <ol class="stati-nave">
+        <li class="stato-nave">
+          <img src="/img/nave-stato-1.svg" alt="The ship's hull with the oars, the steering oar and the lantern." width="440" height="352" loading="lazy">
+          <p class="stato-rotte"><span class="numero">0</span> routes</p>
+          <p class="stato-nome">At the start: the hull and the oars</p>
+        </li>
+        <li class="stato-nave">
+          <img src="/img/nave-stato-2.svg" alt="The ship with the mast and the furled sail." width="440" height="352" loading="lazy">
+          <p class="stato-rotte"><span class="numero">1</span> route</p>
+          <p class="stato-nome">Argo has a mast</p>
+        </li>
+        <li class="stato-nave">
+          <img src="/img/nave-stato-3.svg" alt="The ship with the sail unfurled." width="440" height="352" loading="lazy">
+          <p class="stato-rotte"><span class="numero">3</span> routes</p>
+          <p class="stato-nome">Argo unfurls its sail</p>
+        </li>
+        <li class="stato-nave">
+          <img src="/img/nave-stato-4.svg" alt="The complete ship, with the pennant, the blue stripes on the sail, the gold and the eye on the bow." width="440" height="352" loading="lazy">
+          <p class="stato-rotte"><span class="numero">5</span> routes</p>
+          <p class="stato-nome">Argo is complete</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="tappa" id="heroes" aria-labelledby="heroes-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C4 20 16 45 10 60S6 88 10 100"/></svg>
+      <span class="etichetta">The Heroes</span>
+      <h2 id="heroes-title">The heroes of the Argonautica come aboard your Argo as you explore</h2>
+      <p class="colonna">Each one comes aboard with something you really did: a route started or completed, a card
+        discovered. Aboard they live their own lives, and at night they all sleep, except Tiphys at the helm.</p>
+      <ul class="eroi">
+        <li class="eroe">
+          <span class="medaglione"><img src="/img/eroe-orfeo.svg" alt="" width="120" height="120" loading="lazy"></span>
+          <h3>Orpheus <span class="epiteto">the singer</span></h3>
+          <p>Comes aboard when you start your first route.</p>
+          <p class="fonte">Apollonius of Rhodes, <cite>Argonautica</cite> 1.23–34</p>
+        </li>
+        <li class="eroe">
+          <span class="medaglione"><img src="/img/eroe-tifi.svg" alt="" width="120" height="120" loading="lazy"></span>
+          <h3>Tiphys <span class="epiteto">the helmsman</span></h3>
+          <p>Comes aboard when you complete your first route.</p>
+          <p class="fonte">Apollonius of Rhodes, <cite>Argonautica</cite> 1.105–110</p>
+        </li>
+        <li class="eroe">
+          <span class="medaglione"><img src="/img/eroe-mopso.svg" alt="" width="120" height="120" loading="lazy"></span>
+          <h3>Mopsus <span class="epiteto">the seer</span></h3>
+          <p>Comes aboard when the golden eagle joins your collection.</p>
+          <p class="fonte">Apollonius of Rhodes, <cite>Argonautica</cite> 1.65–66</p>
+        </li>
+        <li class="eroe">
+          <span class="medaglione"><img src="/img/eroe-linceo.svg" alt="" width="120" height="120" loading="lazy"></span>
+          <h3>Lynceus <span class="epiteto">the sharp-eyed</span></h3>
+          <p>Comes aboard when you have added six new cards to your collection.</p>
+          <p class="fonte">Apollonius of Rhodes, <cite>Argonautica</cite> 1.151–155</p>
+        </li>
+        <li class="eroe">
+          <span class="medaglione"><img src="/img/eroe-eracle.svg" alt="" width="120" height="120" loading="lazy"></span>
+          <h3>Heracles <span class="epiteto">the strongest</span></h3>
+          <p>Comes aboard when you have completed five routes.</p>
+          <p class="fonte">Apollonius of Rhodes, <cite>Argonautica</cite> 1.1153 and following</p>
+        </li>
+      </ul>
+      <div class="parte">
+        <div class="parte-testo">
+          <p>In the Heroes sheet there are also the other Argonauts from Apollonius of Rhodes' catalogue, each with
+            their myth and its source. Every story carries the label “Myth”.</p>
+          <p><a class="pulsante leggero" href="/en/argonauta/the-myth/">Why Argo: the myth</a></p>
+        </div>
+        <div class="due-telefoni">
+          <figure class="schermata">
+            <div class="telefono">
+              <picture>
+                <source srcset="/img/schermate/equipaggio-scuro.jpg" media="(prefers-color-scheme: dark)">
+                <img src="/img/schermate/equipaggio-chiaro.jpg" alt="The Heroes sheet: Orpheus, Tiphys and Mopsus aboard, Lynceus and Heracles next aboard, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+              </picture>
+            </div>
+          </figure>
+          <figure class="schermata">
+            <div class="telefono">
+              <picture>
+                <source srcset="/img/schermate/orfeo-scuro.jpg" media="(prefers-color-scheme: dark)">
+                <img src="/img/schermate/orfeo-chiaro.jpg" alt="The page of Orpheus, the singer, with the Myth label, his story and the source, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+              </picture>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="tappa" id="with-care" aria-labelledby="with-care-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C15 25 5 45 10 60S15 90 10 100"/></svg>
+      <span class="etichetta">Out on the trail, with care</span>
+      <h2 id="with-care-title">What the app really does</h2>
+      <div class="parte">
+        <div class="parte-testo">
+          <p>Argonauta helps you find your way, but it isn't a rescue service. It never says whether a trail is open or
+            in good condition, and it gives no weather or news about refuges or water: it would have no up-to-date
+            source for that. Here's what it does.</p>
+          <ul class="elenco-prudenza">
+            <li><strong>“Before You Set Off”</strong>, on the route page: sunrise, sunset, dark and the moon, worked out
+              on the phone, and when you'd arrive if you set off now, with the CAI's walking time.</li>
+            <li><strong>Alerts along the route</strong>: if you go off route, it tells you, even with the screen
+              locked.</li>
+            <li><strong>The “Safety” sheet</strong>: “Call 112” on iPhone, your location with coordinates to read out,
+              what to do with no signal, and how to get ready.</li>
+          </ul>
+        </div>
+        <div class="due-telefoni">
+          <figure class="schermata">
+            <div class="telefono">
+              <picture>
+                <source srcset="/img/schermate/prima-di-partire-scuro.jpg" media="(prefers-color-scheme: dark)">
+                <img src="/img/schermate/prima-di-partire-chiaro.jpg" alt="Before You Set Off on a route page: when you would arrive, the moon and the advice to get ready, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+              </picture>
+            </div>
+          </figure>
+          <figure class="schermata">
+            <div class="telefono">
+              <picture>
+                <source srcset="/img/schermate/sicurezza-scuro.jpg" media="(prefers-color-scheme: dark)">
+                <img src="/img/schermate/sicurezza-chiaro.jpg" alt="The Safety sheet with Call 112, the coordinates of where you are and what to do with no signal, in Italian." width="870" height="1891" loading="lazy" decoding="async">
+              </picture>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="tappa" id="privacy" aria-labelledby="privacy-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C5 30 15 50 10 70S6 90 10 100"/></svg>
+      <span class="etichetta">Privacy in short</span>
+      <h2 id="privacy-title">What you do stays yours</h2>
+      <blockquote class="citazione">
+        <p>Argonauta doesn't collect personal data. There's no account. There are no analytics, ads or tracking. What
+          you do in the app stays on your iPhone or iPad, and we don't see it.</p>
+      </blockquote>
+      <p><a href="/argonauta/privacy/#en">Read the privacy policy</a></p>
+    </section>
+
+    <section class="tappa" id="places" aria-labelledby="places-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0C14 25 6 50 10 65S14 90 10 100"/></svg>
+      <span class="etichetta">For parks, towns and schools</span>
+      <h2 id="places-title">Your area inside Argonauta</h2>
+      <p class="colonna">A park, a town or a school can bring into Argonauta the routes, places and stories of its area,
+        each with its sources. They become part of the same app, with the same rules of care. If you'd like to talk
+        about it, write to <a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a>.</p>
+    </section>
+
+    <section class="tappa" id="support" aria-labelledby="support-title">
+      <svg class="segno" viewBox="0 0 20 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="tratto" d="M10 0V100"/></svg>
+      <span class="etichetta">Support</span>
+      <h2 id="support-title">Write to us</h2>
+      <div class="griglia due">
+        <div class="scheda">
+          <h3>For a problem or a question</h3>
+          <p>Write to <a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a>. To help us understand, tell us:</p>
+          <ul>
+            <li>your iPhone or iPad model and your iOS version, which you'll find in Settings › General › About;</li>
+            <li>what you were doing and what happened, step by step;</li>
+            <li>if you can, a screenshot.</li>
+          </ul>
+          <p>Many answers are already in <a href="/en/argonauta/help/">Help and questions</a>.</p>
+        </div>
+        <div class="scheda">
+          <h3>Where it works</h3>
+          <ul>
+            <li>iPhone and iPad with iOS 26.1 or later.</li>
+            <li>On iPhone the app stays in portrait; on iPad it also turns to landscape.</li>
+            <li>In Italian and in English, following the device's language.</li>
+            <li>Wi‑Fi‑only iPads don't have GPS: your location may be missing or inaccurate.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+<!-- piede:inizio -->
+<footer class="piede">
+  <div class="contenitore">
+    <div>
+      <p class="firma">Sic Studio di Vincenzo Siciliano</p>
+      <p>© 2026 Vincenzo Siciliano</p>
+      <p><a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a></p>
+    </div>
+    <nav aria-label="Pages">
+      <ul class="elenco-piede">
+        <li><a href="/en/argonauta/">Argonauta</a></li>
+        <li><a href="/en/argonauta/the-myth/">The myth</a></li>
+        <li><a href="/en/argonauta/help/">Help and questions</a></li>
+        <li><a href="/argonauta/privacy/#en">Argonauta's privacy policy</a></li>
+        <li><a href="/argonauta/" hreflang="it" lang="it">Italiano</a></li>
+      </ul>
+    </nav>
+    <p class="crediti" id="crediti">The site's drawings, with the ship, the heroes and Argo's landscapes, are provisional and made with AI. The screenshots come from the app: the maps show their credits.</p>
+  </div>
+  <!-- [P.IVA]: da mettere quando c'è, così: <p>P.IVA 01234567890</p> -->
+</footer>
+<!-- piede:fine -->
+</body>
+</html>

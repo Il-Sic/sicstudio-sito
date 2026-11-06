@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-60 -60 120 120" role="img" aria-label="Un timbro tondo con le parole «Nella collezione» e «Diario di bordo»">
+<style>.velo{fill:#08739A;fill-opacity:.1}.anello{fill:none;stroke:#08739A}.inchiostro{fill:#08739A}.parole{font:800 9px ui-rounded,system-ui,-apple-system,sans-serif;letter-spacing:.11em;fill:#08739A}.spunta{fill:none;stroke:#FFFFFF;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}@media (prefers-color-scheme:dark){.velo,.inchiostro{fill:#2B9FC4}.anello{stroke:#2B9FC4}.parole{fill:#2B9FC4}.spunta{stroke:#1C1C1E}}</style>
+<defs><path id="giro" d="M0,-41.5A41.5,41.5 0 1,1 0,41.5A41.5,41.5 0 1,1 0,-41.5"/></defs>
+<g transform="rotate(-8)">
+<circle class="velo" r="56"/>
+<circle class="anello" r="54.6" stroke-width="2.8"/>
+<circle class="anello" r="50" stroke-width="1"/>
+<circle class="anello" r="31" stroke-width="1"/>
+<text class="parole"><textPath href="#giro" textLength="258" lengthAdjust="spacing">NELLA COLLEZIONE · DIARIO DI BORDO · </textPath></text>
+<path class="inchiostro" d="M0,-15.8 L2.43,-18.44 L4.81,-17.97 L6.05,-14.6 L7.9,-13.68 L11.32,-14.76 L13.15,-13.15 L12.53,-9.62 L13.68,-7.9 L17.18,-7.12 L17.97,-4.81 L15.66,-2.06 L15.8,-0 L18.44,2.43 L17.97,4.81 L14.6,6.05 L13.68,7.9 L14.76,11.32 L13.15,13.15 L9.62,12.53 L7.9,13.68 L7.12,17.18 L4.81,17.97 L2.06,15.66 L0,15.8 L-2.43,18.44 L-4.81,17.97 L-6.05,14.6 L-7.9,13.68 L-11.32,14.76 L-13.15,13.15 L-12.53,9.62 L-13.68,7.9 L-17.18,7.12 L-17.97,4.81 L-15.66,2.06 L-15.8,0 L-18.44,-2.43 L-17.97,-4.81 L-14.6,-6.05 L-13.68,-7.9 L-14.76,-11.32 L-13.15,-13.15 L-9.62,-12.53 L-7.9,-13.68 L-7.12,-17.18 L-4.81,-17.97 L-2.06,-15.66Z"/>
+<path class="spunta" d="M-7,0.5 L-2,5.5 L8,-5"/>
+</g>
+</svg>

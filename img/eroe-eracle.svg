@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-13.4 -34.5 34.5 34.5" width="345" height="345">
+<title>Eracle</title>
+<g transform="scale(-1.2 1.2)">
+ <g transform="translate(0 4.6) rotate(-14 0 -6.8)">
+  <path fill="#6B4424" d="M-4.2-2.6L-2.4-3.2L.2-19.6C.5-22.2-3.3-22.6-3.4-19.8Z"/>
+  <g fill="#4E301A">
+   <circle cx="-1.4" cy="-17.6" r=".8"/>
+   <circle cx="-2.6" cy="-14" r=".8"/>
+   <circle cx="-.9" cy="-12.4" r=".8"/>
+  </g>
+  <g fill="none" stroke="#A06A4A" stroke-linecap="round">
+   <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-76)"/>
+   <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-84)"/>
+   <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-66)"/>
+  </g>
+  <path fill="#7A4E2D" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+  <path fill="none" stroke="#55351D" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+  <path fill="#C48A3F" d="M-4.3-17.2Q0-19.6 4.6-16.6L4.3-14.3Q0-15.6-4.5-14.2Z"/>
+  <circle fill="#9E6B2E" cx="2.7" cy="-15.1" r="1.1"/>
+  <g transform="translate(.3 -17.2) rotate(4)">
+   <rect fill="#B97F5B" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+   <path fill="#C48A3F" d="M-5.8 1.6C-6.8-6-4.6-11.8.4-12.2C4.6-12.4 6.2-9 5.8-6.2L2.4-7.4C.4-8.6-2.4-7.6-3-5.2C-3.4-3.2-3-.6-2 1.6Z"/>
+   <circle fill="#9E6B2E" cx="-2.6" cy="-11.3" r="1.4"/>
+   <circle fill="#9E6B2E" cx="1.6" cy="-12" r="1.4"/>
+   <circle fill="#B97F5B" cx=".2" cy="-4.6" r="4.6"/>
+   <path fill="#2E1E14" d="M-1.4-2.8C-.8 1.6 4.6 1.8 5.2-3.2C4-2 1.6-2-1.4-2.8Z"/>
+   <path fill="#C48A3F" d="M-2.6-6.2C-1.2-8.8 3.2-9 5.6-6L5.4-5.1C3.2-7.4-.6-7.5-2.2-5.4Z"/>
+   <circle fill="#2A1B12" cx="2.5" cy="-5.1" r=".6"/>
+   <circle fill="#E2645A" fill-opacity=".22" cx="2.7" cy="-3.3" r=".9"/>
+  </g>
+  <path fill="none" stroke="#C9A070" stroke-width="2" stroke-linecap="round" d="M6.4-13.7L11-1"/>
+  <g transform="translate(.3 -15.4) rotate(-74)">
+   <path fill="none" stroke="#B97F5B" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+   <circle fill="#B97F5B" cx="0" cy="6.3" r="1.1"/>
+  </g>
+ </g>
+</g>
+</svg>
