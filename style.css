@@ -311,12 +311,13 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   letter-spacing: -0.03em; line-height: 0.95;
 }
 .apertura-studio .sottotitolo { max-inline-size: 30rem; }
-/* La casa del bosco a metà strada, larga come la pagina: il sentiero si disegna, le finestre si accendono, la stella
-   brilla, una volta sola all'apertura. */
+/* La casa del bosco a metà strada, larga come la pagina: il sentiero si disegna, le finestre si accendono, la luna
+   sorge con il suo alone, una volta sola all'apertura. */
 .bottega { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 460; margin-top: var(--s4); border-radius: var(--r3); box-shadow: var(--ombra); }
 @media (max-width: 47.99rem) { .bottega { aspect-ratio: 4 / 3; margin-top: var(--s3); border-radius: var(--r2); } }
 .bs-cielo { fill: var(--carta-2); }
-.bs-stella { fill: var(--stella); transform-box: fill-box; transform-origin: center; }
+.bs-luna { transform-box: fill-box; transform-origin: center; }
+.bs-falce { fill: var(--stella); }
 .bs-monti { fill: #DDD4C4; }
 .bs-colli { fill: #C9C2AE; }
 .bs-sentiero { stroke-width: 7; }
@@ -326,11 +327,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @media (prefers-reduced-motion: no-preference) {
   .bs-sentiero { stroke-dasharray: 1; stroke-dashoffset: 1; animation: traccia 1.8s cubic-bezier(.6, 0, .3, 1) .2s forwards; }
   .bottega .cs-vetro, .bs-lume { opacity: 0; animation: accendi-luce .6s ease-out 1.9s forwards; }
-  .bs-stella { scale: 0; animation: brilla .7s cubic-bezier(.3, 1.6, .5, 1) 2.4s forwards; }
+  .bs-luna { animation: sorge 1s cubic-bezier(.2, .8, .2, 1) 2.3s both; }
 }
 @keyframes traccia { to { stroke-dashoffset: 0; } }
 @keyframes accendi-luce { to { opacity: 1; } }
-@keyframes brilla { to { scale: 1; } }
+@keyframes sorge { from { opacity: 0; scale: 0.6; translate: 0 12px; } }
 
 /* ---------- Lo studio ---------- */
 
@@ -428,11 +429,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .fr-sentiero, .bs-sentiero { stroke: #2A3646; }
   .sg-sentiero { fill: #2A3646; }
 }
-/* Il cielo, uguale nelle due scene: le stelle (di notte) e la stella guida, che al telefono sta più a sinistra. */
-.volta-stella { fill: var(--stella); }
+/* Il cielo, uguale nelle due scene: le stelle (di notte) e la luna crescente con il suo alone caldo, che al telefono
+   sta più a sinistra. */
+.volta-falce { fill: var(--stella); }
 .volta { transform-box: view-box; transform-origin: 730px 806px; }
-.volta-guida { transform-box: fill-box; transform-origin: center; }
-@media (max-width: 47.99rem) { .volta-guida { translate: -390px -110px; } }
+.volta-luna { transform-box: fill-box; transform-origin: center; }
+@media (max-width: 47.99rem) { .volta-luna { translate: -390px -110px; } }
 .lg-acqua { fill: #BCCFCD; }
 .lg-luce { fill: #E2EBE6; }
 .lg-sassi { fill: #918A7E; }
@@ -593,7 +595,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .fr-scena { height: calc(100% + var(--sotto)); min-height: 0; }
     .frontespizio-paesaggio, .soglia-disegno { height: calc(100% - var(--sotto)); overflow: visible; }
     .fr-terra { animation: fr-scendi linear both; animation-timeline: --fronte; animation-range: contain 0% contain 23.9%; }
-    .volta-guida { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
+    .volta-luna { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
     .volta-stelle { animation: fr-stelle linear both; animation-timeline: --fronte; animation-range: contain 2.1% contain 19.5%; }
     .frase-terra { animation: fr-sali linear both; animation-timeline: --fronte; animation-range: contain 0% contain 9.6%; }
     .frase-cielo { animation: fr-appari linear both; animation-timeline: --fronte; animation-range: contain 10.4% contain 20%; }
@@ -621,7 +623,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .frontespizio-palco { height: 415svh; }
     .frontespizio + .dentro { margin-top: calc(var(--testata) - 126svh); padding-top: calc(var(--s5) + 26svh); }
     .fr-terra { animation-range: contain 0% contain 20%; }
-    .volta-guida { animation-range: contain 4.4% contain 16.4%; }
+    .volta-luna { animation-range: contain 4.4% contain 16.4%; }
     .volta-stelle { animation-range: contain 1.8% contain 16.4%; }
     .frase-terra { animation-range: contain 0% contain 8.1%; }
     .frase-cielo { animation-range: contain 8.8% contain 16.7%; }
@@ -782,14 +784,14 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .og-manico { fill: none; }
 }
 
-/* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con la sua stella, dentro la pianta. In una
+/* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con la sua luna, dentro la pianta. In una
    colonna sola viene dopo il quaderno ed è piccola, per non prendere da sola uno schermo intero. */
 .finestra { grid-area: finestra; justify-self: center; width: min(64%, 15rem); }
 @media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 19rem); margin-left: var(--s3); } }
 .finestra-disegno { width: 100%; height: auto; display: block; }
 .fn-telaio { fill: var(--legno); }
 .fn-cielo { fill: #F7F1E4; }
-.fn-stella { fill: var(--stella); }
+.fn-falce { fill: var(--stella); }
 .fn-monti { fill: #DCD3C2; }
 .fn-colli { fill: #B9B7A0; }
 .fn-abeti { fill: #6E8664; }
