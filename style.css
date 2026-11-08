@@ -406,14 +406,17 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   height: calc(100svh - var(--testata)); min-height: 34rem;
 }
 .frontespizio-paesaggio, .soglia-disegno { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* I colori dei paesaggi della casa (frontespizio, soglia, studio, finestra, laghetto), di giorno e di notte. */
+/* I colori dei paesaggi della casa (frontespizio, soglia, studio, finestra, laghetto), di giorno e di notte. Il prato
+   e la luce della porta servono anche al palco del frontespizio, che dipinge la striscia della barra di Safari. */
+:root { --prato: #A9A891; --luce-soglia: #FFE6B0; }
+@media (prefers-color-scheme: dark) { :root { --prato: #0A111A; --luce-soglia: #D99331; } }
 .fr-cielo, .sg-cielo { fill: var(--carta); }
 .volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { fill: #F4EEDC; opacity: 0; }
 .fr-alba-0, .sg-alba-0, .fn-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
 .fr-alba-1, .sg-alba-1, .fn-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.9; }
 .fr-monti, .sg-monti { fill: #E4DCCD; }
 .fr-colli, .sg-colli { fill: #CDC6B4; }
-.fr-collina, .sg-terra, .bs-terra { fill: #A9A891; }
+.fr-collina, .sg-terra, .bs-terra { fill: var(--prato); }
 .fr-sentiero, .bs-sentiero { fill: none; stroke: #F4EDE0; stroke-linecap: round; stroke-linejoin: round; }
 .fr-sentiero { stroke-width: 9; }
 .sg-sentiero { fill: #F4EDE0; }
@@ -425,7 +428,6 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .fr-alba-1, .sg-alba-1, .fn-alba-1 { stop-color: #233656; stop-opacity: 0.7; }
   .fr-monti, .sg-monti, .bs-monti { fill: #142033; }
   .fr-colli, .sg-colli, .bs-colli { fill: #0F1826; }
-  .fr-collina, .sg-terra, .bs-terra { fill: #0A111A; }
   .fr-sentiero, .bs-sentiero { stroke: #2A3646; }
   .sg-sentiero { fill: #2A3646; }
 }
@@ -563,13 +565,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    avvicina, la porta si apre e la luce riempie lo schermo, fino al muro della bottega. */
 .soglia { position: relative; height: min(70svh, 44rem); overflow: clip; }
 .sg-raggio { fill: #FFD27A; opacity: 0; }
-.sg-luce { fill: #FFE6B0; opacity: 0; }
+.sg-luce { fill: var(--luce-soglia); opacity: 0; }
 .sg-alone { opacity: 0; }
 .sg-alone-0 { stop-color: #FFF1C9; stop-opacity: 1; }
 .sg-alone-1 { stop-color: #FFD27A; stop-opacity: 0.6; }
 .sg-alone-2 { stop-color: #FFC85A; stop-opacity: 0; }
 @media (prefers-color-scheme: dark) {
-  .sg-luce { fill: #D99331; }
   .sg-alone-0 { stop-color: #FFC85A; }
   .sg-alone-1 { stop-color: #E39A35; stop-opacity: 0.55; }
 }
@@ -589,18 +590,36 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .frontespizio { --strada: contain 43.4% contain 100%; }
     .frontespizio-palco { height: 365svh; view-timeline: --fronte block; }
     .frontespizio + .dentro { position: relative; z-index: 2; margin-top: calc(var(--testata) - 121.5svh); padding-top: calc(var(--s5) + 21.5svh); }
-    /* La scena scende anche nella striscia che la barra di Safari lascia rimpicciolendosi (--sotto, con 5rem di
-       margine sotto lo schermo): i disegni restano della misura di prima e sotto il bordo continuano (casa.py). */
-    .frontespizio-fermo { --sotto: calc(100lvh - 100svh + 5rem); position: sticky; top: var(--testata); z-index: 3; pointer-events: none; height: calc(100svh - var(--testata)); min-height: 34rem; }
-    .fr-scena { height: calc(100% + var(--sotto)); min-height: 0; }
-    .frontespizio-paesaggio, .soglia-disegno { height: calc(100% - var(--sotto)); overflow: visible; }
+    /* La striscia della barra di Safari. Quando la barra si chiude, lo schermo si allunga di 100lvh - 100svh; ma su
+       iPhone (iOS 26) Safari non disegna niente di fermo (sticky o fixed) sotto la linea dove stava la barra (così
+       dicono le segnalazioni sui forum di Apple, ed è quello che si vedeva qui), e una scena che scendesse oltre il suo
+       bordo lì non si vedrebbe: resterebbe una fascia di carta, o la bottega che sale.
+       Così la scena finisce su quella linea (100svh), e la striscia la dipinge il palco, che scorre con la pagina e
+       Safari lo disegna sempre: è del colore del prato, poi della luce della porta, e copre la bottega finché la luce
+       non sfuma (fr-fondo, sulla stessa strada della soglia). Uguale su ogni browser, con la barra aperta o chiusa. */
+    .frontespizio-palco { position: relative; }
+    .frontespizio-palco::before {
+      content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none; background: var(--prato);
+      animation: fr-fondo linear both; animation-timeline: --fronte; animation-range: var(--strada);
+    }
+    .frontespizio-fermo {
+      position: sticky; top: var(--testata); z-index: 4; pointer-events: none;
+      height: calc(100svh - var(--testata)); min-height: 34rem;
+      clip-path: inset(calc(-1 * var(--testata)) 0 max(0px, 100% - 100svh + var(--testata)) 0);
+    }
+    /* Dietro la testata di vetro resta la carta, non il prato del palco che le scorre sotto. */
+    .frontespizio-fermo::before {
+      content: ""; position: absolute; inset: auto 0 100%; height: var(--testata); background: var(--carta);
+      animation: fr-velo linear both; animation-timeline: --fronte; animation-range: var(--strada);
+    }
+    .fr-scena { height: 100%; min-height: 0; }
     .fr-terra { animation: fr-scendi linear both; animation-timeline: --fronte; animation-range: contain 0% contain 23.9%; }
     .volta-luna { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
     .volta-stelle { animation: fr-stelle linear both; animation-timeline: --fronte; animation-range: contain 2.1% contain 19.5%; }
     .frase-terra { animation: fr-sali linear both; animation-timeline: --fronte; animation-range: contain 0% contain 9.6%; }
     .frase-cielo { animation: fr-appari linear both; animation-timeline: --fronte; animation-range: contain 10.4% contain 20%; }
     .frontespizio-nome { animation: fr-nome linear both; animation-timeline: --fronte; animation-range: contain 19.5% contain 34.8%; }
-    .soglia { position: absolute; inset: 0 0 calc(-1 * var(--sotto)); height: auto; }
+    .soglia { position: absolute; inset: 0; height: auto; }
     .frontespizio-parole, .frontespizio-paesaggio, .fr-zoom, .volta, .soglia, .sg-avvicina, .sg-entra, .cs-porta-su, .cs-porta-giu,
     .cs-anta-ombra, .sg-tappeto, .sg-lume-porta, .sg-alone, .sg-raggio, .sg-luce { animation: linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .sg-alone { animation-name: sg-alone; }
@@ -617,6 +636,15 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .cs-anta-ombra { animation-name: anta-ombra; }
     .sg-tappeto, .sg-lume-porta { animation-name: tappeto; }
     .sg-luce { animation-name: sg-luce; }
+  }
+  /* Sui touch, dove c'è la barra, gli ultimi 3rem della scena sfumano nel prato: il sentiero non resta tagliato sulla
+     linea della barra. */
+  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (hover: none) {
+    .frontespizio-fermo::after {
+      content: ""; position: absolute; inset: calc(100svh - var(--testata) - 3rem) 0 auto; height: 3rem;
+      background: var(--prato); -webkit-mask-image: linear-gradient(transparent, #000); mask-image: linear-gradient(transparent, #000);
+      animation: fr-fondo linear both; animation-timeline: --fronte; animation-range: var(--strada);
+    }
   }
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (min-width: 48rem) {
     .frontespizio { --strada: contain 36.5% contain 100%; }
@@ -636,6 +664,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @keyframes fr-sali { from { translate: 0 6svh; color: var(--testo); } }
 @keyframes fr-appari { from { opacity: 0; translate: 0 1rem; } }
 @keyframes fr-nome { from { opacity: 0; translate: 0 2rem; } }
+/* Il fondo del palco e la sfumatura in fondo alla scena: il prato, poi la luce insieme a .sg-luce, poi vanno via
+   insieme alla soglia (sg-appari). */
+@keyframes fr-fondo { 85% { background-color: var(--prato); } 89%, 91% { background-color: var(--luce-soglia); opacity: 1; } 100% { background-color: var(--luce-soglia); opacity: 0; } }
+@keyframes fr-velo { 91% { opacity: 1; } 100% { opacity: 0; } }
 /* La strada fino alla porta, in percentuali della strada: le parole vanno via; il paesaggio si avvicina alla casa e il
    cielo, lontano, si allarga meno ed esce dall'alto prima che la porta si apra; la soglia compare sopra il paesaggio
    (le due case hanno la stessa misura fra il 22 e il 32%), la casa si avvicina, la porta si apre, la luce esce, si
