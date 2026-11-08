@@ -1112,8 +1112,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .versi p { font-style: italic; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; text-wrap: pretty; }
 @supports (text-indent: 1em hanging each-line) { .versi p { text-indent: 1.5em hanging each-line; } }
 @media (max-width: 47.99rem) { .versi p { text-indent: 0; } .versi br { display: none; } }
-.versi footer { margin-top: var(--s0); font: 400 0.875rem/1.4 var(--strumenti); color: var(--testo-2); }
-.versi footer cite { font-style: italic; }
+.versi figcaption { margin-top: var(--s0); font: 400 0.875rem/1.4 var(--strumenti); color: var(--testo-2); }
+.versi figcaption cite { font-style: italic; }
 .indice-mito ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s2); counter-reset: indice; }
 .indice-mito li { counter-increment: indice; }
 .indice-mito a { display: inline-flex; align-items: baseline; gap: 0.4rem; min-height: 2.75rem; padding-top: 0.6rem; color: var(--testo); text-decoration-color: var(--matita); }
