@@ -957,8 +957,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   font: 600 0.9375rem/1.3 var(--strumenti); color: var(--testo);
   padding: 0.5rem 0.9rem; border-radius: 99px; background: var(--carta-2); border: 1px solid var(--riga);
 }
-@media (max-width: 30rem) { .stato-app { background: none; border: 0; padding: 0; } }
-.stato-app::before { content: ""; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--stella); box-shadow: 0 0 0 3px color-mix(in srgb, var(--stella) 25%, transparent); }
+.stato-app::before { content: ""; flex: none; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--stella); box-shadow: 0 0 0 3px color-mix(in srgb, var(--stella) 25%, transparent); }
+/* Al telefono la frase va a capo: il pallino sta nella prima riga, attaccato alla prima parola, come un capolettera. */
+@media (max-width: 30rem) {
+  .stato-app { display: block; background: none; border: 0; padding: 0; text-wrap: balance; }
+  .stato-app::before { display: inline-block; vertical-align: 0.1em; margin-right: 0.5rem; }
+}
 
 /* ---------- Argonauta: una giornata ---------- */
 
