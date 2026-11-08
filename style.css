@@ -316,19 +316,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .bottega { display: block; width: 100%; height: auto; aspect-ratio: 1200 / 460; margin-top: var(--s4); border-radius: var(--r3); box-shadow: var(--ombra); }
 @media (max-width: 47.99rem) { .bottega { aspect-ratio: 4 / 3; margin-top: var(--s3); border-radius: var(--r2); } }
 .bs-cielo { fill: var(--carta-2); }
-.bs-stelle { fill: #F4EEDC; opacity: 0; }
 .bs-stella { fill: var(--stella); transform-box: fill-box; transform-origin: center; }
 .bs-monti { fill: #DDD4C4; }
 .bs-colli { fill: #C9C2AE; }
-.bs-terra { fill: #A9A891; }
-.bs-sentiero { fill: none; stroke: #F4EDE0; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.bs-sentiero { stroke-width: 7; }
 @media (prefers-color-scheme: dark) {
   .bs-cielo { fill: url(#bs-notte); }
-  .bs-stelle { opacity: 1; }
-  .bs-monti { fill: #142033; }
-  .bs-colli { fill: #0F1826; }
-  .bs-terra { fill: #0A111A; }
-  .bs-sentiero { stroke: #2A3646; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .bs-sentiero { stroke-dasharray: 1; stroke-dashoffset: 1; animation: traccia 1.8s cubic-bezier(.6, 0, .3, 1) .2s forwards; }
@@ -381,7 +374,6 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .cure li { counter-increment: cura; padding: var(--s2) 0 var(--s3); border-top: 1px solid var(--riga); display: grid; gap: var(--s0); align-content: start; }
 .cure h3 { font-size: var(--t3); font-style: italic; }
 .cure h3::before { content: counter(cura) "  "; font-style: normal; color: var(--oro); white-space: pre; }
-.cure p { max-inline-size: var(--misura); }
 
 /* Il giornale di bordo: le date nel margine, le righe del quaderno. */
 .diario-bordo { list-style: none; border-top: 1px solid var(--testo); }
@@ -392,7 +384,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   border-bottom: 1px solid var(--riga);
 }
 .diario-bordo time { font: italic 400 var(--t1)/1.7 var(--libro); color: var(--testo-2); font-variant-numeric: oldstyle-nums; }
-.diario-bordo p { font-size: var(--t2); line-height: 1.5; max-inline-size: var(--misura); }
+.diario-bordo p, .cure p { font-size: var(--t2); line-height: 1.5; max-inline-size: var(--misura); }
 @media (min-width: 40rem) {
   .diario-bordo { border-top: 0; background: linear-gradient(var(--matita), var(--matita)) 11.25rem 0 / 1px 100% no-repeat; }
   .diario-bordo li { border-bottom: 0; }
@@ -413,28 +405,49 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   height: calc(100svh - var(--testata)); min-height: 34rem;
 }
 .frontespizio-paesaggio, .soglia-disegno { position: absolute; inset: 0; width: 100%; height: 100%; }
-.fr-cielo { fill: var(--carta); }
-.fr-stelle { fill: #F4EEDC; opacity: 0; }
-.fr-guida-stella { fill: var(--stella); }
-.fr-guida, .fr-guida-alone { transform-box: fill-box; transform-origin: center; }
-.fr-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
-.fr-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.9; }
-.fr-monti { fill: #E4DCCD; }
-.fr-colli { fill: #CDC6B4; }
-.fr-collina { fill: #A9A891; }
-.fr-sentiero { fill: none; stroke: #F4EDE0; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+/* I colori dei paesaggi della casa (frontespizio, soglia, studio, finestra, laghetto), di giorno e di notte. */
+.fr-cielo, .sg-cielo { fill: var(--carta); }
+.volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { fill: #F4EEDC; opacity: 0; }
+.fr-alba-0, .sg-alba-0, .fn-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
+.fr-alba-1, .sg-alba-1, .fn-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.9; }
+.fr-monti, .sg-monti { fill: #E4DCCD; }
+.fr-colli, .sg-colli { fill: #CDC6B4; }
+.fr-collina, .sg-terra, .bs-terra { fill: #A9A891; }
+.fr-sentiero, .bs-sentiero { fill: none; stroke: #F4EDE0; stroke-linecap: round; stroke-linejoin: round; }
+.fr-sentiero { stroke-width: 9; }
+.sg-sentiero { fill: #F4EDE0; }
 @media (prefers-color-scheme: dark) {
   .fr-cielo { fill: url(#fr-notte); }
-  .fr-stelle { opacity: 1; }
-  .fr-alba-0 { stop-color: #20314F; stop-opacity: 0; }
-  .fr-alba-1 { stop-color: #233656; stop-opacity: 0.7; }
-  .fr-monti { fill: #142033; }
-  .fr-colli { fill: #0F1826; }
-  .fr-collina { fill: #0A111A; }
-  .fr-sentiero { stroke: #2A3646; }
+  .sg-cielo { fill: url(#sg-notte); }
+  .volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { opacity: 1; }
+  .fr-alba-0, .sg-alba-0, .fn-alba-0 { stop-color: #20314F; }
+  .fr-alba-1, .sg-alba-1, .fn-alba-1 { stop-color: #233656; stop-opacity: 0.7; }
+  .fr-monti, .sg-monti, .bs-monti { fill: #142033; }
+  .fr-colli, .sg-colli, .bs-colli { fill: #0F1826; }
+  .fr-collina, .sg-terra, .bs-terra { fill: #0A111A; }
+  .fr-sentiero, .bs-sentiero { stroke: #2A3646; }
+  .sg-sentiero { fill: #2A3646; }
+}
+/* Il cielo, uguale nelle due scene: le stelle (di notte) e la stella guida, che al telefono sta più a sinistra. */
+.volta-stella { fill: var(--stella); }
+.volta { transform-box: view-box; transform-origin: 730px 806px; }
+.volta-guida { transform-box: fill-box; transform-origin: center; }
+@media (max-width: 47.99rem) { .volta-guida { translate: -390px -110px; } }
+.lg-acqua { fill: #BCCFCD; }
+.lg-luce { fill: #E2EBE6; }
+.lg-sassi { fill: #918A7E; }
+.lg-giunchi { fill: none; stroke: #5F6E3E; stroke-width: 1.6; stroke-linecap: round; }
+.lg-teste { fill: #7A5534; }
+.lg-riflesso { fill: #FFC85A; opacity: 0; }
+@media (prefers-color-scheme: dark) {
+  .lg-acqua { fill: #15233A; }
+  .lg-luce { fill: #1D2E4A; }
+  .lg-sassi { fill: #262A31; }
+  .lg-giunchi { stroke: #1A2614; }
+  .lg-teste { fill: #2E2016; }
+  .lg-riflesso { opacity: 0.7; }
 }
 .fr-terra { transform: translateY(245px); }
-@media (max-width: 47.99rem) { .fr-guida { translate: -390px -110px; } }
 /* Il paesaggio si avvicina alla casa intorno allo stesso punto della soglia, così le due case coincidono. */
 .fr-zoom { transform-box: view-box; transform-origin: 730px 806px; }
 
@@ -547,31 +560,13 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* La soglia: la casa da vicino. Ferma, la porta è aperta e la luce esce sul sentiero; con lo scorrimento ci si
    avvicina, la porta si apre e la luce riempie lo schermo, fino al muro della bottega. */
 .soglia { position: relative; height: min(70svh, 44rem); overflow: clip; }
-.sg-cielo { fill: var(--carta); }
-.sg-stelle { fill: #F4EEDC; opacity: 0; }
-.sg-guida { fill: var(--stella); }
-.sg-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
-.sg-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.9; }
-.sg-monti { fill: #E4DCCD; }
-.sg-colli { fill: #CDC6B4; }
-.sg-terra { fill: #A9A891; }
-.sg-sentiero { fill: #F4EDE0; }
 .sg-raggio { fill: #FFD27A; opacity: 0; }
 .sg-luce { fill: #FFE6B0; opacity: 0; }
 .sg-alone { opacity: 0; }
 .sg-alone-0 { stop-color: #FFF1C9; stop-opacity: 1; }
 .sg-alone-1 { stop-color: #FFD27A; stop-opacity: 0.6; }
 .sg-alone-2 { stop-color: #FFC85A; stop-opacity: 0; }
-.sg-muro { fill: var(--muro); opacity: 0; }
 @media (prefers-color-scheme: dark) {
-  .sg-cielo { fill: url(#sg-notte); }
-  .sg-stelle { opacity: 1; }
-  .sg-alba-0 { stop-color: #20314F; stop-opacity: 0; }
-  .sg-alba-1 { stop-color: #233656; stop-opacity: 0.7; }
-  .sg-monti { fill: #142033; }
-  .sg-colli { fill: #0F1826; }
-  .sg-terra { fill: #0A111A; }
-  .sg-sentiero { fill: #2A3646; }
   .sg-luce { fill: #D99331; }
   .sg-alone-0 { stop-color: #FFC85A; }
   .sg-alone-1 { stop-color: #E39A35; stop-opacity: 0.55; }
@@ -585,26 +580,33 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
-    /* Al telefono la strada fino alla porta è lunga una schermata e mezza, sul computer due (sotto). Poi la bottega
-       sale sopra la scena ferma, che è già del colore del muro: niente schermata vuota fra la porta e i libri. */
-    .frontespizio { --strada: contain 34.3% contain 79.1%; }
-    .frontespizio-palco { height: 435svh; view-timeline: --fronte block; }
-    .dentro { position: relative; z-index: 2; margin-top: -70svh; }
-    .frontespizio-fermo { position: sticky; top: var(--testata); height: calc(100svh - var(--testata)); min-height: 34rem; overflow: clip; }
-    .fr-scena { height: 100%; min-height: 0; }
-    .fr-terra { animation: fr-scendi linear both; animation-timeline: --fronte; animation-range: contain 0% contain 18.9%; }
-    .fr-guida { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 4.1% contain 15.4%; }
-    .fr-stelle { animation: fr-stelle linear both; animation-timeline: --fronte; animation-range: contain 1.7% contain 15.4%; }
-    .frase-terra { animation: fr-sali linear both; animation-timeline: --fronte; animation-range: contain 0% contain 7.6%; }
-    .frase-cielo { animation: fr-appari linear both; animation-timeline: --fronte; animation-range: contain 8.2% contain 15.8%; }
-    .frontespizio-nome { animation: fr-nome linear both; animation-timeline: --fronte; animation-range: contain 15.4% contain 27.5%; }
-    .soglia { position: absolute; inset: 0; height: auto; }
-    .frontespizio-parole, .fr-zoom, .soglia, .sg-avvicina, .sg-entra, .cs-porta-su, .cs-porta-giu, .cs-anta-ombra,
-    .sg-tappeto, .sg-lume-porta, .sg-alone, .sg-raggio, .sg-luce, .sg-muro { animation: linear both; animation-timeline: --fronte; animation-range: var(--strada); }
+    /* Al telefono la strada fino alla porta è lunga una schermata e mezza, sul computer due (sotto), e il palco finisce
+       con lei. La scena sta sopra la bottega, che le sale sotto mentre la luce riempie lo schermo: quando la luce sfuma,
+       il titolo e la finestra sono già lì. La sovrapposizione è quella fra l'inizio della sfumatura e la fine del
+       palco, più 8svh per la barra di Safari che si chiude; altrettanto spazio in più sopra il titolo. */
+    .frontespizio { --strada: contain 43.4% contain 100%; }
+    .frontespizio-palco { height: 365svh; view-timeline: --fronte block; }
+    .frontespizio + .dentro { position: relative; z-index: 2; margin-top: calc(var(--testata) - 121.5svh); padding-top: calc(var(--s5) + 21.5svh); }
+    /* La scena scende anche nella striscia che la barra di Safari lascia rimpicciolendosi (--sotto, con 5rem di
+       margine sotto lo schermo): i disegni restano della misura di prima e sotto il bordo continuano (casa.py). */
+    .frontespizio-fermo { --sotto: calc(100lvh - 100svh + 5rem); position: sticky; top: var(--testata); z-index: 3; pointer-events: none; height: calc(100svh - var(--testata)); min-height: 34rem; }
+    .fr-scena { height: calc(100% + var(--sotto)); min-height: 0; }
+    .frontespizio-paesaggio, .soglia-disegno { height: calc(100% - var(--sotto)); overflow: visible; }
+    .fr-terra { animation: fr-scendi linear both; animation-timeline: --fronte; animation-range: contain 0% contain 23.9%; }
+    .volta-guida { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
+    .volta-stelle { animation: fr-stelle linear both; animation-timeline: --fronte; animation-range: contain 2.1% contain 19.5%; }
+    .frase-terra { animation: fr-sali linear both; animation-timeline: --fronte; animation-range: contain 0% contain 9.6%; }
+    .frase-cielo { animation: fr-appari linear both; animation-timeline: --fronte; animation-range: contain 10.4% contain 20%; }
+    .frontespizio-nome { animation: fr-nome linear both; animation-timeline: --fronte; animation-range: contain 19.5% contain 34.8%; }
+    .soglia { position: absolute; inset: 0 0 calc(-1 * var(--sotto)); height: auto; }
+    .frontespizio-parole, .frontespizio-paesaggio, .fr-zoom, .volta, .soglia, .sg-avvicina, .sg-entra, .cs-porta-su, .cs-porta-giu,
+    .cs-anta-ombra, .sg-tappeto, .sg-lume-porta, .sg-alone, .sg-raggio, .sg-luce { animation: linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .sg-alone { animation-name: sg-alone; }
     .sg-raggio { animation-name: sg-raggio; }
     .frontespizio-parole { animation-name: fr-via; }
+    .frontespizio-paesaggio { animation-name: fr-nascondi; }
     .fr-zoom { animation-name: fr-avvicina; }
+    .volta { animation-name: volta-via; }
     .soglia { animation-name: sg-appari; }
     .sg-avvicina { animation-name: sg-avvicina; }
     .sg-entra { animation-name: sg-entra; }
@@ -613,17 +615,17 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .cs-anta-ombra { animation-name: anta-ombra; }
     .sg-tappeto, .sg-lume-porta { animation-name: tappeto; }
     .sg-luce { animation-name: sg-luce; }
-    .sg-muro { animation-name: sg-muro; }
   }
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (min-width: 48rem) {
-    .frontespizio { --strada: contain 29.9% contain 81.8%; }
-    .frontespizio-palco { height: 485svh; }
-    .fr-terra { animation-range: contain 0% contain 16.4%; }
-    .fr-guida { animation-range: contain 3.6% contain 13.4%; }
-    .fr-stelle { animation-range: contain 1.5% contain 13.4%; }
-    .frase-terra { animation-range: contain 0% contain 6.6%; }
-    .frase-cielo { animation-range: contain 7.2% contain 13.7%; }
-    .frontespizio-nome { animation-range: contain 13.4% contain 23.9%; }
+    .frontespizio { --strada: contain 36.5% contain 100%; }
+    .frontespizio-palco { height: 415svh; }
+    .frontespizio + .dentro { margin-top: calc(var(--testata) - 126svh); padding-top: calc(var(--s5) + 26svh); }
+    .fr-terra { animation-range: contain 0% contain 20%; }
+    .volta-guida { animation-range: contain 4.4% contain 16.4%; }
+    .volta-stelle { animation-range: contain 1.8% contain 16.4%; }
+    .frase-terra { animation-range: contain 0% contain 8.1%; }
+    .frase-cielo { animation-range: contain 8.8% contain 16.7%; }
+    .frontespizio-nome { animation-range: contain 16.4% contain 29.2%; }
   }
 }
 @keyframes fr-scendi { from { transform: translateY(0); } }
@@ -632,22 +634,24 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @keyframes fr-sali { from { translate: 0 6svh; color: var(--testo); } }
 @keyframes fr-appari { from { opacity: 0; translate: 0 1rem; } }
 @keyframes fr-nome { from { opacity: 0; translate: 0 2rem; } }
-/* La strada fino alla porta, in percentuali della strada: le parole vanno via, il paesaggio si avvicina alla casa e
-   sfuma nella soglia (le due case hanno la stessa misura fra il 22 e il 32%), la casa si avvicina, la porta si apre, la
-   luce esce, si entra e la luce diventa il muro della bottega. */
+/* La strada fino alla porta, in percentuali della strada: le parole vanno via; il paesaggio si avvicina alla casa e il
+   cielo, lontano, si allarga meno ed esce dall'alto prima che la porta si apra; la soglia compare sopra il paesaggio
+   (le due case hanno la stessa misura fra il 22 e il 32%), la casa si avvicina, la porta si apre, la luce esce, si
+   entra, la luce riempie lo schermo e sfuma sulla bottega. */
 @keyframes fr-via { 0% { opacity: 1; } 10%, 100% { opacity: 0; } }
-@keyframes fr-avvicina { 0% { transform: scale(1); opacity: 1; } 22% { opacity: 1; } 32%, 100% { transform: scale(2.5); opacity: 0; } }
-@keyframes sg-appari { 0%, 22% { opacity: 0; } 32%, 100% { opacity: 1; } }
+@keyframes fr-avvicina { 32%, 100% { transform: scale(2.5); } }
+@keyframes fr-nascondi { 0%, 32% { opacity: 1; } 33%, 100% { opacity: 0; } }
+@keyframes volta-via { 50%, 100% { transform: scale(1.45); } }
+@keyframes sg-appari { 0%, 22% { opacity: 0; } 32%, 91% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes sg-avvicina { 0%, 22% { transform: scale(0.406); } 32% { transform: scale(0.5); } 55%, 100% { transform: scale(1); } }
 @keyframes porta-su { 0%, 55% { transform: skewY(0deg) scaleX(1); } 62% { transform: skewY(6.6deg) scaleX(0.79); } 69% { transform: skewY(19deg) scaleX(0.43); } 76%, 100% { transform: skewY(48deg) scaleX(0.15); } }
 @keyframes porta-giu { 0%, 55% { transform: skewY(0deg) scaleX(1); } 62% { transform: skewY(-6.6deg) scaleX(0.79); } 69% { transform: skewY(-19deg) scaleX(0.43); } 76%, 100% { transform: skewY(-48deg) scaleX(0.15); } }
 @keyframes anta-ombra { 0%, 55% { opacity: 0; } 76%, 100% { opacity: 0.35; } }
 @keyframes tappeto { 0%, 58% { opacity: 0; } 80%, 100% { opacity: 1; } }
-@keyframes sg-entra { 0%, 64% { transform: scale(1); } 92%, 100% { transform: scale(2.4); } }
-@keyframes sg-alone { 0%, 76% { opacity: 0; transform: scale(0.5); } 84% { opacity: 1; transform: scale(1.6); } 94%, 100% { opacity: 1; transform: scale(5); } }
-@keyframes sg-raggio { 0%, 82% { opacity: 0; transform: scale(1); } 85% { opacity: 1; transform: scale(1); } 95%, 100% { opacity: 1; transform: scale(3); } }
-@keyframes sg-luce { 0%, 88% { opacity: 0; } 92%, 100% { opacity: 1; } }
-@keyframes sg-muro { 0%, 94% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes sg-entra { 0%, 64% { transform: scale(1); } 90%, 100% { transform: scale(2.4); } }
+@keyframes sg-alone { 0%, 75% { opacity: 0; transform: scale(0.5); } 82% { opacity: 1; transform: scale(1.6); } 90%, 100% { opacity: 1; transform: scale(5); } }
+@keyframes sg-raggio { 0%, 80% { opacity: 0; transform: scale(1); } 83% { opacity: 1; transform: scale(1); } 90%, 100% { opacity: 1; transform: scale(3); } }
+@keyframes sg-luce { 0%, 85% { opacity: 0; } 89%, 100% { opacity: 1; } }
 
 /* ---------- La home: dentro la bottega ---------- */
 
@@ -677,14 +681,16 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); grid-template-areas: "finestra scaffale" "scrittoio scaffale";
     column-gap: var(--s5); row-gap: var(--s2); align-items: end;
   }
+  .scaffale { align-self: center; }
 }
 
-/* Lo scaffale: i libri in piedi sulla mensola, con la copertina in vista, e un po' di posto per i prossimi. */
+/* Lo scaffale: i libri in piedi sulla mensola, con la copertina in vista (sul computer un po' di posto per i prossimi);
+   sotto il libro del gioco il suo cartellino, attaccato alla mensola. */
 .scaffale {
   grid-area: scaffale; display: grid; align-items: end;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 0.45fr); column-gap: var(--s1);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); column-gap: var(--s1);
 }
-@media (min-width: 48rem) { .scaffale { grid-template-columns: 15rem 10.5rem minmax(4rem, 1fr); column-gap: var(--s2); } }
+@media (min-width: 48rem) { .scaffale { grid-template-columns: 13.5rem 14rem minmax(0, 1fr); column-gap: var(--s2); } }
 .scaffale::before {
   content: ""; grid-row: 1; grid-column: 1 / -1; align-self: end; height: 0.85rem; margin: 0 calc(-1 * var(--s0)) -0.85rem;
   background: linear-gradient(var(--legno-chiaro) 0 22%, var(--legno) 22% 62%, var(--legno-scuro) 62%); border-radius: 2px;
@@ -693,9 +699,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .scaffale .libro { display: contents; }
 .scaffale .libro-copertina { grid-area: 1 / 1; }
 .libro-gioco .copertina-matita { grid-area: 1 / 2; }
-.scaffale .pianta { grid-area: 1 / 3; justify-self: center; width: min(100%, 4.6rem); }
-.scaffale .cartellino { grid-column: 1 / -1; margin-top: calc(var(--s3) + 0.85rem); }
-.libro-gioco .cartellino { margin-top: var(--s2); }
+.scaffale .cartellino { grid-area: 3 / 1 / 4 / -1; margin-top: var(--s2); }
+.cartellino-gioco {
+  grid-area: 2 / 2; justify-self: center; margin-top: 0.3rem; padding: 0.2rem 0.6rem; rotate: -1.5deg;
+  background: var(--scheda); border-radius: 2px; box-shadow: 0 1px 3px rgb(30 20 10 / 0.3);
+  font-style: italic; font-size: 0.9375rem; line-height: 1.4;
+}
 .cartellino { display: grid; gap: var(--s0); max-inline-size: 32rem; }
 .cartellino-righe { font-size: var(--t2); line-height: 1.45; }
 
@@ -737,16 +746,20 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .libro-copertina:hover { translate: 0 -6px; box-shadow: 0 1px 2px rgb(30 20 10 / 0.25), 0 30px 44px -20px rgb(30 20 10 / 0.6); }
 }
 
-/* Il libro del gioco: uno schizzo a matita, senza titolo. */
-.copertina-matita {
-  position: relative; aspect-ratio: 2 / 3; background: var(--foglio-matita); border-radius: 2px 5px 5px 2px;
-  rotate: -7deg; transform-origin: bottom left;
-  box-shadow: inset 0.6rem 0 0 rgb(0 0 0 / 0.08), 3px 0 0 -1px var(--pagine), 6px 1px 0 -2px var(--pagine), 0 12px 18px -12px rgb(30 20 10 / 0.5);
-}
-.matita-disegno { position: absolute; inset: 0; width: 100%; height: 100%; }
-.mt-contorno, .mt-dorso, .mt-schizzo { fill: none; stroke: var(--tratto-matita); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+/* Il libro del gioco: un libro vero, tutto a matita, con la matita appoggiata accanto. Senza titolo. */
+.matita-disegno { display: block; width: 100%; }
+.mt-contorno, .mt-schizzo, .mt-lato { fill: none; stroke: var(--tratto-matita); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .mt-righe { fill: none; stroke: var(--tratto-matita); stroke-width: 0.8; opacity: 0.55; vector-effect: non-scaling-stroke; }
 .mt-schizzo { opacity: 0.7; }
+.mt-carta { fill: var(--foglio-matita); }
+.mt-pagine { fill: var(--pagine); }
+.mt-ombra { fill: rgb(40 25 10 / 0.16); }
+.mt-matita { fill: #D9A93F; }
+.mt-legno { fill: #E8CBA0; }
+.mt-mina, .mt-ghiera { fill: #77706A; }
+.mt-gomma { fill: #D58A84; }
+.mt-lato { stroke: #F0CF7E; }
+@media (prefers-color-scheme: dark) { .mt-matita { fill: #B88E36; } .mt-legno { fill: #C2A47A; } .mt-gomma { fill: #B0716B; } .mt-lato { stroke: #CFAE62; } }
 
 .og-foglia { fill: #6F8A55; }
 .og-foglia-2 { fill: #5A7445; }
@@ -766,15 +779,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .og-manico { fill: none; }
 }
 
-/* La finestra sopra il tavolo: fuori, il cielo di prima con la sua stella. */
+/* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con la sua stella, dentro la pianta. */
 .finestra { grid-area: finestra; justify-self: center; width: min(100%, 24rem); }
-@media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 21rem); margin-left: var(--s3); } }
+@media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 19rem); margin-left: var(--s3); } }
 .finestra-disegno { width: 100%; height: auto; display: block; }
 .fn-telaio { fill: var(--legno); }
 .fn-cielo { fill: #F7F1E4; }
-.fn-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
-.fn-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.85; }
-.fn-stelle { fill: #F4EEDC; opacity: 0; }
 .fn-stella { fill: var(--stella); }
 .fn-monti { fill: #DCD3C2; }
 .fn-colli { fill: #B9B7A0; }
@@ -783,32 +793,35 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .fn-davanzale { fill: var(--legno-chiaro); }
 @media (prefers-color-scheme: dark) {
   .fn-cielo { fill: url(#fn-notte); }
-  .fn-alba-0 { stop-color: #20314F; stop-opacity: 0; }
-  .fn-alba-1 { stop-color: #233656; stop-opacity: 0.6; }
-  .fn-stelle { opacity: 1; }
   .fn-monti { fill: #142033; }
   .fn-colli { fill: #0B131E; }
   .fn-abeti { fill: #08100C; }
 }
 
-/* Lo scrittoio sotto la finestra (non .tavolo, che è il fondo delle fasce), con il quaderno per i parchi, i comuni e le scuole e una lampada. */
+/* Lo scrittoio sotto la finestra (non .tavolo, che è il fondo delle fasce): un tavolo vero, più largo del quaderno, con
+   il piano spesso, la fascia del cassetto con il pomello, le gambe e la traversa. Sopra il quaderno per i parchi, i
+   comuni e le scuole e la lampada. */
 .scrittoio {
-  grid-area: scrittoio; position: relative; display: flex; align-items: flex-end; gap: var(--s2);
-  padding: 0 var(--s1) 1rem; margin-bottom: 2.6rem;
+  grid-area: scrittoio; position: relative; display: flex; align-items: flex-end; gap: var(--s1);
+  padding: 0 var(--s2) 3.3rem; margin-bottom: 8.5rem;
 }
 .scrittoio::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1rem; border-radius: 3px;
-  background: linear-gradient(var(--legno-chiaro) 0 26%, var(--legno) 26% 70%, var(--legno-scuro) 70%);
+  content: ""; position: absolute; inset: auto 0 0; height: 3.3rem; border-radius: 3px;
+  background:
+    radial-gradient(circle, var(--legno-scuro) 0.2rem, transparent 0.25rem) 50% 1.85rem / 1rem 1rem no-repeat,
+    linear-gradient(var(--legno) 0 calc(100% - 0.3rem), var(--legno-scuro) 0) 1.2rem 1.3rem / calc(100% - 2.4rem) 2rem no-repeat,
+    linear-gradient(var(--legno-chiaro) 0 0.3rem, var(--legno) 0 1rem, var(--legno-scuro) 0 1.3rem, transparent 0);
   box-shadow: 0 12px 16px -12px rgb(40 25 10 / 0.5);
 }
 .scrittoio::before {
-  content: ""; position: absolute; left: var(--s1); right: var(--s1); bottom: -2.6rem; height: 2.6rem;
-  background: linear-gradient(90deg, var(--legno-scuro) 0 0.8rem, transparent 0.8rem calc(100% - 0.8rem), var(--legno-scuro) calc(100% - 0.8rem));
+  content: ""; position: absolute; top: 100%; left: 1.6rem; right: 1.6rem; height: 8.5rem;
+  background: linear-gradient(90deg, var(--legno-scuro) 0 1.1rem, transparent 0 calc(100% - 1.1rem), var(--legno-scuro) 0),
+    linear-gradient(var(--legno-scuro), var(--legno-scuro)) 0 74% / 100% 0.5rem no-repeat;
 }
 .scrittoio .quaderno { flex: 1 1 auto; max-inline-size: 24rem; margin-bottom: 0.15rem; }
-.lampada { flex: none; width: 4.4rem; margin-bottom: -0.1rem; }
-@media (max-width: 47.99rem) { .scrittoio { gap: var(--s0); padding-inline: var(--s0); } .lampada { width: 3.2rem; } }
-.lampada svg, .pianta svg { width: 100%; height: auto; display: block; }
+.lampada { flex: none; width: 5rem; margin-bottom: -0.1rem; }
+@media (max-width: 47.99rem) { .scrittoio { gap: var(--s0); padding-inline: var(--s0); margin-bottom: 7rem; } .scrittoio::before { height: 7rem; } .lampada { width: 3.4rem; } }
+.lampada svg { width: 100%; height: auto; display: block; }
 
 .quaderno-copertina {
   display: grid; gap: var(--s0); justify-items: start; padding: var(--s3) var(--s2) var(--s2) var(--s3);
@@ -1148,7 +1161,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .cn-nero { left: 57.27%; top: 32.33%; }
 .carta-barca { transform: translate(959.1px, 283.2px); }
 @keyframes naviga { 0.00% { transform: translate(61.4px, 463px); } 1.50% { transform: translate(61.4px, 463px); } 3.58% { transform: translate(72.6px, 479.6px); } 5.66% { transform: translate(95.3px, 470.8px); } 7.75% { transform: translate(115.9px, 456.8px); } 9.83% { transform: translate(136.2px, 442.4px); } 11.91% { transform: translate(157.7px, 430px); } 14.91% { transform: translate(157.7px, 430px); } 16.90% { transform: translate(178.9px, 430px); } 18.89% { transform: translate(200.9px, 420.9px); } 20.88% { transform: translate(220.5px, 408.4px); } 22.88% { transform: translate(238.5px, 393.3px); } 24.87% { transform: translate(262.1px, 393.5px); } 26.86% { transform: translate(285.5px, 398.2px); } 29.86% { transform: translate(285.5px, 398.2px); } 32.10% { transform: translate(306.1px, 383.4px); } 34.34% { transform: translate(327.7px, 367.6px); } 36.58% { transform: translate(341.8px, 346.8px); } 39.58% { transform: translate(341.8px, 346.8px); } 41.50% { transform: translate(364.2px, 341.6px); } 43.43% { transform: translate(387.2px, 341.9px); } 45.35% { transform: translate(410.1px, 342.5px); } 47.27% { transform: translate(433.1px, 341px); } 49.20% { transform: translate(454.8px, 333.8px); } 51.12% { transform: translate(472.6px, 319.3px); } 53.04% { transform: translate(491.1px, 305.7px); } 54.97% { transform: translate(512.8px, 298.2px); } 56.89% { transform: translate(535.4px, 293.8px); } 58.81% { transform: translate(558.1px, 290.4px); } 60.74% { transform: translate(581px, 288.2px); } 62.66% { transform: translate(604px, 286.5px); } 64.59% { transform: translate(626.5px, 290px); } 66.51% { transform: translate(647px, 300.3px); } 68.43% { transform: translate(666.4px, 312.7px); } 70.36% { transform: translate(683.7px, 327.9px); } 72.28% { transform: translate(702.2px, 341.5px); } 74.20% { transform: translate(724.3px, 347.4px); } 76.13% { transform: translate(747.2px, 349.2px); } 78.05% { transform: translate(770.2px, 350.6px); } 79.97% { transform: translate(793.2px, 351.3px); } 81.90% { transform: translate(816.1px, 349.5px); } 83.82% { transform: translate(838.4px, 343.9px); } 85.74% { transform: translate(859.6px, 334.9px); } 87.67% { transform: translate(877.8px, 321px); } 89.59% { transform: translate(894.8px, 305.5px); } 91.51% { transform: translate(912.3px, 290.5px); } 94.51% { transform: translate(912.3px, 290.5px); } 96.51% { transform: translate(935.6px, 287.2px); } 98.50% { transform: translate(959.1px, 283.2px); } 100.00% { transform: translate(959.1px, 283.2px); } }
-@keyframes scia { 0.00% { stroke-dashoffset: 1.0000; } 1.50% { stroke-dashoffset: 1.0000; } 3.58% { stroke-dashoffset: 0.9755; } 5.66% { stroke-dashoffset: 0.9510; } 7.75% { stroke-dashoffset: 0.9265; } 9.83% { stroke-dashoffset: 0.9020; } 11.91% { stroke-dashoffset: 0.8775; } 14.91% { stroke-dashoffset: 0.8775; } 16.90% { stroke-dashoffset: 0.8541; } 18.89% { stroke-dashoffset: 0.8307; } 20.88% { stroke-dashoffset: 0.8072; } 22.88% { stroke-dashoffset: 0.7838; } 24.87% { stroke-dashoffset: 0.7604; } 26.86% { stroke-dashoffset: 0.7370; } 29.86% { stroke-dashoffset: 0.7370; } 32.10% { stroke-dashoffset: 0.7106; } 34.34% { stroke-dashoffset: 0.6843; } 36.58% { stroke-dashoffset: 0.6579; } 39.58% { stroke-dashoffset: 0.6579; } 41.50% { stroke-dashoffset: 0.6353; } 43.43% { stroke-dashoffset: 0.6126; } 45.35% { stroke-dashoffset: 0.5900; } 47.27% { stroke-dashoffset: 0.5674; } 49.20% { stroke-dashoffset: 0.5447; } 51.12% { stroke-dashoffset: 0.5221; } 53.04% { stroke-dashoffset: 0.4995; } 54.97% { stroke-dashoffset: 0.4769; } 56.89% { stroke-dashoffset: 0.4542; } 58.81% { stroke-dashoffset: 0.4316; } 60.74% { stroke-dashoffset: 0.4090; } 62.66% { stroke-dashoffset: 0.3863; } 64.59% { stroke-dashoffset: 0.3637; } 66.51% { stroke-dashoffset: 0.3411; } 68.43% { stroke-dashoffset: 0.3184; } 70.36% { stroke-dashoffset: 0.2958; } 72.28% { stroke-dashoffset: 0.2732; } 74.20% { stroke-dashoffset: 0.2506; } 76.13% { stroke-dashoffset: 0.2279; } 78.05% { stroke-dashoffset: 0.2053; } 79.97% { stroke-dashoffset: 0.1827; } 81.90% { stroke-dashoffset: 0.1600; } 83.82% { stroke-dashoffset: 0.1374; } 85.74% { stroke-dashoffset: 0.1148; } 87.67% { stroke-dashoffset: 0.0921; } 89.59% { stroke-dashoffset: 0.0695; } 91.51% { stroke-dashoffset: 0.0469; } 94.51% { stroke-dashoffset: 0.0469; } 96.51% { stroke-dashoffset: 0.0234; } 98.50% { stroke-dashoffset: 0.0000; } 100.00% { stroke-dashoffset: 0.0000; } }
+@keyframes scia { 0.00% { stroke-dashoffset: 1.0000; } 1.50% { stroke-dashoffset: 1.0000; } 11.91% { stroke-dashoffset: 0.8775; } 14.91% { stroke-dashoffset: 0.8775; } 26.86% { stroke-dashoffset: 0.7370; } 29.86% { stroke-dashoffset: 0.7370; } 36.58% { stroke-dashoffset: 0.6579; } 39.58% { stroke-dashoffset: 0.6579; } 91.51% { stroke-dashoffset: 0.0469; } 94.51% { stroke-dashoffset: 0.0469; } 98.50% { stroke-dashoffset: 0.0000; } 100.00% { stroke-dashoffset: 0.0000; } }
 @keyframes scorri { 0.00% { translate: calc(0.0614 * (100cqw - 100%)) 0; } 1.50% { translate: calc(0.0614 * (100cqw - 100%)) 0; } 7.75% { translate: calc(0.1159 * (100cqw - 100%)) 0; } 11.91% { translate: calc(0.1577 * (100cqw - 100%)) 0; } 14.91% { translate: calc(0.1577 * (100cqw - 100%)) 0; } 16.90% { translate: calc(0.1789 * (100cqw - 100%)) 0; } 24.87% { translate: calc(0.2621 * (100cqw - 100%)) 0; } 26.86% { translate: calc(0.2855 * (100cqw - 100%)) 0; } 29.86% { translate: calc(0.2855 * (100cqw - 100%)) 0; } 34.34% { translate: calc(0.3277 * (100cqw - 100%)) 0; } 36.58% { translate: calc(0.3418 * (100cqw - 100%)) 0; } 39.58% { translate: calc(0.3418 * (100cqw - 100%)) 0; } 43.43% { translate: calc(0.3872 * (100cqw - 100%)) 0; } 51.12% { translate: calc(0.4726 * (100cqw - 100%)) 0; } 58.81% { translate: calc(0.5581 * (100cqw - 100%)) 0; } 66.51% { translate: calc(0.6470 * (100cqw - 100%)) 0; } 74.20% { translate: calc(0.7243 * (100cqw - 100%)) 0; } 81.90% { translate: calc(0.8161 * (100cqw - 100%)) 0; } 89.59% { translate: calc(0.8948 * (100cqw - 100%)) 0; } 91.51% { translate: calc(0.9123 * (100cqw - 100%)) 0; } 94.51% { translate: calc(0.9123 * (100cqw - 100%)) 0; } 98.50% { translate: calc(0.9591 * (100cqw - 100%)) 0; } 100.00% { translate: calc(0.9591 * (100cqw - 100%)) 0; } }
 /* carta:fine */
 
@@ -1305,6 +1318,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .equipaggio-piede, .territori-scrivi { margin-top: var(--s3); }
   .prudenza-riga, .supporto-riga, .cielo-riga, .approdi { gap: var(--s3); }
   .pirati-fermo { padding-block: var(--s5); }
+  .dentro { padding-bottom: var(--s5); }
   .colophon { padding-top: var(--s4); }
 }
 /* Le parole dei pirati, al telefono, si accendono mentre la frase sale nello schermo, senza fermarsi a tutta pagina. */
