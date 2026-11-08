@@ -1104,13 +1104,16 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @keyframes entra { from { opacity: 0; translate: 0 1.5rem; } }
 @keyframes telefono-giorno { 0% { opacity: 0; translate: 0 2rem; scale: 0.97; } 18%, 80% { opacity: 1; translate: 0 0; scale: 1; } 100% { opacity: 0; scale: 0.98; } }
 
-/* La copertina di Argonauta diventa l'apertura di Argonauta. Non quando la pagina si apre su una sezione (#contatti,
-   #supporto, i link del menu che ricaricano la pagina): lì la copertina sarebbe fuori dallo schermo prima e dopo, e
-   attraverserebbe lo schermo in volo. */
+/* La copertina di Argonauta diventa l'apertura di Argonauta. Il nome della transizione c'è solo mentre l'immagine è
+   sullo schermo: se è fuori, prima o dopo (la pagina si apre su #contatti o #territori, i link del menu che ricaricano
+   la pagina), la copertina non attraversa lo schermo in volo: sparisce o compare al suo posto. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
 }
-:root:has(:target) :is(.libro-piatto, .apertura-argonauta-scena) img { view-transition-name: none; }
+@supports (animation-timeline: view()) {
+  :is(.libro-piatto, .apertura-argonauta-scena) img { animation: nome-in-vista linear both; animation-timeline: view(); }
+}
+@keyframes nome-in-vista { 0%, 100% { view-transition-name: none; } 1%, 99% { view-transition-name: scena-argonauta; } }
 ::view-transition-group(scena-argonauta) { animation-duration: 0.5s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
 
 /* ---------- Il mito: un capitolo di libro ---------- */
