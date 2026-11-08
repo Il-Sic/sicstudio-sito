@@ -675,7 +675,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   background: repeating-linear-gradient(180deg, transparent 0 calc(2.75rem - 2px), var(--asse) calc(2.75rem - 2px) 2.75rem);
   -webkit-mask-image: linear-gradient(transparent 0, #000 22rem); mask-image: linear-gradient(transparent 0, #000 22rem);
 }
-.stanza { display: grid; gap: var(--s4); grid-template-areas: "finestra" "scrittoio" "scaffale"; }
+/* In una colonna sola (telefono e tablet in verticale) l'ordine è quello dell'HTML, lo stesso per gli occhi, la
+   tastiera e i lettori di schermo: prima Argonauta, poi il quaderno per i territori, in fondo la finestra. Sul computer
+   la stanza è disegnata per aree: finestra e scrittoio a sinistra, lo scaffale a destra. */
+.stanza { display: grid; gap: var(--s4); grid-template-areas: "scaffale" "scrittoio" "finestra"; }
 @media (min-width: 64rem) {
   .stanza {
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); grid-template-areas: "finestra scaffale" "scrittoio scaffale";
@@ -779,8 +782,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .og-manico { fill: none; }
 }
 
-/* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con la sua stella, dentro la pianta. */
-.finestra { grid-area: finestra; justify-self: center; width: min(100%, 24rem); }
+/* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con la sua stella, dentro la pianta. In una
+   colonna sola viene dopo il quaderno ed è piccola, per non prendere da sola uno schermo intero. */
+.finestra { grid-area: finestra; justify-self: center; width: min(64%, 15rem); }
 @media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 19rem); margin-left: var(--s3); } }
 .finestra-disegno { width: 100%; height: auto; display: block; }
 .fn-telaio { fill: var(--legno); }
