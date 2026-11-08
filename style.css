@@ -1104,8 +1104,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .apertura-mito { display: grid; gap: var(--s2); padding-top: var(--s5); }
 .apertura-mito h1 { font-size: clamp(3.2rem, 2rem + 6vw, 6.5rem); letter-spacing: -0.03em; line-height: 0.95; }
 .versi { margin: var(--s2) 0; padding-left: var(--s2); border-left: 1px solid var(--matita); max-inline-size: 40rem; }
-.versi p { font-style: italic; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; text-wrap: nowrap; }
-@media (max-width: 47.99rem) { .versi p { text-wrap: pretty; } .versi br { display: none; } }
+/* I versi tengono le loro righe; una riga più lunga della colonna (in inglese capita) va a capo, e dove il browser lo
+   sa fare il seguito rientra, come nei libri di poesia. Al telefono i versi scorrono come un paragrafo. */
+.versi p { font-style: italic; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; text-wrap: pretty; }
+@supports (text-indent: 1em hanging each-line) { .versi p { text-indent: 1.5em hanging each-line; } }
+@media (max-width: 47.99rem) { .versi p { text-indent: 0; } .versi br { display: none; } }
 .versi footer { margin-top: var(--s0); font: 400 0.875rem/1.4 var(--strumenti); color: var(--testo-2); }
 .versi footer cite { font-style: italic; }
 .indice-mito ol { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--s2); counter-reset: indice; }
@@ -1167,6 +1170,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .carta-sopra { translate: -50% calc(-100% - 0.7rem); }
 .carta-sotto { translate: -50% 0.65rem; }
 .carta-sopra-destra { translate: -18% calc(-100% - 0.6rem); }
+/* Il vello è sul bordo destro della carta: il suo nome sta a sinistra del punto, così non esce dalla carta. */
+.carta-sopra.cn-vello { translate: calc(-100% + 0.6rem) calc(-100% - 0.7rem); }
 .carta-mare-nome { translate: -50% -50%; font: italic 400 1.0625rem/1 var(--libro); letter-spacing: 0.12em; color: #46697A; }
 @media (prefers-color-scheme: dark) { .carta-mare-nome { color: #7FA7B8; } }
 @media (min-width: 48rem) { .carta-nome { font-size: 0.9375rem; } .carta-mare-nome { font-size: 1.375rem; } }
@@ -1221,8 +1226,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .cielo-argo img { width: 100%; height: auto; border-radius: var(--r2); }
 
 .congedo { display: grid; justify-items: center; text-align: center; gap: var(--s1); }
-.congedo .versi { border-left: 0; padding-left: 0; }
-.congedo .versi p { font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2.2rem); line-height: 1.35; }
+.congedo .versi { border-left: 0; padding-left: 0; max-inline-size: 48rem; }
+.congedo .versi p { font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2.2rem); line-height: 1.35; text-indent: 0; text-wrap: balance; }
 .congedo .nota { max-inline-size: 34rem; }
 
 /* ---------- Aiuto: le domande e le parole di bordo ---------- */
