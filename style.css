@@ -1120,9 +1120,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 .apertura-mito { display: grid; gap: var(--s2); padding-top: var(--s5); }
 .apertura-mito h1 { font-size: clamp(3.2rem, 2rem + 6vw, 6.5rem); letter-spacing: -0.03em; line-height: 0.95; }
-.versi { margin: var(--s2) 0; padding-left: var(--s2); border-left: 1px solid var(--matita); max-inline-size: 40rem; }
-/* I versi tengono le loro righe; una riga più lunga della colonna (in inglese capita) va a capo, e dove il browser lo
-   sa fare il seguito rientra, come nei libri di poesia. Al telefono i versi scorrono come un paragrafo. */
+.versi { margin: var(--s2) 0; padding-left: var(--s2); border-left: 1px solid var(--matita); max-inline-size: 50rem; }
+/* I versi tengono le loro righe: la colonna è larga abbastanza per il verso più lungo, anche con i caratteri di Apple.
+   Se una riga non ci sta (una finestra stretta) va a capo, e dove il browser lo sa fare il seguito rientra, come nei
+   libri di poesia. Al telefono i versi scorrono come un paragrafo. */
 .versi p { font-style: italic; font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem); line-height: 1.5; text-wrap: pretty; }
 @supports (text-indent: 1em hanging each-line) { .versi p { text-indent: 1.5em hanging each-line; } }
 @media (max-width: 47.99rem) { .versi p { text-indent: 0; } .versi br { display: none; } }
