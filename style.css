@@ -169,11 +169,12 @@ a { color: var(--mare); text-decoration-thickness: 1px; text-underline-offset: 0
 .fonte cite { font-style: italic; }
 time { font-variant-numeric: lining-nums tabular-nums; }
 
+/* Il link con la freccia: alto almeno 44 px; se va a capo, la freccia resta dopo l'ultima parola. */
 .link-freccia {
-  display: inline-flex; align-items: center; gap: 0.4em; min-height: 2.75rem;
+  display: inline-block; min-height: 2.75rem; padding-block: calc((2.75rem - 1.2em) / 2);
   font: 600 1.0625rem/1.2 var(--strumenti); text-decoration: none;
 }
-.link-freccia::after { content: "→"; transition: translate 0.2s ease; }
+.link-freccia::after { content: "→"; display: inline-block; margin-left: 0.4em; transition: translate 0.2s ease; }
 @media (hover: hover) {
   .link-freccia:hover::after { translate: 0.2em 0; }
   .link-freccia:hover { text-decoration: underline; }
