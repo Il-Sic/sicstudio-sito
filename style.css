@@ -727,7 +727,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   grid-area: scaffale; display: grid; align-items: end;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); column-gap: var(--s1);
 }
-@media (min-width: 48rem) { .scaffale { grid-template-columns: 13.5rem 14rem minmax(0, 1fr); column-gap: var(--s2); } }
+/* I due libri hanno la loro misura, ma si stringono un poco quando la colonna è più stretta (1024 px, la stanza in due
+   colonne), invece di uscire dallo schermo. */
+@media (min-width: 48rem) { .scaffale { grid-template-columns: minmax(0, 13.5rem) minmax(0, 14rem) minmax(0, 1fr); column-gap: var(--s2); } }
 .scaffale::before {
   content: ""; grid-row: 1; grid-column: 1 / -1; align-self: end; height: 0.85rem; margin: 0 calc(-1 * var(--s0)) -0.85rem;
   background: linear-gradient(var(--legno-chiaro) 0 22%, var(--legno) 22% 62%, var(--legno-scuro) 62%); border-radius: 2px;
