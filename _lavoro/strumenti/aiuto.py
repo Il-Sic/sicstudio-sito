@@ -22,6 +22,30 @@ CERCA = {
            "Heroes": r"\bHeroes\b", "The Voyage of Argo": r"\b[Vv]oyage\b", "Myths and Legends": r"\b[Mm]yths and [Ll]egends\b",
            "Before You Set Off": r"\b[Bb]efore [Yy]ou [Ss]et [Oo]ff\b", "Safety": r"\bSafety\b"},
 }[LINGUA]
+# Le domande venute dopo il 6/11, in cima al loro gruppo (l'id della sezione), così come sono nella pagina: come si
+# entra nella prova di Argonauta (8/11).
+NUOVE = {
+    "it": {"prima-di-partire": [
+        '<details class="domanda">\n'
+        '          <summary>Come posso provarla?</summary>\n'
+        '          <div class="risposta">\n'
+        '            <p>Argonauta è in prova con TestFlight, l’app gratuita di Apple per provare le app prima che escano.\n'
+        '              Scrivimi a <a href="mailto:vincenzo@sicstudio.app?subject=Vorrei%20provare%20Argonauta">vincenzo@sicstudio.app</a>\n'
+        '              e ti mando l’invito.</p>\n'
+        '          </div>\n'
+        '        </details>']},
+    "en": {"before-you-go": [
+        '<details class="domanda">\n'
+        '          <summary>How can I try it?</summary>\n'
+        '          <div class="risposta">\n'
+        '            <p>Argonauta is in testing with TestFlight, Apple’s free app for trying apps before they come out.\n'
+        '              Write to me at <a href="mailto:vincenzo@sicstudio.app?subject=I%27d%20like%20to%20try%20Argonauta">vincenzo@sicstudio.app</a>\n'
+        '              and I’ll send you an invitation.</p>\n'
+        '          </div>\n'
+        '        </details>']},
+}[LINGUA]
+# Il poema di Apollonio Rodio è un'opera citata: <cite> (8/11).
+OPERA = {"it": "Argonautiche", "en": "Argonautica"}[LINGUA]
 PAROLE = {
     "it": {"occhiello": "Argonauta · aiuto", "indice": "In questa pagina", "chiudi": "Chiudi",
            "glossario_nota": "Tocca una parola sottolineata nelle risposte per leggerla qui senza scendere."},
@@ -95,6 +119,7 @@ for n, (sid, hid, titolo, domande) in enumerate(voci):
     righe.append('  <div class="domande-riga">')
     righe.append(f'    <h2 class="titolo-sezione" id="{hid}">{titolo}</h2>')
     righe.append('    <div class="domande">')
+    righe += ["      " + d for d in NUOVE.get(sid, [])]
     for d in domande:
         d = re.sub(r'(<div class="risposta">)(.*?)(</div>)', lambda m: m.group(1) + avvolgi(m.group(2)) + m.group(3), d, flags=re.S)
         righe.append("      " + d.strip())
@@ -146,9 +171,11 @@ def apostrofi(codice):
 if LINGUA == "it":
     righe = [r.replace("scrivici a", "scrivimi a") for r in righe]
 righe = [apostrofi(r) for r in righe]
+righe = [re.sub(rf"\b{OPERA}\b", f"<cite>{OPERA}</cite>", r) for r in righe]
 pagina = (SITO / FILE).read_text(encoding="utf-8")
 a = pagina.index('<main id="contenuto"'); b = pagina.index("</main>")
 pagina = pagina[:a] + '<main id="contenuto" class="pagina-aiuto">\n\n' + "\n".join(righe) + "\n\n" + pagina[b:]
 (SITO / FILE).write_text(pagina, encoding="utf-8")
-print(FILE, "domande:", sum(len(v[3]) for v in voci), "parole nel testo:", len(usati), "di", len(termini))
+print(FILE, "domande:", sum(len(v[3]) for v in voci) + sum(len(v) for v in NUOVE.values()), "parole nel testo:",
+      len(usati), "di", len(termini))
 print("non trovate:", [t for t in CERCA if t not in usati])

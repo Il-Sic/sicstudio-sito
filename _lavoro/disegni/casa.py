@@ -1,6 +1,6 @@
 """La casa dello studio, in tre misure, e le cose della bottega. Scrive i disegni dentro le pagine, fra i segni
 <!-- nome:inizio --> e <!-- nome:fine -->, così le tre case restano la stessa casa:
-- cielo-fronte: le stelle e la stella guida dell'apertura della home (le stesse della soglia);
+- cielo-fronte: le stelle, il sole e la luna dell'apertura della home (gli stessi della soglia);
 - colle: la collina dell'apertura con il laghetto, il sentiero e la casa piccola (un quinto della casa grande);
 - soglia: la casa da vicino, con la porta che si apre, sopra l'apertura della home;
 - bottega-studio: la casa a metà strada, nell'apertura della pagina dello studio;
@@ -25,13 +25,41 @@ def n(v):
     return s[:-2] if s.endswith(".0") else s
 
 
-def stella(cx, cy, r):
-    punti = []
-    for k in range(10):
-        a = math.radians(-90 + 36 * k)
-        rr = r if k % 2 == 0 else r * 0.41
-        punti.append(f"{n(cx + rr * math.cos(a))} {n(cy + rr * math.sin(a))}")
-    return "M" + "L".join(punti) + "Z"
+def luna(cx, cy, R, r, d, gradi=28):
+    """La falce della luna crescente: il cerchio di raggio R meno il cerchio di raggio r spostato di d verso il lato
+    buio (a sinistra, ruotato di «gradi» in senso orario), con il baricentro della parte chiara in (cx, cy), dove sta
+    il centro del sole. Il tracciato è in coordinate assolute, perché le animazioni usano transform-box: fill-box."""
+    a = math.radians(180 + gradi)
+    ux, uy = math.cos(a), math.sin(a)            # dal centro del cerchio grande verso il lato buio
+    vx, vy = -uy, ux
+    x = (d * d + R * R - r * r) / (2 * d)        # la corda comune, a x dal centro grande
+    h = math.sqrt(R * R - x * x)
+
+    def segmento(raggio, distanza):
+        """Area di un segmento circolare con la corda a «distanza» dal centro, e la distanza del suo baricentro."""
+        t = math.acos(distanza / raggio)
+        area = raggio * raggio * (t - math.sin(t) * math.cos(t))
+        return area, 4 * raggio * math.sin(t) ** 3 / (3 * (2 * t - math.sin(2 * t)))
+
+    # La parte comune ai due cerchi è il segmento del grande oltre la corda più quello del piccolo al di qua.
+    a1, g1 = segmento(R, x)
+    a2, g2 = segmento(r, d - x)
+    comune = a1 + a2
+    g = (a1 * g1 + a2 * (d - g2)) / comune
+    sposta = g * comune / (math.pi * R * R - comune)
+    ox, oy = cx + sposta * ux, cy + sposta * uy  # il centro del cerchio grande
+    p = (ox + x * ux + h * vx, oy + x * uy + h * vy)
+    q = (ox + x * ux - h * vx, oy + x * uy - h * vy)
+    return (f"M{n(p[0])} {n(p[1])}A{n(R)} {n(R)} 0 1 1 {n(q[0])} {n(q[1])}"
+            f"A{n(r)} {n(r)} 0 0 0 {n(p[0])} {n(p[1])}Z")
+
+
+def astro(classe, cx, cy, alone, lume, sole, falce):
+    """Il sole (di giorno) e la luna (di notte) nello stesso posto, con il loro alone caldo: .solo-giorno e
+    .solo-notte in style.css ne mostrano uno con prefers-color-scheme. falce: R, r, d per luna()."""
+    return (f'<g class="{classe}-astro"><circle cx="{n(cx)}" cy="{n(cy)}" r="{n(alone)}" fill="url(#{lume})"/>'
+            f'<circle class="{classe}-sole solo-giorno" cx="{n(cx)}" cy="{n(cy)}" r="{n(sole)}"/>'
+            f'<path class="{classe}-falce solo-notte" d="{luna(cx, cy, *falce)}"/></g>')
 
 
 def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9):
@@ -42,11 +70,10 @@ def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9):
 
 def cielo(prefisso):
     """Il cielo lontano dell'apertura (la «volta»: la classe «cielo» è già della sezione del mito), uguale nel
-    frontespizio e nella soglia: le stelle e la stella guida con il suo alone. Scorrendo si allarga piano intorno alla
-    casa, meno del paesaggio, ed esce dall'alto dello schermo."""
+    frontespizio e nella soglia: le stelle, e il sole o la luna con il loro alone. Scorrendo si allarga piano intorno
+    alla casa, meno del paesaggio, ed esce dall'alto dello schermo."""
     return (f'<g class="volta"><g class="volta-stelle">{stelline(17, 0, 0, 1440, 520, 80)}</g>'
-            f'<g class="volta-guida"><circle cx="1300" cy="210" r="80" fill="url(#{prefisso}-lume)"/>'
-            f'<path class="volta-stella" d="{stella(1300, 210, 24)}"/></g></g>')
+            f'{astro("volta", 1300, 210, 80, f"{prefisso}-lume", 18, (26, 23, 13))}</g>')
 
 
 def casa(cx=730.0, base=760.0, s=1.0, porta="chiusa"):
@@ -324,7 +351,7 @@ def bottega_studio():
         '</defs>'
         '<rect class="bs-cielo" width="1200" height="460"/>'
         f'<g class="bs-stelle">{stelline(11, 0, 0, 1200, 250, 46, 0.7, 1.6)}</g>'
-        f'<path class="bs-stella" d="{stella(820, 82, 15)}"/>'
+        f'{astro("bs", 820, 81, 44, "bs-lume", 10.5, (14.5, 12.8, 7.2))}'
         '<path class="bs-monti" d="M0 286C140 252 260 262 380 276S600 236 760 258S1020 270 1200 250V460H0Z"/>'
         '<path class="bs-colli" d="M0 330C160 306 300 316 420 322S620 300 760 310S1020 330 1200 318V460H0Z"/>'
         f'{fila([(0, 330), (160, 312), (300, 316), (420, 320), (560, 306), (760, 310), (900, 318), (1020, 326), (1200, 318)], 41, 14, 26, 20, "cs-bosco-lontano", "bs")}'
@@ -339,17 +366,18 @@ def bottega_studio():
 
 
 def finestra():
-    """La finestra della bottega, più alta che larga come in una casa di tronchi: fuori il cielo di prima, con la stella
-    e le colline; sul davanzale, dentro, la pianta."""
+    """La finestra della bottega, più alta che larga come in una casa di tronchi: fuori il cielo di prima, con il sole
+    o la luna e le colline; sul davanzale, dentro, la pianta."""
     return (
         '<svg class="finestra-disegno" viewBox="-12 0 324 404" aria-hidden="true" focusable="false">'
         '<defs><linearGradient id="fn-notte" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05080D"/><stop offset="1" stop-color="#1A2B48"/></linearGradient>'
-        '<linearGradient id="fn-alba" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="fn-alba-0"/><stop offset="1" class="fn-alba-1"/></linearGradient></defs>'
+        '<linearGradient id="fn-alba" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="fn-alba-0"/><stop offset="1" class="fn-alba-1"/></linearGradient>'
+        '<radialGradient id="fn-lume"><stop offset="0" stop-color="#FFC85A" stop-opacity=".6"/><stop offset=".45" stop-color="#FFC85A" stop-opacity=".18"/><stop offset="1" stop-color="#FFC85A" stop-opacity="0"/></radialGradient></defs>'
         '<rect class="fn-telaio" x="0" y="0" width="300" height="390" rx="5"/>'
         '<rect class="fn-cielo" x="13" y="13" width="274" height="364"/>'
         '<rect x="13" y="200" width="274" height="177" fill="url(#fn-alba)"/>'
         f'<g class="fn-stelle">{stelline(5, 16, 16, 284, 250, 34, 0.6, 1.4)}</g>'
-        f'<path class="fn-stella" d="{stella(222, 76, 14)}"/>'
+        f'{astro("fn", 222, 76, 38, "fn-lume", 10, (14, 12.4, 7))}'
         '<path class="fn-monti" d="M13 316C60 300 100 304 140 310S210 290 250 302S280 306 287 304V377H13Z"/>'
         '<path class="fn-colli" d="M13 342C70 328 120 336 170 331S250 338 287 333V377H13Z"/>'
         '<path class="fn-abeti" d="' + "".join(abete(x, y, h, 0.5)[0] for x, y, h in ((40, 342, 38), (64, 348, 52), (92, 340, 30), (206, 340, 34), (232, 348, 54), (262, 343, 40))) + '"/>'

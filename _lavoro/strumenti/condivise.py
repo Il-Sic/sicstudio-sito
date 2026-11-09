@@ -33,7 +33,7 @@ PAGINE = {
         lingua="it", percorso="/argonauta/", altro="/en/argonauta/", casa="argonauta", voce="argonauta",
         titolo="Argonauta · Sic Studio",
         descrizione="Argonauta è un’app per esplorare, divertirsi e sognare: una giornata di rotte, schede da "
-                    "collezionare e la nave Argo che cresce con te. Qui c'è anche il supporto."),
+                    "collezionare e la nave Argo che cresce con te. Qui c’è anche il supporto."),
     "argonauta/il-mito/index.html": dict(
         lingua="it", percorso="/argonauta/il-mito/", altro="/en/argonauta/the-myth/", casa="argonauta", voce="mito",
         titolo="Il mito di Argo · Argonauta",
@@ -91,7 +91,7 @@ PAROLE = {
         "crediti": ("I disegni del sito, con la nave, gli eroi e i paesaggi di Argo, sono provvisori. Le schermate "
                     "vengono dall’app: sulle mappe ci sono i loro crediti."),
         "og_locale": "it_IT",
-        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio scritto nel cielo, sopra una casa di tronchi in cima a un sentiero, con un laghetto e la stella."),
+        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio scritto nel cielo, sopra una casa di tronchi in cima a un sentiero, con un laghetto e il sole."),
                "argonauta": ("anteprima.jpg", "La nave Argo sul mare, di giorno.")},
     },
     "en": {
@@ -106,7 +106,7 @@ PAROLE = {
         "crediti": ("The site’s drawings, with the ship, the heroes and Argo’s landscapes, are provisional. The "
                     "screenshots come from the app: the maps show their credits."),
         "og_locale": "en_GB",
-        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio written in the sky, above a log cabin at the top of a path, with a small lake and the star."),
+        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio written in the sky, above a log cabin at the top of a path, with a small lake and the sun."),
                "argonauta": ("anteprima.jpg", "The ship Argo at sea, by day.")},
     },
 }
@@ -168,6 +168,8 @@ def testa(file, d):
             '<meta property="og:image:width" content="1200">',
             '<meta property="og:image:height" content="630">',
             f'<meta property="og:image:alt" content="{e(alt)}">',
+            # Su X l'anteprima grande, come su WhatsApp e iMessage, invece della scheda piccola.
+            '<meta name="twitter:card" content="summary_large_image">',
         ]
     else:
         righe += ['<meta name="robots" content="noindex">']
@@ -187,11 +189,22 @@ def voci(d):
     return [(k, t, u[k]) for k, t in elenco]
 
 
+def al_telefono(h, d):
+    """Nel menu del telefono un link a una sezione della stessa pagina ha un «?» vuoto prima del «#» (/?#contatti):
+    così la pagina si ricarica e il menu, che è un popover, si chiude. Il menu del computer resta com'è."""
+    pagina, segno, sezione = h.partition("#")
+    if segno and pagina in ("", d["percorso"]):
+        return f'{d["percorso"]}?#{sezione}'
+    return h
+
+
 def testata(file, d):
     lingua, casa = d["lingua"], d["casa"]
     p, u = PAROLE[lingua], percorsi(lingua)
     altra = d["altro"] or ("/en/" if lingua == "it" else "/")
-    lingua_link = f'<a href="{altra}" hreflang="{p["altra_lingua"]}" lang="{p["altra_lingua"]}">{p["altra"]}</a>'
+
+    def lingua_link(h):
+        return f'<a href="{h}" hreflang="{p["altra_lingua"]}" lang="{p["altra_lingua"]}">{p["altra"]}</a>'
     righe = [f'<a class="salta" href="#contenuto">{p["salta"]}</a>', f'<header class="testata testata-{casa or "fuori"}">',
              '  <div class="testata-riga">']
     righe.append(f'    <a class="casa" href="{u["home"]}" aria-label="{p["casa"]}">{MARCHIO}<span>Sic Studio</span></a>')
@@ -200,12 +213,13 @@ def testata(file, d):
         righe.append(f'    <span class="testata-sep" aria-hidden="true">/</span>'
                      f'<a class="progetto" href="{u["argonauta"]}"{attuale}>Argonauta</a>')
     if casa:
-        def lista(classe):
+        def lista(classe, telefono=False):
+            link = (lambda h: al_telefono(h, d)) if telefono else (lambda h: h)
             r = [f'      <ul class="{classe}">']
             for k, t, h in voci(d):
                 attuale = ' aria-current="page"' if k == d["voce"] else ""
-                r.append(f'        <li><a href="{h}"{attuale}>{t}</a></li>')
-            r.append(f'        <li class="lingua">{lingua_link}</li>')
+                r.append(f'        <li><a href="{link(h)}"{attuale}>{t}</a></li>')
+            r.append(f'        <li class="lingua">{lingua_link(link(altra))}</li>')
             r.append('      </ul>')
             return r
         nome_menu = p["menu_studio"] if casa == "studio" else p["menu_argonauta"]
@@ -220,7 +234,7 @@ def testata(file, d):
             righe.append(f'      <p class="menu-casa"><a href="{u["home"]}">← Sic Studio</a></p>')
             righe.append(f'      <ul class="menu"><li><a href="{u["argonauta"]}"'
                          f'{" aria-current=" + chr(34) + "page" + chr(34) if d["voce"] == "argonauta" else ""}>Argonauta</a></li></ul>')
-        righe += ["  " + r for r in lista("menu")]
+        righe += ["  " + r for r in lista("menu", telefono=True)]
         righe += [
             '      </nav>',
             f'      <button class="chiudi-menu" type="button" popovertarget="menu-telefono" popovertargetaction="hide">'
