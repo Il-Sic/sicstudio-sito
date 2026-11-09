@@ -1,8 +1,8 @@
 """Il marchio di Sic Studio (seconda passata): un sentiero a tre tornanti che sale verso una stella a cinque punte.
 
 La propria via, che si trova camminando, e lo sguardo che si alza (le parole di Sic, da-sic/risposte.md, b).
-Scrive img/icona.svg (con la versione per lo scuro) e _lavoro/disegni/marchio-quadrato-2.svg, da cui png.py fa
-apple-touch-icon.png, favicon.ico e le anteprime. Nelle pagine il marchio è dentro l'HTML (condivise.py, MARCHIO),
+Scrive img/icona.svg (con la versione per lo scuro) e _lavoro/disegni/marchio-quadrato-2.svg, da cui png-2.py fa
+apple-touch-icon.png e favicon.ico. Nelle pagine il marchio è dentro l'HTML (condivise.py, MARCHIO),
 con il colore del testo.
 
     python3 -I _lavoro/disegni/marchio-2.py

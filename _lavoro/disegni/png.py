@@ -1,9 +1,11 @@
-"""Le due immagini PNG del sito, fatte con qlmanage e sips (niente altro da installare):
-- apple-touch-icon.png, 180×180, dalla sagoma di Argo su fondo blu (disegni/icona-quadrata.svg);
-- img/anteprima.jpg, 1200×630, la scena di Argo di giorno, per i link mandati su WhatsApp o iMessage;
-- favicon.ico, 32×32, l'icona tonda di giorno (img/icona.svg) per Safari, che non usa le icone SVG.
+"""L'anteprima dei link delle pagine di Argonauta (img/anteprima.jpg, 1200×630, per WhatsApp, iMessage e gli altri): la
+scena di Argo di giorno, ferma. Fatta con qlmanage e sips, niente altro da installare: qlmanage disegna un SVG dentro
+un quadrato, poi sips ritaglia il centro e la fa JPEG, e strumenti/pulisci.py le toglie i metadati.
 
-qlmanage disegna un SVG dentro un quadrato: per l'anteprima si ritaglia il centro con sips.
+    python3 -I _lavoro/disegni/png.py
+
+La scena viene dai disegni dell'app, in _lavoro/riferimenti/svg-sito/ (scena.svg e scena.css), che restano fuori da
+git: lo script si usa sul Mac che li ha. Le icone (apple-touch-icon.png e favicon.ico) le fa png-2.py.
 """
 import pathlib, re, subprocess, tempfile
 
@@ -20,20 +22,6 @@ def disegna(svg, lato, uscita):
         png = pathlib.Path(d) / "disegno.svg.png"
         uscita.write_bytes(png.read_bytes())
 
-
-# L'icona per la Home di iPhone: quadrata e piena, gli angoli li arrotonda iOS.
-disegna((QUI / "icona-quadrata.svg").read_text(encoding="utf-8"), 180, SITO / "apple-touch-icon.png")
-
-# L'icona per Safari: disegnata grande e rimpicciolita, poi in ICO.
-grande = QUI / "icona-256.png"
-# Senza la parte per la notte: qlmanage segue l'aspetto del Mac, e l'icona di Safari è quella del giorno.
-icona = re.sub(r"@media[^{]*\{(?:[^{}]*\{[^}]*\})*[^}]*\}", "", (SITO / "img" / "icona.svg").read_text(encoding="utf-8"))
-disegna(icona, 256, grande)
-piccola = QUI / "icona-32.png"
-subprocess.run(["sips", "-z", "32", "32", str(grande), "--out", str(piccola)], capture_output=True)
-subprocess.run(["sips", "-s", "format", "ico", str(piccola), "--out", str(SITO / "favicon.ico")], capture_output=True)
-grande.unlink()
-piccola.unlink()
 
 # L'anteprima: la scena del sito con i colori del giorno scritti dentro, ferma.
 scena = (SVG_SITO / "scena.svg").read_text(encoding="utf-8")
@@ -59,6 +47,7 @@ subprocess.run(["sips", "-s", "format", "jpeg", "-s", "formatOptions", "82", str
                 str(SITO / "img" / "anteprima.jpg")], capture_output=True)
 ritaglio.unlink()
 temporanea.unlink()
-for p in (SITO / "apple-touch-icon.png", SITO / "img" / "anteprima.jpg", SITO / "favicon.ico"):
-    out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(p)], capture_output=True, text=True).stdout
-    print(p.name, " ".join(out.split()[-4:]), p.stat().st_size // 1024, "KB")
+subprocess.run(["python3", "-I", str(SITO / "_lavoro" / "strumenti" / "pulisci.py"), str(SITO / "img" / "anteprima.jpg")])
+p = SITO / "img" / "anteprima.jpg"
+out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(p)], capture_output=True, text=True).stdout
+print(p.name, " ".join(out.split()[-4:]), p.stat().st_size // 1024, "KB")

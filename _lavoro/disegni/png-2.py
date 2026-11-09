@@ -28,6 +28,8 @@ disegna(icona, 256, grande)
 subprocess.run(["sips", "-z", "32", "32", str(grande), "--out", str(piccola)], capture_output=True)
 subprocess.run(["sips", "-s", "format", "ico", str(piccola), "--out", str(SITO / "favicon.ico")], capture_output=True)
 grande.unlink(); piccola.unlink()
+# Senza i metadati che scrive qlmanage (il PNG resta com'è, pixel per pixel).
+subprocess.run(["python3", "-I", str(SITO / "_lavoro" / "strumenti" / "pulisci.py"), str(SITO / "apple-touch-icon.png")])
 
 for p in (SITO / "apple-touch-icon.png", SITO / "favicon.ico"):
     out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(p)], capture_output=True, text=True).stdout
