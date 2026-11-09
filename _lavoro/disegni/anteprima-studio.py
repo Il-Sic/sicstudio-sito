@@ -1,22 +1,29 @@
 """L'anteprima dei link dello studio (img/anteprima-studio.jpg, 1200×630), per WhatsApp, iMessage e gli altri: il
 paesaggio della prima schermata della home, di giorno, con la terra in alto come all'apertura (la casa, il sentiero, il
-laghetto, la stella) e «Sic Studio» scritto nel cielo con il carattere dei titoli. La usano la home e lo studio, in
+laghetto, il sole) e «Sic Studio» scritto nel cielo con il carattere dei titoli. La usano la home e lo studio, in
 italiano e in inglese: il nome va bene in tutte e due le lingue.
 
     python3 -I _lavoro/disegni/anteprima-studio.py
 
 Prende l'SVG dell'apertura da index.html, lo mette in una pagina di prova in _lavoro/prove (che usa style.css, senza
-le animazioni), la fotografa con Chrome senza finestra (serve il server locale, servi.py), la fa JPEG con sips e le
-toglie i metadati con strumenti/pulisci.py.
+le animazioni), la fotografa con Chrome senza finestra, nel tema chiaro (così del cielo si vede il sole, non la luna:
+.solo-giorno e .solo-notte in style.css), la fa JPEG con sips e le toglie i metadati con strumenti/pulisci.py. Serve
+il server locale acceso (servi.py). Rifatta sullo stesso Mac, viene uguale byte per byte.
 """
-import pathlib, re, subprocess, tempfile
+import pathlib, re, subprocess, sys, tempfile, urllib.request
 
 QUI = pathlib.Path(__file__).resolve().parent
 SITO = QUI.parents[1]
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
+try:
+    urllib.request.urlopen("http://127.0.0.1:8765/style.css", timeout=5).close()
+except OSError:
+    sys.exit("Prima va acceso il server locale: python3 -I _lavoro/strumenti/servi.py")
+
 svg = re.search(r'<svg class="frontespizio-paesaggio".*?</svg>', (SITO / "index.html").read_text(encoding="utf-8"), re.S).group(0)
 pagina = SITO / "_lavoro" / "prove" / "anteprima-studio.html"
+pagina.parent.mkdir(exist_ok=True)
 pagina.write_text(f'''<!doctype html>
 <meta charset="utf-8">
 <title>anteprima</title>
