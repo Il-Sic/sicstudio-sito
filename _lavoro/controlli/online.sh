@@ -1,8 +1,10 @@
 #!/bin/zsh
 # Il sito pubblicato su https://sicstudio.app confrontato con questa cartella, solo con curl (richieste GET, nient'altro).
 # Per ogni file in git, cioè per ogni file pubblicato: risposta 200 e contenuto identico byte per byte; le pagine anche
-# al loro indirizzo con la barra finale; una pagina che non c'è, /_lavoro/STATO.md e /.gitignore danno 404 con la
-# pagina «Fuori rotta». Da lanciare dopo che GitHub Pages ha finito (Actions › «pages build and deployment»):
+# al loro indirizzo con la barra finale. I file di _lavoro sono in git ma non vanno online (GitHub Pages costruisce il
+# sito con Jekyll, che lascia fuori le cartelle che cominciano con «_»): ognuno, la cartella /_lavoro/, una pagina che
+# non c'è e /.gitignore danno 404 con la pagina «Fuori rotta». Da lanciare dopo che GitHub Pages ha finito (Actions ›
+# «pages build and deployment»):
 #   zsh _lavoro/controlli/online.sh
 SITO=${0:A:h:h:h}
 BASE=https://sicstudio.app
@@ -27,11 +29,15 @@ prova() {
 # .gitignore e CNAME sono in git ma non online: il primo GitHub Pages non lo pubblica, il secondo lo usa per il dominio.
 for f in ${(f)"$(git -C "$SITO" ls-files)"}; do
   [[ $f == .gitignore || $f == CNAME ]] && continue
+  if [[ $f == _lavoro/* ]]; then
+    prova "/$f" "$SITO/404.html" 404
+    continue
+  fi
   prova "/$f" "$SITO/$f" 200
   [[ $f == index.html || $f == */index.html ]] && prova "/${f%index.html}" "$SITO/$f" 200
 done
 prova /questa-pagina-non-c-e/ "$SITO/404.html" 404
-prova /_lavoro/STATO.md "$SITO/404.html" 404
+prova /_lavoro/ "$SITO/404.html" 404
 prova /.gitignore "$SITO/404.html" 404
 
 print -r -- "--- la privacy (sha-256), online e in questa cartella:"
