@@ -1,0 +1,1002 @@
+/* Sic Studio: il foglio comune del sito.
+   La base è quella di Apple, come nell'app Argonauta: caratteri di sistema, tanto spazio, angoli tondi e un
+   colore solo per link e pulsanti. L'identità è il mondo di Argo: in chiaro il giorno della sua copertina,
+   in scuro la notte. Niente file di altri siti: i caratteri sono quelli del dispositivo. */
+
+/* ---------- Variabili: chiaro (il giorno) ---------- */
+
+:root {
+  color-scheme: light dark;
+
+  /* I colori dell'app (Assets.xcassets, ArgonautaDesign.swift). */
+  --mare: #08739A;            /* AccentColor, il «Mare»: link, pulsanti di testo, la rotta */
+  --mare-pieno: #08739A;      /* argoButtonFill: i pulsanti pieni con la scritta bianca */
+  --mare-velo: rgba(8, 115, 154, 0.1);
+  --oro: #925D00;             /* ArgoReward: quello che si conquista */
+  --su-oro: #FFFFFF;          /* onArgoReward */
+  --timbro: #D70015;          /* argoPassportRed: l'inchiostro dei timbri */
+  --legno: #A2845E;           /* argoCrewFace, il legno della nave */
+  --legno-scuro: #5E4C36;     /* argoCrewRim */
+  --legno-ombra: #826A4B;     /* argoCrewFaceShade, il legno in ombra */
+  --medaglione-bordo: #644A37;        /* ArgoCrewMedallion, misurato nelle schermate */
+  --medaglione-legno-alto: #AC7F5E;
+  --medaglione-legno-basso: #8A664B;
+  --lino: #F4EBDA;            /* la vela */
+  --lino-fondo: #FBF7EF;      /* il lino come fondo di una sezione */
+  --cielo-velo: #E6F4FB;      /* il cielo della copertina, schiarito: il fondo sopra la scena */
+  --nebbia-cielo: #DCE6EA;    /* la pagina fuori rotta */
+  --nebbia-mare: #A9BCC4;
+  --nebbia: rgba(255, 255, 255, 0.85);
+
+  /* Testo e fondi, come i colori di sistema, con il contrasto controllato (_lavoro/controlli). */
+  --testo: #1D1D1F;
+  --testo-2: #5F5F64;
+  --fondo: #FFFFFF;
+  --fondo-gruppo: #F2F2F7;
+  --carta: #FFFFFF;
+  --scheda-su-fondo: #F2F2F7;
+  --riga: #D2D2D7;
+  --ombra: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.1);
+
+  /* Le cose contate, come ArgoTone: solo per simboli e anelli. */
+  --tappe: #5856D6;
+  --rotte: #248A3D;
+  --collezione: #AF52DE;
+  --collezione-velo: rgba(175, 82, 222, 0.14);
+  --collezione-testo: #8A3CB4;
+  --emergenza: #D70015;       /* «Chiama il 112», il rosso del sistema con il contrasto alto */
+
+  /* Caratteri di sistema. */
+  --serif: ui-serif, "New York", Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --tondo: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
+
+  /* Misure, come ArgonautaRadius. */
+  --r-riga: 12px;
+  --r-tessera: 18px;
+  --r-scheda: 24px;
+  --r-pannello: 32px;
+  --colonna: 40rem;
+  --pagina: 72rem;
+  --margine: clamp(1rem, 4vw, 2.5rem);
+}
+
+/* ---------- Variabili: scuro (la notte) ---------- */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mare: #2B9FC4;
+    --mare-pieno: #0A7DA6;
+    --mare-velo: rgba(43, 159, 196, 0.16);
+    --oro: #FFD60A;
+    --su-oro: rgba(0, 0, 0, 0.85);
+    --timbro: #FF453A;
+    --legno: #937959;
+    --legno-scuro: #4A3B2A;
+    --legno-ombra: #766147;
+    --medaglione-bordo: #6A503B;
+    --medaglione-legno-alto: #9C7557;
+    --medaglione-legno-basso: #7D5E46;
+    --lino: #CFC3AE;            /* la vela di notte, come nella scena */
+    --lino-fondo: #15130F;
+    --cielo-velo: #0A142E;
+    --nebbia-cielo: #1B2430;
+    --nebbia-mare: #0F1A22;
+    --nebbia: rgba(150, 165, 175, 0.42);
+
+    --testo: #F5F5F7;
+    --testo-2: #A8A8AE;
+    --fondo: #000000;
+    --fondo-gruppo: #000000;
+    --carta: #1C1C1E;
+    --scheda-su-fondo: #1C1C1E;
+    --riga: #38383A;
+    --ombra: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.5);
+
+    --tappe: #7D7AFF;
+    --rotte: #30D158;
+    --collezione: #BF5AF2;
+    --collezione-velo: rgba(191, 90, 242, 0.2);
+    --collezione-testo: #D59BF6;
+    --emergenza: #D70015;
+  }
+}
+
+/* ---------- Base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: 106.25%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 1rem;
+}
+
+/* Su iPhone e iPad il testo segue la dimensione scelta nelle Impostazioni. */
+@supports (font: -apple-system-body) and (-webkit-touch-callout: none) {
+  html { font: -apple-system-body; }
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  line-height: 1.55;
+  color: var(--testo);
+  background: var(--fondo);
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, svg, picture { display: block; max-width: 100%; height: auto; }
+
+a { color: var(--mare); text-underline-offset: 0.18em; text-decoration-thickness: 0.06em; }
+a:hover { text-decoration-thickness: 0.12em; }
+
+:focus-visible {
+  outline: 3px solid var(--mare);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.6em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.2rem, 1.6rem + 3vw, 3.6rem); }
+h2 { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.3rem); }
+h3 { font-size: 1.25rem; }
+p { margin: 0 0 1em; text-wrap: pretty; }
+ul, ol { margin: 0 0 1em; padding-left: 1.3em; }
+li + li { margin-top: 0.35em; }
+strong { font-weight: 650; }
+
+[id] { scroll-margin-top: 1.25rem; }
+
+::selection { background: var(--mare-velo); }
+
+/* Per saltare al contenuto con la tastiera. */
+.salta {
+  position: absolute;
+  left: 1rem;
+  top: -10rem;
+  z-index: 10;
+  padding: 0.7rem 1rem;
+  border-radius: var(--r-riga);
+  background: var(--carta);
+  color: var(--mare);
+  box-shadow: var(--ombra);
+}
+.salta:focus { top: 1rem; }
+
+.nascosto {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Impaginazione ---------- */
+
+.contenitore {
+  width: 100%;
+  max-width: calc(var(--pagina) + 2 * var(--margine));
+  margin: 0 auto;
+  padding: 0 var(--margine);
+}
+.colonna { max-width: var(--colonna); }
+.centrato { margin-left: auto; margin-right: auto; text-align: center; }
+
+.sezione { padding: clamp(3rem, 2rem + 4vw, 6rem) 0; }
+.sezione.gruppo { background: var(--fondo-gruppo); }
+.sezione.lino { background: var(--lino-fondo); }
+/* Due sezioni dello stesso fondo, una dopo l'altra: lo spazio fra loro basta una volta. */
+.sezione:not(.gruppo, .lino) + .sezione:not(.gruppo, .lino),
+.sezione.gruppo + .sezione.gruppo,
+.sezione.lino + .sezione.lino { padding-top: 0; }
+
+.griglia {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+.griglia.due { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+
+/* ---------- Intestazione ---------- */
+
+.testata {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--riga);
+  background: var(--fondo);
+}
+.testata .contenitore {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+.marchio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 650;
+  color: var(--testo);
+  text-decoration: none;
+}
+.marchio-nave { width: 2.2rem; height: auto; aspect-ratio: 230 / 176; flex: none; }
+.marchio-sagoma { fill: var(--mare); stroke: var(--mare); }
+.menu { margin: 0 0 0 -0.55rem; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0 0.1rem; }
+.menu li { margin: 0; }
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  color: var(--testo);
+  text-decoration: none;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+.menu a:hover { background: var(--mare-velo); }
+.menu a[aria-current="page"] { color: var(--mare); font-weight: 600; }
+.menu .lingua a { color: var(--mare); }
+@media (min-width: 40rem) {
+  .menu { margin: 0; gap: 0 0.25rem; }
+  .menu a { padding: 0 0.8rem; font-size: 0.94rem; }
+}
+
+/* ---------- Piè di pagina ---------- */
+
+.piede {
+  margin-top: 0;
+  padding: 3rem 0 2.5rem;
+  border-top: 1px solid var(--riga);
+  background: var(--fondo-gruppo);
+  color: var(--testo-2);
+  font-size: 0.88rem;
+}
+.piede .contenitore { display: grid; gap: 1.5rem; }
+@media (min-width: 48rem) {
+  .piede .contenitore { grid-template-columns: auto minmax(0, 1fr); column-gap: 3rem; }
+  .elenco-piede { justify-content: flex-end; }
+}
+.piede p { margin: 0 0 0.4em; }
+.piede a { color: var(--testo); }
+.piede .firma { font-family: var(--serif); font-size: 1.05rem; color: var(--testo); }
+.elenco-piede { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 0; padding: 0; list-style: none; }
+.elenco-piede li { margin: 0; }
+.elenco-piede a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.piede .crediti { grid-column: 1 / -1; margin: 0; padding-top: 1.25rem; border-top: 1px solid var(--riga); }
+
+/* ---------- Testi ---------- */
+
+.etichetta {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  font-family: var(--tondo);
+  font-size: 0.82rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mare);
+}
+.etichetta.oro { color: var(--oro); }
+.introduzione { font-size: clamp(1.1rem, 1rem + 0.5vw, 1.3rem); color: var(--testo-2); max-width: 36rem; }
+.motto {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.05rem + 0.8vw, 1.6rem);
+  color: var(--testo);
+}
+.secondario { color: var(--testo-2); }
+.fonte {
+  display: block;
+  margin-top: 0.6rem;
+  font-family: var(--tondo);
+  font-size: 0.82rem;
+  color: var(--testo-2);
+}
+.numero { font-family: var(--tondo); font-variant-numeric: tabular-nums; font-weight: 650; }
+
+/* ---------- Pulsanti ---------- */
+
+.pulsante {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  background: var(--mare-pieno);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pulsante:hover { filter: brightness(1.08); }
+.pulsante.leggero { background: var(--mare-velo); color: var(--mare); }
+
+/* ---------- Schede ---------- */
+
+.scheda {
+  padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  border-radius: var(--r-scheda);
+  background: var(--carta);
+}
+.sezione:not(.gruppo):not(.lino) .scheda { background: var(--scheda-su-fondo); }
+.scheda > :last-child { margin-bottom: 0; }
+.scheda h3 { margin-bottom: 0.4em; }
+.scheda .disegno { width: 4.5rem; height: 4.5rem; margin-bottom: 1rem; }
+
+/* ---------- La copertina: la scena di Argo, di giorno e di notte ---------- */
+
+/* Come la copertina di Argo nell'app: la scena in un pannello tondo, sotto il nome e le parole. */
+.copertina {
+  background: linear-gradient(to bottom, var(--cielo-velo), var(--fondo) 85%);
+  padding-bottom: clamp(1rem, 0.5rem + 2vw, 2rem);
+}
+.copertina-testo { padding-top: clamp(2.25rem, 1.5rem + 4vw, 4.5rem); }
+.copertina h1 { margin-bottom: 0.15em; }
+.cornice-scena {
+  max-width: 64rem;
+  margin: clamp(1.5rem, 1rem + 2vw, 2.5rem) auto 0;
+  border-radius: var(--r-pannello);
+  overflow: hidden;
+  box-shadow: var(--ombra);
+  background: #8CCCED;
+}
+.cornice-scena { aspect-ratio: 4 / 3; }
+@media (min-width: 44rem) { .cornice-scena { aspect-ratio: 16 / 9; } }
+.cornice-scena .sc-scena { display: block; width: 100%; height: 100%; }
+.azioni { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1.5rem 0 1rem; }
+.azioni.centrate { justify-content: center; }
+.stato { font-size: 0.92rem; color: var(--testo-2); }
+.stato .numero { color: var(--oro); margin-right: 0.35rem; }
+
+/* ---------- Le parti di una pagina ---------- */
+
+.percorso { padding-top: clamp(3rem, 2rem + 4vw, 5.5rem); padding-bottom: clamp(3rem, 2rem + 4vw, 5.5rem); }
+.percorso > .tappa + .tappa { margin-top: clamp(3.5rem, 2.5rem + 4vw, 6.5rem); }
+.parte { display: grid; gap: 2rem; align-items: center; }
+/* In una tappa il testo parte in alto, accanto al pallino della rotta o sotto il titolo. */
+.tappa.parte, .tappa .parte { align-items: start; }
+.parte-testo { max-width: 34rem; }
+@media (min-width: 52rem) {
+  .parte { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 3rem; }
+  .parte:nth-of-type(even) .parte-testo { order: 2; }
+}
+
+.citazione {
+  margin: 0 0 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--oro);
+  border-radius: 0 var(--r-riga) var(--r-riga) 0;
+  background: var(--lino-fondo);
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  max-width: var(--colonna);
+}
+.citazione p:last-child { margin-bottom: 0; }
+
+/* ---------- La home: la vetrina dell'app e i principi ---------- */
+
+.nome-app { font-size: clamp(2.6rem, 2rem + 3vw, 4.2rem); margin-bottom: 0.2em; }
+.vetrina-app .introduzione { margin-left: auto; margin-right: auto; }
+.rotta-giu { width: 1.5rem; height: 7.5rem; margin: 1.5rem auto 0; }
+.rotta-giu .tratto { fill: none; stroke: var(--mare); stroke-width: 2.5; stroke-dasharray: 7 8; stroke-linecap: round; }
+.rotta-giu .tappa-punto { fill: var(--fondo); stroke: var(--mare); stroke-width: 3; }
+@supports (animation-timeline: view()) {
+  .rotta-giu .tratto { animation: disegna-giu linear both; animation-timeline: view(); animation-range: entry 20% cover 55%; }
+}
+@keyframes disegna-giu { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+
+.principi { margin-top: 2rem; }
+/* Le righe delle schede in comune: richiamo, titolo e testo partono alla stessa altezza in ogni scheda. */
+@supports (grid-template-rows: subgrid) {
+  .principio { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
+  .principio h3 { align-self: end; }
+}
+.principio h3 { font-size: 1.2rem; }
+.principio p { color: var(--testo-2); }
+.principio p a { font-weight: 600; }
+/* Piccoli richiami all'app, fatti di testo: non sono pulsanti. */
+.mostra { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1.1rem; }
+.mostra-fonte {
+  display: block;
+  min-height: 0;
+  padding: 0.8rem 1rem;
+  border-radius: var(--r-riga);
+  background: var(--fondo-gruppo);
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--testo-2);
+}
+.mostra-titolo { display: block; font-family: var(--sans); font-weight: 700; font-size: 0.95rem; color: var(--testo); }
+.pillola {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.25rem 0.85rem;
+  border-radius: 999px;
+  font-family: var(--tondo);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+.pillola.mito { background: var(--collezione-velo); color: var(--collezione-testo); }
+.pillola.emergenza { min-height: 2.75rem; padding: 0.4rem 1.4rem; background: var(--emergenza); color: #FFFFFF; font-family: var(--sans); font-size: 1rem; }
+.mostra-numeri { flex-wrap: nowrap; gap: 0.4rem; }
+.mostra-numeri span {
+  display: inline-flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 0.45rem 0.5rem;
+  border-radius: var(--r-riga);
+  background: var(--fondo-gruppo);
+  font-size: 0.78rem;
+  color: var(--testo-2);
+}
+.mostra-numeri .numero { font-size: 1.5rem; line-height: 1.1; color: var(--rotte); }
+
+/* ---------- La nave che cresce, l'Equipaggio, la prudenza ---------- */
+
+.stati-nave {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 48rem) { .stati-nave { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.stato-nave {
+  margin: 0;
+  padding: 0.9rem 0.75rem 1rem;
+  border-radius: var(--r-scheda);
+  background: var(--scheda-su-fondo);
+  text-align: center;
+}
+.stato-nave img { width: 100%; height: auto; aspect-ratio: 5 / 4; margin: 0 auto 0.5rem; }
+.stato-rotte { margin: 0; font-family: var(--tondo); font-size: 0.95rem; color: var(--testo-2); }
+.stato-rotte .numero { font-size: 2rem; color: var(--oro); margin-right: 0.2rem; }
+.stato-nome { margin: 0.2rem 0 0; font-family: var(--serif); font-size: 1.05rem; font-weight: 600; line-height: 1.25; }
+
+.eroi {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 2rem 0 2.5rem;
+  padding: 0;
+  list-style: none;
+}
+/* Sul telefono un eroe è una riga: il medaglione a sinistra, le parole a destra. Più largo, una scheda. */
+.eroe {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: start;
+  margin: 0;
+  padding: 1rem;
+  border-radius: var(--r-scheda);
+  background: var(--scheda-su-fondo);
+}
+.eroe .medaglione { width: 4.75rem; height: 4.75rem; grid-row: span 3; }
+.eroe h3 { margin: 0.15rem 0 0.3rem; font-size: 1.15rem; }
+@media (min-width: 34rem) { .eroi { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 60rem) {
+  .eroi { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .eroe { display: block; padding: 1.25rem 1rem; text-align: center; }
+  .eroe .medaglione { width: 6rem; height: 6rem; }
+  .eroe h3 { margin: 0.75rem 0 0.35rem; }
+  .eroi-mito .eroe p { text-align: left; }
+}
+.eroe p { margin: 0; font-size: 0.92rem; }
+.eroe .fonte { margin-top: 0.6rem; }
+.epiteto { display: block; font-family: var(--sans); font-size: 0.85rem; font-weight: 400; color: var(--testo-2); }
+/* Il medaglione di un eroe, come nell'app (ArgoCrewMedallion): il bordo, il legno con la sua luce e la corda
+   tratteggiata; il ritratto tagliato sul cerchio del legno. */
+.medaglione {
+  position: relative;
+  display: block;
+  width: 6.5rem;
+  height: 6.5rem;
+  margin: 0 auto;
+  padding: 8%;
+  border-radius: 50%;
+  background: var(--medaglione-bordo);
+}
+.medaglione::after {
+  content: "";
+  position: absolute;
+  inset: 12.5%;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+}
+.medaglione img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, var(--medaglione-legno-alto), var(--medaglione-legno-basso));
+}
+
+.due-telefoni { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.due-telefoni .telefono { width: min(100%, 15rem); padding: 0.35rem; border-radius: 1.9rem; }
+.due-telefoni .telefono img { border-radius: 1.55rem; }
+
+.elenco-prudenza { padding-left: 1.2em; }
+.elenco-prudenza li + li { margin-top: 0.7rem; }
+
+.timbro { width: 7.5rem; height: 7.5rem; margin: 0.5rem 0 1.25rem; }
+
+/* ---------- Schermate dell'app in una cornice di telefono ---------- */
+
+.schermata { margin: 0; }
+.telefono {
+  width: min(100%, 13.5rem);
+  margin: 0 auto;
+  padding: 0.5rem;
+  border-radius: 2.6rem;
+  background: #1D1D1F;
+  box-shadow: var(--ombra), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.telefono img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1206 / 2622;
+  border-radius: 2.15rem;
+  background: var(--fondo-gruppo);
+}
+.schermata figcaption {
+  max-width: 18rem;
+  margin: 0.9rem auto 0;
+  font-size: 0.86rem;
+  color: var(--testo-2);
+  text-align: center;
+}
+@media (min-width: 40rem) { .telefono { width: min(100%, 16.5rem); } }
+@media (prefers-color-scheme: dark) {
+  .telefono { background: #2C2C2E; box-shadow: var(--ombra), inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+}
+
+/* ---------- Domande e parole di bordo ---------- */
+
+.domande { display: grid; gap: 0.6rem; margin: 0 0 2.5rem; }
+.domanda { border-radius: var(--r-tessera); background: var(--scheda-su-fondo); }
+.domanda summary {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 1rem 3.25rem 1rem 1.25rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+  border-radius: var(--r-tessera);
+}
+.domanda summary::-webkit-details-marker { display: none; }
+.domanda summary::after {
+  content: "";
+  position: absolute;
+  right: 1.35rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--mare);
+  border-bottom: 2px solid var(--mare);
+  transform: translateY(-70%) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.domanda[open] summary::after { transform: translateY(-25%) rotate(-135deg); }
+.domanda .risposta { padding: 0 1.25rem 1.15rem; }
+.domanda .risposta > :last-child { margin-bottom: 0; }
+
+.glossario {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  margin: 0;
+}
+.glossario > div { padding: 1rem 1.25rem; border-radius: var(--r-tessera); background: var(--scheda-su-fondo); }
+.glossario dt { font-family: var(--serif); font-size: 1.12rem; font-weight: 650; }
+.glossario dd { margin: 0.3rem 0 0; color: var(--testo-2); }
+
+/* ---------- La rotta tratteggiata che lega le parti di una pagina ---------- */
+
+.percorso { position: relative; }
+.tappa { position: relative; padding-left: clamp(2.6rem, 2rem + 2vw, 3.75rem); view-timeline-name: --tappa; }
+/* La tappa: un pallino come quelli delle rotte nell'app. */
+.tappa::before {
+  content: "";
+  position: absolute;
+  left: 0.3rem;
+  top: 0.45rem;
+  z-index: 1;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: var(--fondo);
+  border: 3px solid var(--mare);
+}
+.sezione.gruppo .tappa::before { background: var(--fondo-gruppo); }
+.sezione.lino .tappa::before { background: var(--lino-fondo); }
+/* Il tratto fino alla tappa dopo: un sentiero che piega un poco, steso sull'altezza della parte. */
+.tappa > .segno {
+  position: absolute;
+  left: 0;
+  top: 1.5rem;
+  width: 1.6rem;
+  height: calc(100% - 0.6rem);
+  overflow: visible;
+}
+.tappa > .segno .tratto { fill: none; stroke: var(--mare); stroke-width: 2; stroke-dasharray: 6 7; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.tappa:last-child > .segno .tratto { display: none; }
+@supports (animation-timeline: view()) {
+  .tappa > .segno .tratto { animation: disegna-rotta linear both; animation-timeline: --tappa; animation-range: entry 10% cover 50%; }
+}
+@keyframes disegna-rotta { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* ---------- La testa di una pagina interna: titolo, parole e i salti ---------- */
+
+.testa-pagina {
+  padding: clamp(2.25rem, 1.5rem + 4vw, 4.5rem) 0 clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  background: linear-gradient(to bottom, var(--cielo-velo), var(--fondo));
+}
+.testa-pagina-griglia { display: grid; gap: 2rem; align-items: center; }
+.testa-pagina .etichetta { margin-bottom: 0.2rem; }
+.testa-pagina .etichetta a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: none; }
+.rosa-testa { display: none; width: 100%; max-width: 19rem; height: auto; justify-self: end; opacity: 0.9; }
+@media (min-width: 56rem) {
+  .testa-pagina-griglia { grid-template-columns: minmax(0, 1fr) 17rem; }
+  .rosa-testa { display: block; }
+}
+.salti ul { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0 0; padding: 0; list-style: none; }
+.salti li { margin: 0; }
+.salti a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--mare-velo);
+  color: var(--mare);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.colonna-domande { max-width: calc(48rem + 2 * var(--margine)); padding-top: 1rem; padding-bottom: clamp(3rem, 2rem + 4vw, 5rem); }
+.colonna-domande > section { padding-top: 2.5rem; }
+.colonna-domande h2 { font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem); }
+
+/* ---------- Il mito ---------- */
+
+.mito .parte { align-items: start; }
+.perche-argo { max-width: 44rem; margin-top: 2.25rem; background: var(--lino-fondo); }
+.sezione:not(.gruppo):not(.lino) .perche-argo { background: var(--lino-fondo); }
+.nave-mito { margin: 0; text-align: center; }
+.nave-mito img { width: 100%; max-width: 26rem; height: auto; margin: 0 auto; }
+.nave-mito figcaption { margin-top: 0.6rem; font-size: 0.88rem; color: var(--testo-2); }
+.eroi-mito .eroe p { text-align: left; }
+.approdi {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.approdo { margin: 0; padding: 1rem 1rem 1.25rem; border-radius: var(--r-scheda); background: var(--scheda-su-fondo); }
+/* Il paesaggio dell'approdo con la nave nello stato di quel momento, come sulla copertina di Argo. */
+.vignetta { position: relative; margin-bottom: 0.9rem; border-radius: var(--r-tessera); overflow: hidden; }
+.vignetta picture img { width: 100%; height: auto; aspect-ratio: 400 / 270; }
+/* La nave nella scena 400×270: x 58,1–344,1, y 18,8–247,6 (NOTE-SITO.md). */
+.vignetta-nave { position: absolute; left: 14.53%; top: 6.96%; width: 71.5%; height: auto; }
+.approdo h3 { margin-bottom: 0.4rem; }
+.approdo h3 .numero { color: var(--oro); margin-right: 0.3rem; }
+.approdo p { font-size: 0.95rem; }
+.carta-viaggio { max-width: 40rem; margin: 2rem 0 0; }
+.carta-viaggio img { width: 100%; height: auto; }
+/* I nomi degli approdi. Sul telefono stretto, un elenco numerato su due colonne; da 480 px, sotto i punti della
+   carta, su due righe alternate come nell'app. */
+.carta-nomi {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 0.15rem 1rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--tondo);
+  font-size: 0.86rem;
+  font-weight: 650;
+  color: var(--testo-2);
+}
+.carta-nomi li { margin: 0; }
+.carta-nomi li::before { content: counter(list-item) " "; color: var(--oro); }
+.carta-nomi li:last-child { color: var(--oro); }
+@media (min-width: 30rem) {
+  .carta-nomi {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    grid-auto-flow: row;
+    gap: 0;
+    margin-top: 0.4rem;
+    font-size: clamp(0.72rem, 0.6rem + 0.4vw, 0.86rem);
+  }
+  .carta-nomi li { justify-self: center; max-width: 7em; line-height: 1.2; text-align: center; }
+  .carta-nomi li::before { content: none; }
+  .carta-nomi li:nth-child(odd) { grid-row: 1; }
+  .carta-nomi li:nth-child(even) { grid-row: 2; padding-top: 0.15rem; }
+  .carta-nomi li:nth-child(1) { grid-column: 1; justify-self: start; text-align: left; }
+  .carta-nomi li:nth-child(2) { grid-column: 2; }
+  .carta-nomi li:nth-child(3) { grid-column: 3; }
+  .carta-nomi li:nth-child(4) { grid-column: 4; }
+  .carta-nomi li:nth-child(5) { grid-column: 5; }
+  .carta-nomi li:nth-child(6) { grid-column: 6; justify-self: end; text-align: right; }
+}
+/* La nave nel cielo: la carta delle stelle, blu notte anche di giorno. */
+.cielo-argo { width: 100%; max-width: 24rem; margin: 0 auto; }
+.cielo-argo img { display: block; width: 100%; height: auto; border-radius: var(--r-scheda); box-shadow: 0 12px 32px rgb(11 27 51 / 0.22); }
+.cielo-argo figcaption { margin-top: 0.75rem; font-size: 0.88rem; color: var(--testo-2); }
+.argonauta-guscio { width: 100%; max-width: 18rem; height: auto; margin: 0 auto; }
+
+/* ---------- Fuori rotta: la nave nella nebbia ---------- */
+
+.fuori-rotta { padding: clamp(2rem, 1.5rem + 3vw, 4rem) 0 clamp(3rem, 2rem + 4vw, 5rem); }
+.nebbia {
+  position: relative;
+  max-width: 30rem;
+  margin: 0 auto 2rem;
+  aspect-ratio: 6 / 5;
+  overflow: hidden;
+  border-radius: var(--r-pannello);
+  background: linear-gradient(to bottom, var(--nebbia-cielo), var(--nebbia-mare));
+}
+.nave-nebbia { position: absolute; left: 8%; bottom: 6%; width: 84%; height: auto; opacity: 0.55; filter: grayscale(0.6) blur(0.6px); }
+.banco {
+  position: absolute;
+  left: -30%;
+  width: 160%;
+  height: 34%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--nebbia) 0%, transparent 70%);
+  animation: nebbia-va 26s ease-in-out infinite alternate;
+}
+.banco-1 { top: 18%; }
+.banco-2 { top: 42%; animation-duration: 34s; animation-direction: alternate-reverse; }
+.banco-3 { top: 64%; animation-duration: 21s; }
+@keyframes nebbia-va { from { transform: translateX(-9%); } to { transform: translateX(9%); } }
+.fuori-rotta-testi { max-width: 56rem; margin: 0 auto; }
+.come-h1 { font-size: clamp(2.2rem, 1.6rem + 3vw, 3.6rem); }
+.vie { list-style: none; padding: 0; }
+.vie li { margin: 0; }
+.vie a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+
+/* ---------- La scena di Argo (dai disegni dell'app, vedi _lavoro/riferimenti/svg-sito) ---------- */
+
+/* La scena della nave (scena.svg dentro l'HTML): colori, giorno e notte, movimento.
+   Tutti i nomi cominciano con sc-. I colori sono quelli dell'app; i gradienti si colorano dai
+   loro stop (stop-color). Di notte valgono le regole dentro prefers-color-scheme: dark. */
+
+/* Colori di giorno (e quelli che non cambiano) */
+.sc-cielo-0 { stop-color: #8CCCED; }
+.sc-cielo-1 { stop-color: #A9DCF1; }
+.sc-cielo-2 { stop-color: #59B8D6; }
+.sc-cielo-3 { stop-color: #08668C; }
+.sc-mare-0 { stop-color: #2B9EC4; }
+.sc-mare-1 { stop-color: #08668C; }
+.sc-ombra-0 { stop-color: #000; stop-opacity: 0; }
+.sc-ombra-1 { stop-color: #000; stop-opacity: .22; }
+.sc-caldo-0 { stop-color: #FAD69E; stop-opacity: .95; }
+.sc-caldo-1 { stop-color: #FAD69E; stop-opacity: 0; }
+.sc-alone-sole-0 { stop-color: #FFE6A6; stop-opacity: .85; }
+.sc-alone-sole-1 { stop-color: #FFE6A6; stop-opacity: 0; }
+.sc-alone-luna-0 { stop-color: #FFF; stop-opacity: .45; }
+.sc-alone-luna-1 { stop-color: #FFF; stop-opacity: 0; }
+.sc-lume-0 { stop-color: #FFD98A; stop-opacity: .9; }
+.sc-lume-1 { stop-color: #FFB347; stop-opacity: 0; }
+.sc-legno-0 { stop-color: #A86F3E; }
+.sc-legno-1 { stop-color: #8B5631; }
+.sc-legno-2 { stop-color: #653C20; }
+.sc-tela-0 { stop-color: #F7ECD8; }
+.sc-tela-1 { stop-color: #F7ECD8; }
+.sc-tela-2 { stop-color: #E8D6B4; }
+.sc-stelle { fill: #FFF; }
+.sc-sole { fill: #FFDB80; }
+.sc-monti-lontani { fill: #FFF; fill-opacity: .2; }
+.sc-monti-vicini { fill: #FFF; fill-opacity: .3; }
+.sc-v-prato { fill: #6F9A5E; }
+.sc-v-tronchi { fill: none; stroke: #5C3F26; }
+.sc-v-chioma-scura { fill: #3F6B42; }
+.sc-v-chioma { fill: #4E7D46; }
+.sc-v-quercia { fill: #6B4A2B; }
+.sc-v-serpente { fill: none; stroke: #5E7F3B; }
+.sc-v-serpente-testa { fill: #5E7F3B; }
+.sc-vello { fill: #E2A631; }
+.sc-vello-luce { fill: #F6D77A; }
+.sc-onda { fill: #FFF; fill-opacity: .16; }
+.sc-gabbiano { fill: none; stroke: #FFF; stroke-opacity: .9; }
+.sc-sartie { fill: none; stroke: #3C2818; stroke-opacity: .75; }
+.sc-albero { fill: #6F4626; }
+.sc-blu { fill: #08739A; }
+.sc-imbrogli { fill: none; stroke: #D7C29B; }
+.sc-pennone { fill: none; stroke: #6F4626; }
+.sc-oro { fill: #E2A631; }
+.sc-orfeo-ombra { fill: none; stroke: #CF9B74; }
+.sc-orfeo-tunica { fill: #B5443A; }
+.sc-orfeo-cintura { fill: none; stroke: #7E2A23; }
+.sc-orfeo-pelle { fill: #E7B48C; }
+.sc-orfeo-capelli { fill: #3B2417; }
+.sc-orfeo-alloro { fill: #6E9B4E; }
+.sc-e-occhio { fill: #2A1B12; }
+.sc-e-guancia { fill: #E2645A; fill-opacity: .22; }
+.sc-lira { fill: #B9792A; }
+.sc-lira-oro { fill: none; stroke: #E2A631; }
+.sc-lira-corde { fill: none; stroke: #FFF4D6; }
+.sc-orfeo-braccio { fill: none; stroke: #E7B48C; }
+.sc-tifi-ombra { fill: none; stroke: #B27A56; }
+.sc-tifi-tunica { fill: #3E7C99; }
+.sc-tifi-cintura { fill: none; stroke: #2B5A70; }
+.sc-tifi-pelle { fill: #C98E68; }
+.sc-tifi-capelli { fill: #5B4636; }
+.sc-tifi-barba { fill: #6B5646; }
+.sc-tifi-berretto { fill: #8A6A45; }
+.sc-tifi-tesa { fill: none; stroke: #6E5233; }
+.sc-tifi-braccio { fill: none; stroke: #C98E68; }
+.sc-mopso-bastone { fill: none; stroke: #7A5532; }
+.sc-mopso-ombra { fill: none; stroke: #C28B66; }
+.sc-mopso-tunica { fill: #6E8B4E; }
+.sc-mopso-cintura { fill: none; stroke: #4C6436; }
+.sc-mopso-pelle { fill: #D9A27C; }
+.sc-mopso-bianco { fill: #E9E4DA; }
+.sc-mopso-barba { fill: #E9E4DA; stroke: #CFC8BA; }
+.sc-mopso-braccio { fill: none; stroke: #D9A27C; }
+.sc-linceo-ombra { fill: none; stroke: #CB936A; }
+.sc-linceo-tunica { fill: #D59A2E; }
+.sc-linceo-cintura { fill: none; stroke: #9C6C17; }
+.sc-linceo-pelle { fill: #E2AA80; }
+.sc-linceo-capelli { fill: #7A4A24; }
+.sc-linceo-fascia { fill: #08739A; }
+.sc-linceo-braccio { fill: none; stroke: #E2AA80; }
+.sc-eracle-clava { fill: #6B4424; }
+.sc-eracle-nodi { fill: #4E301A; }
+.sc-eracle-ombra { fill: none; stroke: #A06A4A; }
+.sc-eracle-tunica { fill: #7A4E2D; }
+.sc-eracle-cintura { fill: none; stroke: #55351D; }
+.sc-eracle-leone { fill: #C48A3F; }
+.sc-eracle-leone-scuro { fill: #9E6B2E; }
+.sc-eracle-pelle { fill: #B97F5B; }
+.sc-eracle-barba { fill: #2E1E14; }
+.sc-remo { fill: none; stroke: #C9A070; }
+.sc-eracle-braccio { fill: none; stroke: #B97F5B; }
+.sc-scafo { fill: #8B5631; }
+.sc-fasciame { fill: none; stroke: #5A341A; }
+.sc-bordo { fill: none; stroke: #C99260; }
+.sc-oro-tratto { fill: none; stroke: #E2A631; }
+.sc-scalmi { fill: #4A2B14; }
+.sc-occhio { fill: #FFFFFF; }
+.sc-occhio-bordo { fill: none; stroke: #4A2B14; }
+.sc-pupilla { fill: #1C1C1E; }
+.sc-timone { fill: none; stroke: #7A4A26; }
+.sc-timone-pala { fill: #7A4A26; }
+.sc-remo-pala { fill: #C9A070; }
+.sc-onda-mare { fill: #2490B8; fill-opacity: .84; }
+.sc-velo { fill: #06101F; fill-opacity: .32; }
+.sc-luna { fill: #F7EDC7; }
+.sc-gancio { fill: none; stroke: #3B2A1A; }
+.sc-lanterna-corpo { fill: #EAD7B0; }
+.sc-lanterna-bordo { fill: none; stroke: #5A3B22; }
+.sc-lanterna-accesa { fill: #FFE7A0; }
+.sc-lanterna-tetto { fill: #5A3B22; }
+
+/* Giorno e notte: un gruppo o l'altro */
+.sc-solo-notte { display: none; }
+
+/* Movimento (fermo con prefers-reduced-motion, in fondo). Unità: quelle del riquadro dell'SVG. */
+/* Dondolio: 1,5° ogni 5,6 s intorno al perno (205, 206) della scena. */
+.sc-nave { transform-box: view-box; transform-origin: 205px 206px; animation: sc-dondolio 2.8s ease-in-out -1.4s infinite alternate; }
+@keyframes sc-dondolio { from { transform: rotate(-1.5deg); } to { transform: rotate(1.5deg); } }
+/* Su e giù: 1,6 unità ogni 4,3 s, sfasato come nell'app. */
+.sc-su-giu { transform-box: view-box; animation: sc-su-giu 2.15s ease-in-out -1.76s infinite alternate; }
+@keyframes sc-su-giu { from { transform: translateY(-1.6px); } to { transform: translateY(1.6px); } }
+/* Onde: a sinistra di una lunghezza d'onda alla velocità dell'app (5, 9 e 13 unità al secondo). */
+.sc-onde-dietro { animation: sc-onda-64 12.8s linear infinite; }
+.sc-onde-davanti { animation: sc-onda-56 6.222s linear infinite; }
+.sc-onde-basse { animation: sc-onda-90 6.923s linear infinite; }
+@keyframes sc-onda-64 { to { transform: translateX(-64px); } }
+@keyframes sc-onda-56 { to { transform: translateX(-56px); } }
+@keyframes sc-onda-90 { to { transform: translateX(-90px); } }
+/* Bandiera: ±2,6° intorno all'attacco all'albero (125, 32 nel riquadro della nave), metà della
+   velocità dell'app (là 1,43 s per un'oscillazione intera). */
+.sc-stendardo { transform-box: view-box; transform-origin: 125px 32px; animation: sc-stendardo 1.43s ease-in-out -.71s infinite alternate; }
+@keyframes sc-stendardo { from { transform: rotate(2.6deg); } to { transform: rotate(-2.6deg); } }
+/* Lanterna (solo di notte): il bagliore respira piano intorno a (64, 106,6) del riquadro della nave;
+   l'app tremola più in fretta (1 + 0,08·sin 9t + 0,04·sin 23t). */
+.sc-lanterna { transform-box: view-box; transform-origin: 64px 106.6px; animation: sc-fiamma 2.4s ease-in-out infinite; }
+@keyframes sc-fiamma { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.08); } 55% { transform: scale(.95); } 80% { transform: scale(1.04); } }
+/* Stelle (solo di notte): tre gruppi per ritmo dell'app, opacità da 1 a 0,45. */
+.sc-stelle-1 { animation: sc-brilla 1.42s ease-in-out -.3s infinite alternate; }
+.sc-stelle-2 { animation: sc-brilla 1.74s ease-in-out -1.1s infinite alternate; }
+.sc-stelle-3 { animation: sc-brilla 2.3s ease-in-out -1.9s infinite alternate; }
+@keyframes sc-brilla { from { opacity: 1; } to { opacity: .45; } }
+
+/* Notte */
+@media (prefers-color-scheme: dark) {
+  .sc-solo-giorno { display: none; }
+  .sc-solo-notte { display: inline; }
+  .sc-cielo-0 { stop-color: #0A142E; }
+  .sc-cielo-1 { stop-color: #1A2B52; }
+  .sc-cielo-2 { stop-color: #12546E; }
+  .sc-cielo-3 { stop-color: #052638; }
+  .sc-mare-0 { stop-color: #12465E; }
+  .sc-mare-1 { stop-color: #052638; }
+  .sc-monti-lontani { fill: #FFF; fill-opacity: .08; }
+  .sc-monti-vicini { fill: #FFF; fill-opacity: .14; }
+  .sc-v-prato { fill: #426154; }
+  .sc-v-tronchi { fill: none; stroke: #383438; }
+  .sc-v-chioma-scura { fill: #2A4A46; }
+  .sc-v-chioma { fill: #315248; }
+  .sc-v-quercia { fill: #40393B; }
+  .sc-v-serpente { fill: none; stroke: #395442; }
+  .sc-v-serpente-testa { fill: #395442; }
+  .sc-onda-mare { fill: #0F3D54; fill-opacity: .84; }
+}
+
+@media (prefers-reduced-motion: reduce) { .sc-scena * { animation: none !important; } }
+
+/* ---------- Un documento: la privacy ---------- */
+
+.documento { max-width: calc(44rem + 2 * var(--margine)); padding-top: 2rem; padding-bottom: 4rem; }
+.documento h1, .documento .titolo-pagina { font-size: clamp(2rem, 1.6rem + 2vw, 2.8rem); }
+.documento h2 { font-size: 1.35rem; margin-top: 2.2em; }
+.documento .titolo-pagina { margin-top: 0; }
+.documento .lingua { margin: 0 0 1.5rem; }
+.documento .lingua a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.separa-lingue { margin: 4rem 0 2.5rem; border: 0; border-top: 1px solid var(--riga); }
+.indice {
+  margin: 1.5rem 0 0.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--r-tessera);
+  background: var(--scheda-su-fondo);
+  font-size: 0.95rem;
+}
+.indice ol { margin: 0; padding-left: 1.4em; columns: 2 14rem; column-gap: 2rem; }
+.indice li { margin: 0; break-inside: avoid; }
+.indice a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+
+/* ---------- Stampa: pulita, senza menu né disegni ---------- */
+
+@media print {
+  .testata, .piede, .salta, .disegno, .scena, .cornice-scena, nav, .indice, .lingua, .segno { display: none !important; }
+  .documento { max-width: none; padding: 0; }
+  .separa-lingue { break-after: page; border: 0; margin: 0; }
+  h2 { break-after: avoid; }
+  body { color: #000; background: #FFF; font-size: 11pt; }
+  a { color: #000; }
+  .sezione, .scheda { padding: 0; background: none !important; }
+}
+
+/* ---------- Movimento ---------- */
+
+@view-transition { navigation: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

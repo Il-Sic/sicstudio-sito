@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-15.9 -31.4 34.5 34.5" width="345" height="345">
+<title>Orfeo</title>
+<g>
+ <g transform="translate(0 4.6)">
+  <g fill="none" stroke="#CF9B74" stroke-linecap="round">
+   <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(-74)"/>
+   <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-82)"/>
+   <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(-30)"/>
+  </g>
+  <path fill="#B5443A" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+  <path fill="none" stroke="#7E2A23" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+  <g transform="translate(.3 -17.2) rotate(6)">
+   <rect fill="#E7B48C" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+   <circle fill="#E7B48C" cx=".2" cy="-4.6" r="4.6"/>
+   <path fill="#3B2417" d="M-4.4-3.4C-5.4-9.6 3.6-11.6 4.9-6.2C3.8-7.6 1-8.2-.4-6.8C-1.4-5.6-2-4-2.6-2.6C-3.4-2-4.2-2.4-4.4-3.4Z"/>
+   <circle fill="#3B2417" cx="-3.3" cy="-7.6" r="1.5"/>
+   <circle fill="#3B2417" cx="-1.4" cy="-9.4" r="1.5"/>
+   <circle fill="#3B2417" cx="1.2" cy="-9.8" r="1.4"/>
+   <circle fill="#3B2417" cx="3.4" cy="-8.6" r="1.2"/>
+   <ellipse fill="#6E9B4E" cx="-2.6" cy="-10" rx="1.4" ry=".6" transform="rotate(-30 -2.6 -10)"/>
+   <ellipse fill="#6E9B4E" cx="-.2" cy="-10.9" rx="1.4" ry=".6" transform="rotate(-8 -.2 -10.9)"/>
+   <ellipse fill="#6E9B4E" cx="2.3" cy="-10.6" rx="1.4" ry=".6" transform="rotate(18 2.3 -10.6)"/>
+   <ellipse fill="#6E9B4E" cx="4.1" cy="-9" rx="1.4" ry=".6" transform="rotate(40 4.1 -9)"/>
+   <circle fill="#2A1B12" cx="2.5" cy="-5.1" r=".6"/>
+   <circle fill="#E2645A" fill-opacity=".22" cx="2.7" cy="-3.3" r=".9"/>
+  </g>
+  <g transform="translate(4.6 -9.4) rotate(-16)">
+   <ellipse fill="#B9792A" cx="0" cy="0" rx="2.4" ry="1.3"/>
+   <path fill="none" stroke="#E2A631" stroke-width="1" stroke-linecap="round" d="M-2-.5C-3.5-2.7-2.8-5.9-1.3-7.3M2-.5C3.5-2.7 2.8-5.9 1.3-7.3"/>
+   <path fill="none" stroke="#E2A631" stroke-width=".9" d="M-1.9-6.3L1.9-6.3"/>
+   <path fill="none" stroke="#FFF4D6" stroke-width=".35" d="M-.8-.6L-.8-6.3M0-.6L0-6.3M.8-.6L.8-6.3"/>
+  </g>
+  <g transform="translate(.3 -15.4) rotate(-38)">
+   <path fill="none" stroke="#E7B48C" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+   <circle fill="#E7B48C" cx="0" cy="6.3" r="1.1"/>
+  </g>
+ </g>
+</g>
+</svg>

@@ -1,0 +1,170 @@
+{
+  "argo-chiaro": {
+    "copie": {
+      "argo-chiaro-400.avif": "7f89d709eb62249db1427a880daf904c0c136cb916734470614074651221186d",
+      "argo-chiaro-400.webp": "7aea71e40eb2f12d97129aed828bd6e8d22811e3b014b9b9ce2888f0384319a3",
+      "argo-chiaro-680.avif": "1ba785e18d7979840d76cb9030a610474828dc43a590c805fd3a37a78f7656da",
+      "argo-chiaro-680.webp": "e0b90aec833cee3539c789e50194bbc78bae587024b9e2899f8caef72890632d",
+      "argo-chiaro.avif": "c7f38059ebb754e14115cb845df6e4ae22872eabb52c7ee55111528f7e011f4a",
+      "argo-chiaro.webp": "cb2f23e07fdf8ee97abee15ab5ff036bee8fca7afaf48a903619a7035c518ec5"
+    },
+    "jpeg": "efb0d4272d9cf64113679100fb8667ee3151a61bc9605ddd77e4dd008a7adfe9",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-40-argo-cinque-rotte.png"
+  },
+  "argo-scuro": {
+    "copie": {
+      "argo-scuro-400.avif": "25dd63cb4aa94ee6091583a37adbf4004847a6e327cdaa03ecf82de5b8483485",
+      "argo-scuro-400.webp": "8cf83e0deb7067d10fcf656a4b6c90f3692030e310d7a32cac31a4ffad6d5126",
+      "argo-scuro-680.avif": "72c63b9f1476160a1936e5469749a988a4071241f3084621d2ad9d80ba1542c6",
+      "argo-scuro-680.webp": "c8e8623228fe3e3139114a5af14ea18f2c3e541dcf404497d541122fd7d831d9",
+      "argo-scuro.avif": "47d0aa723d9d8f556e055398c327b0aa7419254de4aebdb9acd0bd0a8c071da9",
+      "argo-scuro.webp": "e6824a55189e7c1af6c235fc7f85e43a23e496f49da4ec9e9648baa1686a52d6"
+    },
+    "jpeg": "667e0d113399c647f312c732ee92387e1e1d5009c62921672e8360ab76ec8788",
+    "origine": "_lavoro/riferimenti/schermate/scuro-40-argo-cinque-rotte.png"
+  },
+  "diario-chiaro": {
+    "copie": {
+      "diario-chiaro-400.avif": "82ef4585d398da968d7bbb54d22dabe42e714dcae2093ab76d2178c57105c668",
+      "diario-chiaro-400.webp": "63adc60013d3dac03b2f8164ddff707ee6c0e17d1b8c8d94905390db27b68a10",
+      "diario-chiaro-680.avif": "674c928589735c538cc2511237f686d750fd1e4826801da796d5d18ba78d1948",
+      "diario-chiaro-680.webp": "516145aeca9c71cd2093ad780cb747bad22ae9ed6bdc08274484ccee0e11d531",
+      "diario-chiaro.avif": "57bd5ad7f33d0629162dfd30c98435f12ee37a1501d56e29fcdb23d77d420292",
+      "diario-chiaro.webp": "575ab2837c7747355489c353b69514f3e3a498fa9415c1ee562ce66a0d2d791f"
+    },
+    "jpeg": "0f85bb0b15069646e03cd63177dcf35e04aef6d740c729e66d4a25ffcf7787f1",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-16-diario-completo.png"
+  },
+  "diario-scuro": {
+    "copie": {
+      "diario-scuro-400.avif": "efc1af563123b92ec0ffee93025e525b5eb878e8b9e2d5b4d18b8c0949e4f512",
+      "diario-scuro-400.webp": "a8850f83fa748225f20a8a7a62b98025feb4e3aff9f90f50f6d7f080c9fa083c",
+      "diario-scuro-680.avif": "89c7b71c905d944cb1da58bab73200d094fd9e3960d8870168def5a301b60d6c",
+      "diario-scuro-680.webp": "3ed303f0e439ab50fe687ecd7166cbc67e80c5e57d1b60abe3fa8bad19349014",
+      "diario-scuro.avif": "af59d0a799133f13f46269acf966f3ca10de2f05d6b4c21b7fa888b0afd6880c",
+      "diario-scuro.webp": "4d8cc6b4d0a14102ae2e5b7dfbe77c9bd0f34c8587e9048129517e7f0dcc2051"
+    },
+    "jpeg": "2b0e666378fd5d52b601826a6326a06f8259a890d038979398051ada9e889978",
+    "origine": "_lavoro/riferimenti/schermate/scuro-16-diario-completo.png"
+  },
+  "leggenda-chiaro": {
+    "copie": {
+      "leggenda-chiaro-400.avif": "8b06585367c766248664eb9f9834e9fa9bc9f19d34e1dbad719594d4a699790b",
+      "leggenda-chiaro-400.webp": "df6d652db7100a30fc6a693642453458d848b829429da8c5aa36a11944057ea1",
+      "leggenda-chiaro-680.avif": "1290982fbed16abe8c933e6e0a98bcc6c4173c217a46e4a6292cd5da97ddfc83",
+      "leggenda-chiaro-680.webp": "711ae02a0f924349295bec747a5a004e67c3aeb287a0641ad84ef34ad0213aa4",
+      "leggenda-chiaro.avif": "d843dd2519f91af66a8891555a4d81ec92b5178eb56cf6d644f9068306410b1f",
+      "leggenda-chiaro.webp": "c8a3ca8c0431486ec2c3a82a64cacec400152ab12ac8624427aa5a77d0cf34da"
+    },
+    "jpeg": "e8350310c3f5a09bbe87f7f6215fb85ef6b830219201858a221d280da05f50be",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-08-leggenda.png"
+  },
+  "leggenda-scuro": {
+    "copie": {
+      "leggenda-scuro-400.avif": "30a959ec27284fd3ac638dace81d957f1bc2f4805c87aec4167842634b63c7de",
+      "leggenda-scuro-400.webp": "18d97096eabdbede3d66a59bf6f4ce88bbb04227dc25e3a9dbc8039c8357ba46",
+      "leggenda-scuro-680.avif": "70f888bced6f0251fed7c51589259d563ff7e2a5f3a4cdaf9496d2b8e9558f62",
+      "leggenda-scuro-680.webp": "3a8ad9d05e6488cdbae3fa07f979dd4ca9378556d5298bcab1b09e0a184b0773",
+      "leggenda-scuro.avif": "68f29dc97418b209f1e54afb8d2e08295668ec8ef4b272ab0670fc07177d7279",
+      "leggenda-scuro.webp": "18a05376056c98f5eb454cc842be403297b366fe592d6e3cc5738db9d3d54bcf"
+    },
+    "jpeg": "e05d4768f834d52f172decc1dc8080460310dada0e02fdb71ace385b69f6471b",
+    "origine": "_lavoro/riferimenti/schermate/scuro-08-leggenda.png"
+  },
+  "prima-di-partire-chiaro": {
+    "copie": {
+      "prima-di-partire-chiaro-400.avif": "5c45c7354ca3cb722863bd9ff808fdd22b79b6b3097247bde96a269fa4e81739",
+      "prima-di-partire-chiaro-400.webp": "45e04864d3cf9081c1320e9eb67ffff4e0b1d00fdf21d8fa3cf9afcd0df8c881",
+      "prima-di-partire-chiaro-680.avif": "a21d290622758bbd2848739d6b821f0ce4b64b59a5f471d07f2788ce27e65d9b",
+      "prima-di-partire-chiaro-680.webp": "48760f9c895f087e33cbdd1707e377e4e682d816c567280796beac9b75eee4e8",
+      "prima-di-partire-chiaro.avif": "1a343c7eebed1b711858c95269af2b39403d76a247cc3a05b12d512ce1aeb421",
+      "prima-di-partire-chiaro.webp": "16077dbe8e88c0bcc5fc58d05b778773d8de4e578cfb7f1cfac6732aa30b6076"
+    },
+    "jpeg": "b7936500cf2e3a0476c1844fc43c38977e963a8a9497060abdd178f743c6872d",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-12-rotta-prima-di-partire-consigli.png"
+  },
+  "prima-di-partire-scuro": {
+    "copie": {
+      "prima-di-partire-scuro-400.avif": "d809b20136d4c966f1ac18bbf0ce3721e04a8aadcbd0705ad453e94780d030cb",
+      "prima-di-partire-scuro-400.webp": "7463f16508254e56fdb7cfaca01b3f6ab31c3e950dcabfd72e5f9badd84e2478",
+      "prima-di-partire-scuro-680.avif": "97b3904188c62426d02205303b88b97841d6c250d66466e1cd787aef1d4fac8d",
+      "prima-di-partire-scuro-680.webp": "c69487bfb1c5e417959b757d38e1d25170d49af7cef20b3ac58e119077c4561e",
+      "prima-di-partire-scuro.avif": "7acde05ceebe86bb32d5c3cf39f558eca4c939bc6005375cb2ee4532d02b3468",
+      "prima-di-partire-scuro.webp": "f94fa229bdaba1fa8bf8a1f39c7063e19e372ee385b6d9ed3ee1d60cd0c2170d"
+    },
+    "jpeg": "d3633a3426d8649a3d5f53d8a4a71432f316caef215dab9d3fce332f0caafe59",
+    "origine": "_lavoro/riferimenti/schermate/scuro-12-rotta-prima-di-partire-consigli.png"
+  },
+  "rotta-chiaro": {
+    "copie": {
+      "rotta-chiaro-400.avif": "dc9e2120fa7a37c5ba8665def0ff359e95a046f0829a07910e9c46866f94aeef",
+      "rotta-chiaro-400.webp": "2e0a337020462c61bac8e56baac85e7ab0f49d6af68d389f1f39163288b43a75",
+      "rotta-chiaro-680.avif": "bfd91e39210b3586ee3e8da7d010555c1762da4749134dca44853c25e2c63e04",
+      "rotta-chiaro-680.webp": "12c2a84f4b784c3367e1b741537dcb89d38cf7ebb1aaa2b795c4999409f0b520",
+      "rotta-chiaro.avif": "a4be13240cac72836f15164691e67a754b82afdcbc6fe596ff4d8075e750a42d",
+      "rotta-chiaro.webp": "71a4d52ec080bb7bafc14091ad2d06b5a46416370ca5ca2960313bc0c1c42dfc"
+    },
+    "jpeg": "d2098c8f173081cb624832a666e53915b90d90727214365896789aa2ea930826",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-05-anteprima.png"
+  },
+  "rotta-scuro": {
+    "copie": {
+      "rotta-scuro-400.avif": "cfbc83ed85fce726d0472873eb4654b41bbdde211068087c46701dccedd3eb25",
+      "rotta-scuro-400.webp": "e078e9f542a5a55f967716812632915c656cc68f89165c8b0cd3f0f6cc347413",
+      "rotta-scuro-680.avif": "299562e1cd898848284d77a0cfb89bd35a3b80528f856b663b5755346b030c37",
+      "rotta-scuro-680.webp": "7c978ee10b34a33fd72dbd1a71d66e95aae53c3679fd9677ba51add9c8f90cad",
+      "rotta-scuro.avif": "db9d480205bb7f00d19380606855a6c82a9c1dc5e888adfa2bf803c97567ec60",
+      "rotta-scuro.webp": "3d5e727886571e173e300ef2772edba1b30e73b36d1a00615615bf8cac7da78d"
+    },
+    "jpeg": "ec3df9e30c83e1a9e83de7ad5fda8ce7ea971cc32c606b8f9646d77aa1c59b15",
+    "origine": "_lavoro/riferimenti/schermate/scuro-05-anteprima.png"
+  },
+  "scheda-chiaro": {
+    "copie": {
+      "scheda-chiaro-400.avif": "31955d6b6f1e6ef505fe285e4446beb4e450ca2fcc18dc1b301b3c80866b57ef",
+      "scheda-chiaro-400.webp": "b4a38ba88cf09e219699186c6f5648b3a633cc53a5238bed0fcee5942d8bb4df",
+      "scheda-chiaro-680.avif": "23a335fa6c2cd890e3dc887a0a2d3cf0cbc5f1cc10761f8c7426c8bb0a5f9f6d",
+      "scheda-chiaro-680.webp": "f4eb9e8579d5d2713e12a7713fc1b85cfbb80e41497b5bc9b4c934969b0af68c",
+      "scheda-chiaro.avif": "7d1ded0819950961a8f12ae2d37567bddf599900b789b1ed5349ad9a4f9aad2e",
+      "scheda-chiaro.webp": "d0e0b7c009e728138b79c1bde6600e558f70ed36d3d0dcb08f41120e79edaa6e"
+    },
+    "jpeg": "e3171f8fe77285e459d494983b3dafd906d630f44f4a327425b57e742b338859",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-21-atlante-aquila-dati.png"
+  },
+  "scheda-scuro": {
+    "copie": {
+      "scheda-scuro-400.avif": "2977970798c51362209368e3384c70608bc883f99c2a561c82297272e5ba5d1a",
+      "scheda-scuro-400.webp": "2ac8c77803ad889d987873c96fd48c42aeab0d30b7072a3394c39a81a15a5dae",
+      "scheda-scuro-680.avif": "2855e98aad754e02145fc740abf19e7d11daf0da6648c6ddebe02bb2729d18b8",
+      "scheda-scuro-680.webp": "acbe9fc18695e6f411e2cf2e310f17bfbf8b4e71a8a6ef71e64174fa8b4f339e",
+      "scheda-scuro.avif": "9cefb2311952d77ed53696dd71d363af019b63e3e5493b628c72970539b4f1bd",
+      "scheda-scuro.webp": "5611ba4691c20a16bb354463099f00aed1aec5a0ff9e3b4ab6ba45197fe9c735"
+    },
+    "jpeg": "354a7328037cd241d32e5d3389a3064b386b5f773dce6d97f477c0fff06abd59",
+    "origine": "_lavoro/riferimenti/schermate/scuro-21-atlante-aquila-dati.png"
+  },
+  "sicurezza-chiaro": {
+    "copie": {
+      "sicurezza-chiaro-400.avif": "952bd3fadfbd629530c2534a2a54785c9c8138a9962fea436e10311bf1d9f3d5",
+      "sicurezza-chiaro-400.webp": "bdc1df033ec14b8cfd0e3a1d1386c389ed2a0bbb90cb002eb317c1d95be1d49a",
+      "sicurezza-chiaro-680.avif": "eb3699dfdf1d4204655e5c0feec36b1fb4ec872205d8a30c04881d44d86d3e55",
+      "sicurezza-chiaro-680.webp": "404423c9d4c16c432756321419c4a15e308eedf5f975d7348cb3d446378679fd",
+      "sicurezza-chiaro.avif": "2024fc42209dfc7f27642dd706edf9ea36c1347406274dd0971c39025b2ff08b",
+      "sicurezza-chiaro.webp": "44830ad5293fc088fa151b2ef681cc9a6f5cb754e549b8e1f9374bfc4741726e"
+    },
+    "jpeg": "16469be2a32a66af2001e09b0487ca25fc1bf89d7b721ab08c9614fc687a90b9",
+    "origine": "_lavoro/riferimenti/schermate/chiaro-12-sicurezza.png"
+  },
+  "sicurezza-scuro": {
+    "copie": {
+      "sicurezza-scuro-400.avif": "f483cfb7cfe516421849fff899ed112567528e55a290d77c40369eb263ce1998",
+      "sicurezza-scuro-400.webp": "d153f5cd490b29b7c405aa7e1ffd0161355a86259f882a154e0dfa921fc3f50c",
+      "sicurezza-scuro-680.avif": "faede78670436fce429e6e3dc80a2c7dd9a1e68557de3e85b12ffa9a1f1abcc8",
+      "sicurezza-scuro-680.webp": "90354a76e13c11d93c131a5623f3efdfe8a99a26bbb6f7f91ed10527a4f1fbf5",
+      "sicurezza-scuro.avif": "306489cbaa096297775d61fe9c9c99668b004e17758dce425d3ef7ee118b7e6c",
+      "sicurezza-scuro.webp": "0c5b04f72f5799c04eafe3076425f73abf24d2977c0ed816b5495dc6c1a77f98"
+    },
+    "jpeg": "cdfeb2efa51d17d6744982d3bfe4ce7568ade3d0cd1494281c22a0efcd5bd79f",
+    "origine": "_lavoro/riferimenti/schermate/scuro-12-sicurezza.png"
+  }
+}

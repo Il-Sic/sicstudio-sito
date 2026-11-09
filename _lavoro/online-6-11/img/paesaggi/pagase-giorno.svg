@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 270" width="800" height="540" overflow="hidden" stroke-miterlimit="10">
+  <title>Il paesaggio di Pagase, di giorno</title>
+  <defs>
+    <clipPath id="p-pagase-riquadro"><rect x="0" y="0" width="400" height="270"/></clipPath>
+    <linearGradient id="p-pagase-cielo" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270"><stop offset="0" stop-color="#8CCCED"/><stop offset="0.42" stop-color="#A9DCF1"/><stop offset="0.62" stop-color="#59B8D6"/><stop offset="1" stop-color="#08668C"/></linearGradient>
+    <linearGradient id="p-pagase-mare" gradientUnits="userSpaceOnUse" x1="0" y1="199" x2="0" y2="270"><stop offset="0" stop-color="#2B9EC4"/><stop offset="1" stop-color="#08668C"/></linearGradient>
+    <linearGradient id="p-pagase-ombra" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="270"><stop offset="0" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></linearGradient>
+    <radialGradient id="p-pagase-caldo" gradientUnits="userSpaceOnUse" cx="344" cy="0" r="170"><stop offset="0" stop-color="#FAD69E" stop-opacity="0.95"/><stop offset="1" stop-color="#FAD69E" stop-opacity="0"/></radialGradient>
+    <radialGradient id="p-pagase-alone-sole" gradientUnits="userSpaceOnUse" cx="332" cy="54" r="58"><stop offset="0" stop-color="#FFE6A6" stop-opacity="0.85"/><stop offset="1" stop-color="#FFE6A6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- la scena 400×270, tagliata al suo riquadro come la copertina -->
+  <g class="scena" clip-path="url(#p-pagase-riquadro)">
+    <!-- 1. il cielo -->
+    <rect class="cielo" x="0" y="0" width="400" height="270" fill="url(#p-pagase-cielo)"/>
+    <!-- 2. il sole: la luce calda dall'angolo, l'alone e il disco -->
+    <g class="sole">
+      <circle cx="344" cy="0" r="170" fill="url(#p-pagase-caldo)"/>
+      <circle cx="332" cy="54" r="58" fill="url(#p-pagase-alone-sole)"/>
+      <circle cx="332" cy="54" r="22" fill="#FFDB80"/>
+    </g>
+    <!-- 3. i monti del Pollino, lontani e vicini -->
+    <path class="monti-lontani" d="M0 270 L0 162 Q0 162 24 143.1 Q48 124.2 68 136.3 Q88 148.5 116 117.5 Q144 86.4 168 110.7 Q192 135 216 121.5 Q240 108 264 126.9 Q288 145.8 316 124.2 Q344 102.6 372 118.8 L400 135 L400 270 Z" fill="#FFFFFF" fill-opacity="0.2"/>
+    <path class="monti-vicini" d="M0 270 L0 189 Q0 189 20 175.5 Q40 162 72 171.4 Q104 180.9 136 162 Q168 143.1 196 160.7 Q224 178.2 252 166.1 Q280 153.9 312 167.4 Q344 180.9 372 171.4 L400 162 L400 270 Z" fill="#FFFFFF" fill-opacity="0.3"/>
+    <g class="paesaggio paesaggio-pagase passata-land">
+      <!-- paesaggio «pagase»: dietro il mare -->
+      <path d="M286 199 Q306 178 326 152 Q342 130 358 118 Q372 108 386 114 Q396 120 400 124 L400 199 Z" fill="#78A783"/>
+      <path d="M300 199 Q320 182 340 174 Q360 168 380 172 Q394 175 400 174 L400 199 Z" fill="#5F9068"/>
+      <path d="M322.8 164 L326 154 L329.2 164 Z M332.8 152 L336 142 L339.2 152 Z M342.8 141 L346 131 L349.2 141 Z M353.8 131 L357 121 L360.2 131 Z M365.8 124 L369 114 L372.2 124 Z M378.8 125 L382 115 L385.2 125 Z M389.8 131 L393 121 L396.2 131 Z" fill="#5F9068"/>
+      <path d="M0 199 L0 185 Q22 181 44 184 Q58 187 66 199 Z" fill="#E6D7B5"/>
+      <rect x="3" y="171" width="15" height="15" fill="#F4ECDD"/>
+      <path d="M1 172 L10.5 164.2 L20 172 Z" fill="#C76E45"/>
+      <rect x="22" y="177" width="13" height="10" fill="#F4ECDD"/>
+      <path d="M20 178 L28.5 171.2 L37 178 Z" fill="#C76E45"/>
+      <rect x="40" y="181" width="10" height="8" fill="#F4ECDD"/>
+      <path d="M38 182 L45 176.5 L52 182 Z" fill="#C76E45"/>
+      <g fill="#9C8466">
+        <rect x="6.5" y="176" width="3" height="3.5"/>
+        <rect x="12" y="176" width="3" height="3.5"/>
+        <rect x="26.5" y="179.5" width="3" height="3"/>
+        <rect x="43.5" y="182.5" width="2.6" height="2.6"/>
+      </g>
+      <path d="M44 195.5 L76 195.5 L76 199.5 L44 199.5 Z" fill="#8B6A4A"/>
+    </g>
+    <!-- 4. il mare e l'onda dietro la nave -->
+    <rect class="mare" x="0" y="199" width="400" height="71" fill="url(#p-pagase-mare)"/>
+    <path class="onda onda-dietro" d="M-64 270 L-64 201 L-60 201.9 L-56 202.7 L-52 203.2 L-48 203.4 L-44 203.2 L-40 202.7 L-36 201.9 L-32 201 L-28 200.1 L-24 199.3 L-20 198.8 L-16 198.6 L-12 198.8 L-8 199.3 L-4 200.1 L0 201 L4 201.9 L8 202.7 L12 203.2 L16 203.4 L20 203.2 L24 202.7 L28 201.9 L32 201 L36 200.1 L40 199.3 L44 198.8 L48 198.6 L52 198.8 L56 199.3 L60 200.1 L64 201 L68 201.9 L72 202.7 L76 203.2 L80 203.4 L84 203.2 L88 202.7 L92 201.9 L96 201 L100 200.1 L104 199.3 L108 198.8 L112 198.6 L116 198.8 L120 199.3 L124 200.1 L128 201 L132 201.9 L136 202.7 L140 203.2 L144 203.4 L148 203.2 L152 202.7 L156 201.9 L160 201 L164 200.1 L168 199.3 L172 198.8 L176 198.6 L180 198.8 L184 199.3 L188 200.1 L192 201 L196 201.9 L200 202.7 L204 203.2 L208 203.4 L212 203.2 L216 202.7 L220 201.9 L224 201 L228 200.1 L232 199.3 L236 198.8 L240 198.6 L244 198.8 L248 199.3 L252 200.1 L256 201 L260 201.9 L264 202.7 L268 203.2 L272 203.4 L276 203.2 L280 202.7 L284 201.9 L288 201 L292 200.1 L296 199.3 L300 198.8 L304 198.6 L308 198.8 L312 199.3 L316 200.1 L320 201 L324 201.9 L328 202.7 L332 203.2 L336 203.4 L340 203.2 L344 202.7 L348 201.9 L352 201 L356 200.1 L360 199.3 L364 198.8 L368 198.6 L372 198.8 L376 199.3 L380 200.1 L384 201 L388 201.9 L392 202.7 L396 203.2 L400 203.4 L404 203.2 L408 202.7 L412 201.9 L416 201 L420 200.1 L424 199.3 L428 198.8 L432 198.6 L436 198.8 L440 199.3 L444 200.1 L448 201 L452 201.9 L456 202.7 L460 203.2 L464 203.4 L464 270 Z" fill="#FFFFFF" fill-opacity="0.16" data-velocita="5" data-lunghezza="64"/>
+    <g class="paesaggio paesaggio-pagase passata-sea">
+      <!-- paesaggio «pagase»: sul mare -->
+      <path d="M48 199 L48 206 M60 199 L60 206 M72 199 L72 206" fill="none" stroke="#6B4A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <!-- il mare davanti allo scafo e l'ombra in basso -->
+    <path class="onda onda-davanti" d="M-56 270 L-56 210 L-52 211 L-48 211.7 L-44 212.1 L-40 212.1 L-36 211.7 L-32 211 L-28 210 L-24 209 L-20 208.3 L-16 207.9 L-12 207.9 L-8 208.3 L-4 209 L0 210 L4 211 L8 211.7 L12 212.1 L16 212.1 L20 211.7 L24 211 L28 210 L32 209 L36 208.3 L40 207.9 L44 207.9 L48 208.3 L52 209 L56 210 L60 211 L64 211.7 L68 212.1 L72 212.1 L76 211.7 L80 211 L84 210 L88 209 L92 208.3 L96 207.9 L100 207.9 L104 208.3 L108 209 L112 210 L116 211 L120 211.7 L124 212.1 L128 212.1 L132 211.7 L136 211 L140 210 L144 209 L148 208.3 L152 207.9 L156 207.9 L160 208.3 L164 209 L168 210 L172 211 L176 211.7 L180 212.1 L184 212.1 L188 211.7 L192 211 L196 210 L200 209 L204 208.3 L208 207.9 L212 207.9 L216 208.3 L220 209 L224 210 L228 211 L232 211.7 L236 212.1 L240 212.1 L244 211.7 L248 211 L252 210 L256 209 L260 208.3 L264 207.9 L268 207.9 L272 208.3 L276 209 L280 210 L284 211 L288 211.7 L292 212.1 L296 212.1 L300 211.7 L304 211 L308 210 L312 209 L316 208.3 L320 207.9 L324 207.9 L328 208.3 L332 209 L336 210 L340 211 L344 211.7 L348 212.1 L352 212.1 L356 211.7 L360 211 L364 210 L368 209 L372 208.3 L376 207.9 L380 207.9 L384 208.3 L388 209 L392 210 L396 211 L400 211.7 L404 212.1 L408 212.1 L412 211.7 L416 211 L420 210 L424 209 L428 208.3 L432 207.9 L436 207.9 L440 208.3 L444 209 L448 210 L452 211 L456 211.7 L456 270 Z" fill="#2490B8" fill-opacity="0.84" data-velocita="9" data-lunghezza="56"/>
+    <path class="onda onda-bassa" d="M-90 270 L-90 236 L-86 236.8 L-82 237.6 L-78 238.2 L-74 238.7 L-70 239 L-66 239 L-62 238.8 L-58 238.4 L-54 237.8 L-50 237 L-46 236.2 L-42 235.4 L-38 234.6 L-34 233.9 L-30 233.4 L-26 233.1 L-22 233 L-18 233.1 L-14 233.5 L-10 234.1 L-6 234.8 L-2 235.6 L2 236.4 L6 237.2 L10 237.9 L14 238.5 L18 238.9 L22 239 L26 238.9 L30 238.6 L34 238.1 L38 237.4 L42 236.6 L46 235.8 L50 235 L54 234.2 L58 233.6 L62 233.2 L66 233 L70 233 L74 233.3 L78 233.8 L82 234.4 L86 235.2 L90 236 L94 236.8 L98 237.6 L102 238.2 L106 238.7 L110 239 L114 239 L118 238.8 L122 238.4 L126 237.8 L130 237 L134 236.2 L138 235.4 L142 234.6 L146 233.9 L150 233.4 L154 233.1 L158 233 L162 233.1 L166 233.5 L170 234.1 L174 234.8 L178 235.6 L182 236.4 L186 237.2 L190 237.9 L194 238.5 L198 238.9 L202 239 L206 238.9 L210 238.6 L214 238.1 L218 237.4 L222 236.6 L226 235.8 L230 235 L234 234.2 L238 233.6 L242 233.2 L246 233 L250 233 L254 233.3 L258 233.8 L262 234.4 L266 235.2 L270 236 L274 236.8 L278 237.6 L282 238.2 L286 238.7 L290 239 L294 239 L298 238.8 L302 238.4 L306 237.8 L310 237 L314 236.2 L318 235.4 L322 234.6 L326 233.9 L330 233.4 L334 233.1 L338 233 L342 233.1 L346 233.5 L350 234.1 L354 234.8 L358 235.6 L362 236.4 L366 237.2 L370 237.9 L374 238.5 L378 238.9 L382 239 L386 238.9 L390 238.6 L394 238.1 L398 237.4 L402 236.6 L406 235.8 L410 235 L414 234.2 L418 233.6 L422 233.2 L426 233 L430 233 L434 233.3 L438 233.8 L442 234.4 L446 235.2 L450 236 L454 236.8 L458 237.6 L462 238.2 L466 238.7 L470 239 L474 239 L478 238.8 L482 238.4 L486 237.8 L490 237 L490 270 Z" fill="#FFFFFF" fill-opacity="0.16" data-velocita="13" data-lunghezza="90"/>
+    <rect class="ombra" x="0" y="150" width="400" height="120" fill="url(#p-pagase-ombra)"/>
+  </g>
+</svg>

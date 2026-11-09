@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-18.4 -34.9 34.5 34.5" width="345" height="345">
+<title>Linceo</title>
+<g>
+ <g fill="none" stroke="#CB936A" stroke-linecap="round">
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+  <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(150)"/>
+ </g>
+ <path fill="#D59A2E" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+ <path fill="none" stroke="#9C6C17" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+ <g transform="translate(.3 -17.2) rotate(-4)">
+  <rect fill="#E2AA80" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+  <circle fill="#E2AA80" cx=".2" cy="-4.6" r="4.6"/>
+  <path fill="#7A4A24" d="M-4.4-3.4C-5.2-9.4 3.6-11 4.8-6.6C3.4-7.8.6-8-.6-6.6C-1.4-5.6-2-4.2-2.6-3Z"/>
+  <path fill="#08739A" d="M-4.6-6.9Q0-9.4 4.8-6.7L4.8-5.5Q0-8-4.5-5.7Z"/>
+  <path fill="#08739A" d="M-4.4-6.4L-7-4.8L-6.5-4L-4.2-5.4Z"/>
+  <circle fill="#2A1B12" cx="2.5" cy="-5.1" r=".6"/>
+  <circle fill="#E2645A" fill-opacity=".22" cx="2.7" cy="-3.3" r=".9"/>
+ </g>
+ <g transform="translate(.3 -15.4) rotate(-167)">
+  <path fill="none" stroke="#E2AA80" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+  <circle fill="#E2AA80" cx="0" cy="6.3" r="1.1"/>
+ </g>
+</g>
+</svg>
