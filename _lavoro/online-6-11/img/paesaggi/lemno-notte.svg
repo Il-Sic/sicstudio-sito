@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 270" width="800" height="540" overflow="hidden" stroke-miterlimit="10">
+  <title>Il paesaggio di Lemno, di notte</title>
+  <defs>
+    <clipPath id="p-lemno-n-riquadro"><rect x="0" y="0" width="400" height="270"/></clipPath>
+    <linearGradient id="p-lemno-n-cielo" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270"><stop offset="0" stop-color="#0A142E"/><stop offset="0.42" stop-color="#1A2B52"/><stop offset="0.62" stop-color="#12546E"/><stop offset="1" stop-color="#052638"/></linearGradient>
+    <linearGradient id="p-lemno-n-mare" gradientUnits="userSpaceOnUse" x1="0" y1="199" x2="0" y2="270"><stop offset="0" stop-color="#12465E"/><stop offset="1" stop-color="#052638"/></linearGradient>
+    <linearGradient id="p-lemno-n-ombra" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="270"><stop offset="0" stop-color="#000000" stop-opacity="0"/><stop offset="1" stop-color="#000000" stop-opacity="0.22"/></linearGradient>
+    <radialGradient id="p-lemno-n-alone-luna" gradientUnits="userSpaceOnUse" cx="332" cy="54" r="50"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.45"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- la scena 400×270, tagliata al suo riquadro come la copertina -->
+  <g class="scena" clip-path="url(#p-lemno-n-riquadro)">
+    <!-- 1. il cielo -->
+    <rect class="cielo" x="0" y="0" width="400" height="270" fill="url(#p-lemno-n-cielo)"/>
+    <!-- 2. le stelle (ferme: piene; in movimento brillano con data-fase e data-ritmo, in radianti) -->
+    <g class="stelle" fill="#FFFFFF">
+      <circle cx="24" cy="32.4" r="1" data-fase="3.546" data-ritmo="2.14"/>
+      <circle cx="56" cy="81" r="0.8" data-fase="0.592" data-ritmo="2.12"/>
+      <circle cx="88" cy="21.6" r="1.2" data-fase="2.896" data-ritmo="1.27"/>
+      <circle cx="124" cy="54" r="0.7" data-fase="3.732" data-ritmo="1.43"/>
+      <circle cx="160" cy="16.2" r="1" data-fase="0.496" data-ritmo="2.086"/>
+      <circle cx="192" cy="67.5" r="0.8" data-fase="4.723" data-ritmo="1.732"/>
+      <circle cx="224" cy="27" r="1.1" data-fase="4.563" data-ritmo="1.832"/>
+      <circle cx="256" cy="89.1" r="0.7" data-fase="3.572" data-ritmo="1.403"/>
+      <circle cx="280" cy="13.5" r="0.9" data-fase="2.125" data-ritmo="1.374"/>
+      <circle cx="372" cy="21.6" r="1" data-fase="2.651" data-ritmo="2.581"/>
+      <circle cx="388" cy="81" r="0.7" data-fase="5" data-ritmo="1.845"/>
+      <circle cx="12" cy="108" r="0.8" data-fase="1.787" data-ritmo="1.81"/>
+    </g>
+    <!-- 3. i monti del Pollino, lontani e vicini -->
+    <path class="monti-lontani" d="M0 270 L0 162 Q0 162 24 143.1 Q48 124.2 68 136.3 Q88 148.5 116 117.5 Q144 86.4 168 110.7 Q192 135 216 121.5 Q240 108 264 126.9 Q288 145.8 316 124.2 Q344 102.6 372 118.8 L400 135 L400 270 Z" fill="#FFFFFF" fill-opacity="0.08"/>
+    <path class="monti-vicini" d="M0 270 L0 189 Q0 189 20 175.5 Q40 162 72 171.4 Q104 180.9 136 162 Q168 143.1 196 160.7 Q224 178.2 252 166.1 Q280 153.9 312 167.4 Q344 180.9 372 171.4 L400 162 L400 270 Z" fill="#FFFFFF" fill-opacity="0.14"/>
+    <g class="paesaggio paesaggio-lemno passata-land">
+      <!-- paesaggio «lemno»: dietro il mare -->
+      <path d="M330 199 Q346 182 360 156 Q368 140 376 136 Q382 138 388 150 Q396 168 400 174 L400 199 Z" fill="#4F6781"/>
+      <path d="M0 199 L0 158 Q8 148 18 150 Q28 134 42 140 Q54 146 60 162 Q66 180 76 199 Z" fill="#5B7165"/>
+      <path d="M42 140 Q54 146 60 162 Q66 180 76 199 L60 199 Q58 176 50 160 Q46 148 42 140 Z" fill="#50675B"/>
+      <path d="M0 199 L0 188 Q24 185 46 190 Q58 193 64 199 Z" fill="#7D8080"/>
+      <path d="M5 188 L5 177 L16 177 L16 188 Z M19 190 L19 180 L29 180 L29 190 Z M32 192 L32 183 L41 183 L41 192 Z" fill="#868D99"/>
+      <path d="M10 177 L10 168 L15 168 L15 177 Z" fill="#868D99"/>
+      <g fill="#585658">
+        <rect x="8" y="180" width="2.6" height="3"/>
+        <rect x="12" y="180" width="2.6" height="3"/>
+        <rect x="22.5" y="183" width="3" height="3"/>
+        <rect x="35" y="185.5" width="2.6" height="2.6"/>
+      </g>
+    </g>
+    <!-- 4. il mare e l'onda dietro la nave -->
+    <rect class="mare" x="0" y="199" width="400" height="71" fill="url(#p-lemno-n-mare)"/>
+    <path class="onda onda-dietro" d="M-64 270 L-64 201 L-60 201.9 L-56 202.7 L-52 203.2 L-48 203.4 L-44 203.2 L-40 202.7 L-36 201.9 L-32 201 L-28 200.1 L-24 199.3 L-20 198.8 L-16 198.6 L-12 198.8 L-8 199.3 L-4 200.1 L0 201 L4 201.9 L8 202.7 L12 203.2 L16 203.4 L20 203.2 L24 202.7 L28 201.9 L32 201 L36 200.1 L40 199.3 L44 198.8 L48 198.6 L52 198.8 L56 199.3 L60 200.1 L64 201 L68 201.9 L72 202.7 L76 203.2 L80 203.4 L84 203.2 L88 202.7 L92 201.9 L96 201 L100 200.1 L104 199.3 L108 198.8 L112 198.6 L116 198.8 L120 199.3 L124 200.1 L128 201 L132 201.9 L136 202.7 L140 203.2 L144 203.4 L148 203.2 L152 202.7 L156 201.9 L160 201 L164 200.1 L168 199.3 L172 198.8 L176 198.6 L180 198.8 L184 199.3 L188 200.1 L192 201 L196 201.9 L200 202.7 L204 203.2 L208 203.4 L212 203.2 L216 202.7 L220 201.9 L224 201 L228 200.1 L232 199.3 L236 198.8 L240 198.6 L244 198.8 L248 199.3 L252 200.1 L256 201 L260 201.9 L264 202.7 L268 203.2 L272 203.4 L276 203.2 L280 202.7 L284 201.9 L288 201 L292 200.1 L296 199.3 L300 198.8 L304 198.6 L308 198.8 L312 199.3 L316 200.1 L320 201 L324 201.9 L328 202.7 L332 203.2 L336 203.4 L340 203.2 L344 202.7 L348 201.9 L352 201 L356 200.1 L360 199.3 L364 198.8 L368 198.6 L372 198.8 L376 199.3 L380 200.1 L384 201 L388 201.9 L392 202.7 L396 203.2 L400 203.4 L404 203.2 L408 202.7 L412 201.9 L416 201 L420 200.1 L424 199.3 L428 198.8 L432 198.6 L436 198.8 L440 199.3 L444 200.1 L448 201 L452 201.9 L456 202.7 L460 203.2 L464 203.4 L464 270 Z" fill="#FFFFFF" fill-opacity="0.16" data-velocita="5" data-lunghezza="64"/>
+    <!-- il mare davanti allo scafo e l'ombra in basso -->
+    <path class="onda onda-davanti" d="M-56 270 L-56 210 L-52 211 L-48 211.7 L-44 212.1 L-40 212.1 L-36 211.7 L-32 211 L-28 210 L-24 209 L-20 208.3 L-16 207.9 L-12 207.9 L-8 208.3 L-4 209 L0 210 L4 211 L8 211.7 L12 212.1 L16 212.1 L20 211.7 L24 211 L28 210 L32 209 L36 208.3 L40 207.9 L44 207.9 L48 208.3 L52 209 L56 210 L60 211 L64 211.7 L68 212.1 L72 212.1 L76 211.7 L80 211 L84 210 L88 209 L92 208.3 L96 207.9 L100 207.9 L104 208.3 L108 209 L112 210 L116 211 L120 211.7 L124 212.1 L128 212.1 L132 211.7 L136 211 L140 210 L144 209 L148 208.3 L152 207.9 L156 207.9 L160 208.3 L164 209 L168 210 L172 211 L176 211.7 L180 212.1 L184 212.1 L188 211.7 L192 211 L196 210 L200 209 L204 208.3 L208 207.9 L212 207.9 L216 208.3 L220 209 L224 210 L228 211 L232 211.7 L236 212.1 L240 212.1 L244 211.7 L248 211 L252 210 L256 209 L260 208.3 L264 207.9 L268 207.9 L272 208.3 L276 209 L280 210 L284 211 L288 211.7 L292 212.1 L296 212.1 L300 211.7 L304 211 L308 210 L312 209 L316 208.3 L320 207.9 L324 207.9 L328 208.3 L332 209 L336 210 L340 211 L344 211.7 L348 212.1 L352 212.1 L356 211.7 L360 211 L364 210 L368 209 L372 208.3 L376 207.9 L380 207.9 L384 208.3 L388 209 L392 210 L396 211 L400 211.7 L404 212.1 L408 212.1 L412 211.7 L416 211 L420 210 L424 209 L428 208.3 L432 207.9 L436 207.9 L440 208.3 L444 209 L448 210 L452 211 L456 211.7 L456 270 Z" fill="#0F3D54" fill-opacity="0.84" data-velocita="9" data-lunghezza="56"/>
+    <path class="onda onda-bassa" d="M-90 270 L-90 236 L-86 236.8 L-82 237.6 L-78 238.2 L-74 238.7 L-70 239 L-66 239 L-62 238.8 L-58 238.4 L-54 237.8 L-50 237 L-46 236.2 L-42 235.4 L-38 234.6 L-34 233.9 L-30 233.4 L-26 233.1 L-22 233 L-18 233.1 L-14 233.5 L-10 234.1 L-6 234.8 L-2 235.6 L2 236.4 L6 237.2 L10 237.9 L14 238.5 L18 238.9 L22 239 L26 238.9 L30 238.6 L34 238.1 L38 237.4 L42 236.6 L46 235.8 L50 235 L54 234.2 L58 233.6 L62 233.2 L66 233 L70 233 L74 233.3 L78 233.8 L82 234.4 L86 235.2 L90 236 L94 236.8 L98 237.6 L102 238.2 L106 238.7 L110 239 L114 239 L118 238.8 L122 238.4 L126 237.8 L130 237 L134 236.2 L138 235.4 L142 234.6 L146 233.9 L150 233.4 L154 233.1 L158 233 L162 233.1 L166 233.5 L170 234.1 L174 234.8 L178 235.6 L182 236.4 L186 237.2 L190 237.9 L194 238.5 L198 238.9 L202 239 L206 238.9 L210 238.6 L214 238.1 L218 237.4 L222 236.6 L226 235.8 L230 235 L234 234.2 L238 233.6 L242 233.2 L246 233 L250 233 L254 233.3 L258 233.8 L262 234.4 L266 235.2 L270 236 L274 236.8 L278 237.6 L282 238.2 L286 238.7 L290 239 L294 239 L298 238.8 L302 238.4 L306 237.8 L310 237 L314 236.2 L318 235.4 L322 234.6 L326 233.9 L330 233.4 L334 233.1 L338 233 L342 233.1 L346 233.5 L350 234.1 L354 234.8 L358 235.6 L362 236.4 L366 237.2 L370 237.9 L374 238.5 L378 238.9 L382 239 L386 238.9 L390 238.6 L394 238.1 L398 237.4 L402 236.6 L406 235.8 L410 235 L414 234.2 L418 233.6 L422 233.2 L426 233 L430 233 L434 233.3 L438 233.8 L442 234.4 L446 235.2 L450 236 L454 236.8 L458 237.6 L462 238.2 L466 238.7 L470 239 L474 239 L478 238.8 L482 238.4 L486 237.8 L490 237 L490 270 Z" fill="#FFFFFF" fill-opacity="0.16" data-velocita="13" data-lunghezza="90"/>
+    <rect class="ombra" x="0" y="150" width="400" height="120" fill="url(#p-lemno-n-ombra)"/>
+    <!-- la notte: il velo scuro su tutto, poi la luna e le luci del paesaggio sopra il velo -->
+    <rect class="velo-notte" x="0" y="0" width="400" height="270" fill="#06101F" fill-opacity="0.32"/>
+    <g class="luna">
+      <circle cx="332" cy="54" r="50" fill="url(#p-lemno-n-alone-luna)"/>
+      <circle cx="332" cy="54" r="18" fill="#F7EDC7"/>
+    </g>
+    <g class="paesaggio paesaggio-lemno passata-light">
+      <!-- paesaggio «lemno»: le luci sopra il buio -->
+      <g fill="#FFD98A">
+        <rect x="8" y="180" width="2.6" height="3"/>
+        <rect x="12" y="180" width="2.6" height="3"/>
+        <rect x="22.5" y="183" width="3" height="3"/>
+        <rect x="35" y="185.5" width="2.6" height="2.6"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-17 -33.6 34.5 34.5" width="345" height="345">
+<title>Mopso</title>
+<g>
+ <path fill="none" stroke="#7A5532" stroke-width="1.15" stroke-linecap="round" d="M-3.6.4L-3.6-22.4C-3.6-25.8.4-25.8 0-22.8"/>
+ <g fill="none" stroke="#C28B66" stroke-linecap="round">
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+  <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(24)"/>
+ </g>
+ <path fill="#6E8B4E" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+ <path fill="none" stroke="#4C6436" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+ <g transform="translate(.3 -17.2)">
+  <rect fill="#D9A27C" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+  <path fill="#E9E4DA" d="M-4.7-4C-5.6-.8-4.8 1.8-2.6 2L-1.6-2Z"/>
+  <circle fill="#D9A27C" cx=".2" cy="-4.6" r="4.6"/>
+  <path fill="#E9E4DA" d="M-4.5-3.2C-5.4-9.8 3.8-11.4 4.9-6.6C3.2-7.6.4-7.8-.8-6.2C-1.6-5-2-3.8-2.6-2.6Z"/>
+  <path fill="#E9E4DA" stroke="#CFC8BA" stroke-width=".4" stroke-linecap="round" d="M-.9-2.8C-.6 2.2 2.4 4.4 4.3 1.8C5 .4 5-1.8 4.8-3.6C3.6-2.2 1.4-2.2-.9-2.8Z"/>
+  <circle fill="#2A1B12" cx="2.5" cy="-5.1" r=".6"/>
+  <circle fill="#E2645A" fill-opacity=".22" cx="2.7" cy="-3.3" r=".9"/>
+ </g>
+ <g transform="translate(.3 -15.4) rotate(-12)">
+  <path fill="none" stroke="#D9A27C" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+  <circle fill="#D9A27C" cx="0" cy="6.3" r="1.1"/>
+ </g>
+</g>
+</svg>

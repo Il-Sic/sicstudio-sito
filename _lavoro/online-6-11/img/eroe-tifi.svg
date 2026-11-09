@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-16.9 -37 34.5 34.5" width="345" height="345">
+<title>Tifi</title>
+<g>
+ <g fill="none" stroke="#B27A56" stroke-linecap="round">
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(-.9 -6.8) rotate(4)"/>
+  <path stroke-width="2.5" d="M0 0V6.6" transform="translate(.9 -6.8) rotate(-4)"/>
+  <path stroke-width="2.2" d="M0 0V6.1" transform="translate(-.3 -15.4) rotate(62)"/>
+ </g>
+ <path fill="#3E7C99" d="M-3.4-16.9Q0-18.3 3.4-16.9L4.8-6.3Q0-4.7-4.8-6.3Z"/>
+ <path fill="none" stroke="#2B5A70" stroke-width="1.1" d="M-4.2-11.3Q0-10.2 4.2-11.3"/>
+ <g transform="translate(.3 -17.2)">
+  <rect fill="#C98E68" x="-1.1" y="-1.6" width="2.2" height="2.4"/>
+  <circle fill="#C98E68" cx=".2" cy="-4.6" r="4.6"/>
+  <path fill="#5B4636" d="M-4.5-2.8C-5.2-8.6 3.4-10.4 4.8-6.4C3.4-7.2.6-7.4-.6-6.2C-1.6-5-2.2-3.6-2.8-2.2Z"/>
+  <path fill="#6B5646" d="M-1-2.4C-.4 1 4.2 1.4 5-3.4C3.8-2.2 1.6-2-1-2.4Z"/>
+  <path fill="#8A6A45" d="M-4.9-6.6L.5-13.6L5.1-6.4Q.2-5.2-4.9-6.6Z"/>
+  <path fill="none" stroke="#6E5233" stroke-width="1" stroke-linecap="round" d="M-5.3-6.5Q.2-4.9 5.5-6.3"/>
+  <circle fill="#2A1B12" cx="2.5" cy="-5.1" r=".6"/>
+  <circle fill="#E2645A" fill-opacity=".22" cx="2.7" cy="-3.3" r=".9"/>
+ </g>
+ <g transform="translate(.3 -15.4) rotate(-16)">
+  <path fill="none" stroke="#C98E68" stroke-width="2.2" stroke-linecap="round" d="M0 0V6.1"/>
+  <circle fill="#C98E68" cx="0" cy="6.3" r="1.1"/>
+ </g>
+</g>
+</svg>

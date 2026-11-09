@@ -1,2 +1,45 @@
-_lavoro/
 .DS_Store
+
+# _lavoro: in git ci sono gli script che fanno le parti ripetute delle pagine, i disegni e le immagini, con i dati che
+# servono loro. Online non va: GitHub Pages costruisce il sito con Jekyll, che lascia fuori le cartelle che cominciano
+# con «_». Il repository è pubblico: resta solo sul Mac tutto quello che segue.
+
+# I caratteri: Palatino e gli altri del Mac non si possono ridistribuire.
+_lavoro/**/*.ttf
+_lavoro/**/*.ttc
+_lavoro/**/*.otf
+_lavoro/**/*.dfont
+_lavoro/**/*.woff
+_lavoro/**/*.woff2
+
+# Le note di lavoro (anche COME-SI-AGGIORNA.md, che parla di cose dell'app non ancora annunciate), le prove, le tappe,
+# le viste fotografate, le schermate scartate e il sito di prima del 6/11.
+_lavoro/*.md
+_lavoro/prove/
+_lavoro/tappe/
+_lavoro/tappe-2/
+_lavoro/viste/
+_lavoro/schermate-non-usate/
+_lavoro/prima-6-11/
+
+# Le cose private: le risposte di Sic, i riferimenti dell'app (il codice, i disegni, le schermate originali, che sono
+# anche grandi, e le note), tranne il testo pubblicato della privacy; le parole da rileggere, con nomi che il sito non
+# dice.
+_lavoro/da-sic/
+_lavoro/riferimenti/*
+!_lavoro/riferimenti/privacy-argonauta.md
+_lavoro/controlli/parole.json
+
+# I disegni della prima passata, che non servono più (il marchio di Argo, la rosa dei venti, il timbro), e i PNG di
+# passaggio di png.py e png-2.py.
+_lavoro/disegni/marchio.py
+_lavoro/disegni/rosa.py
+_lavoro/disegni/timbro.py
+_lavoro/disegni/icona-quadrata.svg
+_lavoro/disegni/marchio-inline.txt
+_lavoro/disegni/*.png
+
+# L'ambiente Python (con Pillow, per le copie AVIF e WebP) e i file che Python si fa da solo.
+_lavoro/ambiente/
+__pycache__/
+*.pyc
