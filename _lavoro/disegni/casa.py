@@ -15,7 +15,7 @@ a y 552, il punto dove stava la casetta di prima.
 Nell'apertura animata la terra, il sentiero e la luce continuano sotto il bordo del viewBox: al telefono la scena copre
 anche la striscia dietro la barra di Safari, che si vede quando la barra si rimpicciolisce (style.css, 100lvh - 100svh).
 """
-import math, pathlib, random, re, sys
+import json, math, pathlib, random, re, sys
 
 SITO = pathlib.Path(__file__).resolve().parents[2]
 
@@ -62,19 +62,29 @@ def astro(classe, cx, cy, alone, lume, sole, falce):
             f'<path class="{classe}-falce solo-notte" d="{luna(cx, cy, *falce)}"/></g>')
 
 
-def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9, sposta=None):
+def posti(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9):
     rnd = random.Random(seme)
-    stelle = [(rnd.uniform(x0, x1), rnd.uniform(y0, y1), rnd.uniform(rmin, rmax)) for _ in range(quante)]
-    if sposta:
-        stelle = sposta(stelle, seme)
+    return [(rnd.uniform(x0, x1), rnd.uniform(y0, y1), rnd.uniform(rmin, rmax)) for _ in range(quante)]
+
+
+def cerchi(stelle):
     return "".join(f'<circle cx="{n(x)}" cy="{n(y)}" r="{n(r)}"/>' for x, y, r in stelle)
+
+
+def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9):
+    return cerchi(posti(seme, x0, y0, x1, y1, quante, rmin, rmax))
 
 
 # Le parole del frontespizio (la frase e il titolo) nelle coordinate del cielo, riga per riga: dove passano per tutto lo
 # scorrimento, da quando le stelle cominciano ad accendersi a quando le parole se ne vanno, con 6 px di margine sullo
-# schermo. Le ha misurate controlli/stelle.js al telefono (390×844 e 375×667) e sul computer (1440×900); se cambiano le
-# parole o le loro misure in style.css, si rimisurano e si riscrivono qui.
-PAROLE_FRONTE = [
+# schermo. Le misura strumenti/parole-fronte.js a 37 misure di schermo, dal telefono piccolo al computer grande, e le
+# scrive in parole-fronte.json, qui accanto: se cambiano le parole o le loro misure in style.css, si rimisurano.
+# Lo strumento gira in Chromium nella sessione cloud, dove non c'è Iowan Old Style, il carattere del Mac e dell'iPhone:
+# con Iowan le righe sono più alte e il titolo più largo (a 1440×900, con il titolo a 120 px, 21 px per lato e 16 sopra
+# e sotto). Così ogni riga si allarga ancora di LARGO volte la misura del carattere ai lati e di ALTO sopra e sotto.
+LARGO, ALTO = 0.2, 0.18
+# In più, le righe misurate sul Mac, con Iowan, da controlli/stelle.js il 9/11.
+PAROLE_MAC = [
     # 390×844
     (566, 123, 857, 232), (832, 123, 874, 232), (556, 158, 884, 264), (563, 192, 877, 295), (581, 227, 859, 327),
     (628, 261, 812, 359), (571, 332, 869, 480), (565, 424, 875, 508),
@@ -85,12 +95,37 @@ PAROLE_FRONTE = [
     (455, 167, 985, 305), (404, 232, 1036, 365), (433, 297, 1007, 423), (301, 361, 1139, 483), (451, 450, 989, 671),
     (546, 607, 894, 689),
 ]
+
+
+def parole_fronte():
+    misure = json.loads(pathlib.Path(__file__).with_name("parole-fronte.json").read_text(encoding="utf-8"))["misure"]
+    righe = list(PAROLE_MAC)
+    for riga in (r for m in misure.values() for r in m):
+        (a, b, c, d), dx, dy = riga["r"], LARGO * riga["fs"], ALTO * riga["fs"]
+        righe.append((a - dx, b - dy, c + dx, d + dy))
+    return righe
+
+
+PAROLE_FRONTE = parole_fronte()
+
 # Dove stanno il sole e la luna: sul computer, e al telefono, dove style.css li porta 390 più a sinistra e 110 più in
 # alto. Le stelle spostate ne restano lontane, anche dalla parte buia della falce.
 ASTRI = ((1300, 210), (910, 100))
 # Le strisce del cielo che si vedono al telefono, largo 390 e 375 px; sul computer (1440×900) il cielo si vede da y 56
 # in giù, sotto la testata.
 STRISCE = ((497, 943), (444, 996))
+
+
+def sulle_parole(x, y, r):
+    return any(a - r <= x <= c + r and b - r <= y <= d + r for a, b, c, d in PAROLE_FRONTE)
+
+
+def vicino_agli_astri(x, y, r):
+    return any(math.hypot(x - ax, y - ay) <= 40 + r for ax, ay in ASTRI)
+
+
+def libera(x, y, r):
+    return not sulle_parole(x, y, r) and not vicino_agli_astri(x, y, r)
 
 
 def fuori_dalle_parole(stelle, seme):
@@ -101,10 +136,6 @@ def fuori_dalle_parole(stelle, seme):
     la fascia in alto: per non ammucchiarle, ci vanno anche dove il computer ha la testata. Fuori dalla striscia
     restano dove il computer le vede. Il posto è il migliore di 12 punti liberi a caso, quello più lontano dalle altre
     stelle, così si spargono senza fare mucchi."""
-    def libero(x, y, r):
-        return (all(not (a - r <= x <= c + r and b - r <= y <= d + r) for a, b, c, d in PAROLE_FRONTE)
-                and all(math.hypot(x - ax, y - ay) > 40 + r for ax, ay in ASTRI))
-
     def schermi(x, y):
         striscia = tuple(a <= x <= b for a, b in STRISCE)
         return striscia + (x < 720,) + (() if any(striscia) else (y >= 56,))
@@ -112,32 +143,50 @@ def fuori_dalle_parole(stelle, seme):
     def lontano_dai_bordi(x, y):
         return all(abs(x - b) > 8 for s in STRISCE for b in s) and abs(y - 56) > 6 and y > 6
 
-    fuori = [s for s in stelle if libero(*s)]
+    fuori = [s for s in stelle if libera(*s)]
     nuove = []
     for k, (x, y, r) in enumerate(stelle):
-        if not libero(x, y, r):
+        if not libera(x, y, r):
             rnd = random.Random(seme * 1000 + k)
             punti = []
-            while len(punti) < 12:
+            for _ in range(100000):
                 x1, y1 = rnd.uniform(0, 1440), rnd.uniform(0, 520)
-                if schermi(x1, y1) == schermi(x, y) and lontano_dai_bordi(x1, y1) and libero(x1, y1, r):
+                if schermi(x1, y1) == schermi(x, y) and lontano_dai_bordi(x1, y1) and libera(x1, y1, r):
                     punti.append((x1, y1))
+                    if len(punti) == 12:
+                        break
+            if not punti:
+                raise SystemExit(f"Nessun posto libero per la stella {k}: le parole coprono tutto il suo cielo.")
             x, y = max(punti, key=lambda p: min(math.hypot(p[0] - a, p[1] - b) for a, b, _ in fuori))
             fuori.append((x, y, r))
         nuove.append((x, y, r))
     return nuove
 
 
+# Le 80 stelle della volta, dove le mette il caso: le stesse nel frontespizio e nella soglia.
+VOLTA = posti(17, 0, 0, 1440, 520, 80)
+
+
 def cielo(prefisso):
     """Il cielo lontano dell'apertura (la «volta»: la classe «cielo» è già della sezione del mito), nel frontespizio e
     nella soglia: le stelle e il sole o la luna con il loro alone. Scorrendo si allarga piano intorno alla casa, meno
     del paesaggio, ed esce dall'alto dello schermo.
-    Le stelle sono le stesse nei due cieli, ma nel frontespizio quelle che cadrebbero sulle parole sono spostate. Nella
-    soglia restano tutte al loro posto: lì le parole non ci sono più (se ne vanno prima che la soglia compaia), e il
-    cielo che si vede, più grande, è proprio quello in mezzo, che senza di loro al telefono resterebbe vuoto."""
-    sposta = fuori_dalle_parole if prefisso == "fr" else None
-    return (f'<g class="volta"><g class="volta-stelle">{stelline(17, 0, 0, 1440, 520, 80, sposta=sposta)}</g>'
-            f'{astro("volta", 1300, 210, 80, f"{prefisso}-lume", 18, (26, 23, 13))}</g>')
+    Le stelle sono le stesse nei due cieli. Nel frontespizio quelle che cadrebbero sulle parole stanno altrove
+    (volta-spostate) finché ci sono le parole; quando se ne vanno, di notte, si spengono lì e si accendono al loro posto
+    (volta-sotto, style.css): così il cielo di mezzo torna pieno, uguale a quello della soglia che compare dopo. Nella
+    soglia stanno al loro posto, perché lì le parole non ci sono più. Quella che al telefono cadrebbe nella parte buia
+    della falce sta altrove sempre, nei due cieli."""
+    spostate = fuori_dalle_parole(VOLTA, 17)
+    sole_e_luna = astro("volta", 1300, 210, 80, f"{prefisso}-lume", 18, (26, 23, 13))
+    if prefisso != "fr":
+        soglia = cerchi(b if vicino_agli_astri(*a) else a for a, b in zip(VOLTA, spostate))
+        return f'<g class="volta"><g class="volta-stelle">{soglia}</g>{sole_e_luna}</g>'
+    torna = [sulle_parole(*s) and not vicino_agli_astri(*s) for s in VOLTA]
+    ferme = cerchi(b for b, t in zip(spostate, torna) if not t)
+    via = cerchi(b for b, t in zip(spostate, torna) if t)
+    sotto = cerchi(a for a, t in zip(VOLTA, torna) if t)
+    return (f'<g class="volta"><g class="volta-stelle">{ferme}<g class="volta-spostate">{via}</g></g>'
+            f'<g class="volta-sotto">{sotto}</g>{sole_e_luna}</g>')
 
 
 def casa(cx=730.0, base=760.0, s=1.0, porta="chiusa"):

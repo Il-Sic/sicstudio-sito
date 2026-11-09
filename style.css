@@ -412,7 +412,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 :root { --prato: #A9A891; --luce-soglia: #FFE6B0; }
 @media (prefers-color-scheme: dark) { :root { --prato: #0A111A; --luce-soglia: #D99331; } }
 .fr-cielo, .sg-cielo { fill: var(--carta); }
-.volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { fill: #F4EEDC; opacity: 0; }
+.volta-stelle, .volta-sotto, .bs-stelle, .fn-stelle, .lg-stelle { fill: #F4EEDC; opacity: 0; }
 .fr-alba-0, .sg-alba-0, .fn-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
 .fr-alba-1, .sg-alba-1, .fn-alba-1 { stop-color: #F2D2AE; stop-opacity: 0.9; }
 .fr-monti, .sg-monti { fill: #E4DCCD; }
@@ -651,6 +651,16 @@ time { font-variant-numeric: lining-nums tabular-nums; }
       animation: fr-fondo linear both; animation-timeline: --fronte; animation-range: var(--strada);
     }
   }
+  /* Di notte, quando le parole se ne sono andate, le stelle spostate perché non cadessero sulle lettere tornano al
+     loro posto (casa.py): si spengono dove stavano e si accendono dove stavano le parole. Il cielo di mezzo torna
+     pieno, uguale a quello della soglia che compare dopo. */
+  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (prefers-color-scheme: dark) {
+    .volta-spostate, .volta-sotto {
+      animation: linear both; animation-timeline: --fronte; animation-range: var(--strada);
+    }
+    .volta-spostate { animation-name: fr-spegni; }
+    .volta-sotto { animation-name: fr-sotto; }
+  }
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (min-width: 48rem) {
     .frontespizio { --strada: contain 36.5% contain 100%; }
     .frontespizio-palco { height: 415svh; }
@@ -673,11 +683,14 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    insieme alla soglia (sg-appari). */
 @keyframes fr-fondo { 85% { background-color: var(--prato); } 89%, 91% { background-color: var(--luce-soglia); opacity: 1; } 100% { background-color: var(--luce-soglia); opacity: 0; } }
 @keyframes fr-velo { 91% { opacity: 1; } 100% { opacity: 0; } }
-/* La strada fino alla porta, in percentuali della strada: le parole vanno via; il paesaggio si avvicina alla casa e il
-   cielo, lontano, si allarga meno ed esce dall'alto prima che la porta si apra; la soglia compare sopra il paesaggio
-   (le due case hanno la stessa misura fra il 22 e il 32%), la casa si avvicina, la porta si apre, la luce esce, si
-   entra, la luce riempie lo schermo e sfuma sulla bottega. */
+/* La strada fino alla porta, in percentuali della strada: le parole vanno via e poi, di notte, le stelle spostate
+   tornano al loro posto (fr-spegni e fr-sotto); il paesaggio si avvicina alla casa e il cielo, lontano, si allarga meno
+   ed esce dall'alto prima che la porta si apra; la soglia compare sopra il paesaggio (le due case hanno la stessa
+   misura fra il 22 e il 32%), la casa si avvicina, la porta si apre, la luce esce, si entra, la luce riempie lo schermo
+   e sfuma sulla bottega. */
 @keyframes fr-via { 0% { opacity: 1; } 10%, 100% { opacity: 0; } }
+@keyframes fr-sotto { 0%, 10% { opacity: 0; } 18%, 100% { opacity: 1; } }
+@keyframes fr-spegni { 0%, 10% { opacity: 1; } 18%, 100% { opacity: 0; } }
 @keyframes fr-avvicina { 32%, 100% { transform: scale(2.5); } }
 @keyframes fr-nascondi { 0%, 32% { opacity: 1; } 33%, 100% { opacity: 0; } }
 @keyframes volta-via { 50%, 100% { transform: scale(1.45); } }
