@@ -62,17 +62,81 @@ def astro(classe, cx, cy, alone, lume, sole, falce):
             f'<path class="{classe}-falce solo-notte" d="{luna(cx, cy, *falce)}"/></g>')
 
 
-def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9):
+def stelline(seme, x0, y0, x1, y1, quante, rmin=0.8, rmax=1.9, sposta=None):
     rnd = random.Random(seme)
-    return "".join(f'<circle cx="{n(rnd.uniform(x0, x1))}" cy="{n(rnd.uniform(y0, y1))}" r="{n(rnd.uniform(rmin, rmax))}"/>'
-                   for _ in range(quante))
+    stelle = [(rnd.uniform(x0, x1), rnd.uniform(y0, y1), rnd.uniform(rmin, rmax)) for _ in range(quante)]
+    if sposta:
+        stelle = sposta(stelle, seme)
+    return "".join(f'<circle cx="{n(x)}" cy="{n(y)}" r="{n(r)}"/>' for x, y, r in stelle)
+
+
+# Le parole del frontespizio (la frase e il titolo) nelle coordinate del cielo, riga per riga: dove passano per tutto lo
+# scorrimento, da quando le stelle cominciano ad accendersi a quando le parole se ne vanno, con 6 px di margine sullo
+# schermo. Le ha misurate controlli/stelle.js al telefono (390×844 e 375×667) e sul computer (1440×900); se cambiano le
+# parole o le loro misure in style.css, si rimisurano e si riscrivono qui.
+PAROLE_FRONTE = [
+    # 390×844
+    (566, 123, 857, 232), (832, 123, 874, 232), (556, 158, 884, 264), (563, 192, 877, 295), (581, 227, 859, 327),
+    (628, 261, 812, 359), (571, 332, 869, 480), (565, 424, 875, 508),
+    # 375×667
+    (524, 123, 893, 245), (862, 123, 916, 245), (512, 167, 928, 285), (521, 211, 919, 325), (544, 254, 896, 366),
+    (603, 298, 837, 406), (531, 376, 909, 564), (521, 492, 919, 600),
+    # 1440×900
+    (455, 167, 985, 305), (404, 232, 1036, 365), (433, 297, 1007, 423), (301, 361, 1139, 483), (451, 450, 989, 671),
+    (546, 607, 894, 689),
+]
+# Dove stanno il sole e la luna: sul computer, e al telefono, dove style.css li porta 390 più a sinistra e 110 più in
+# alto. Le stelle spostate ne restano lontane, anche dalla parte buia della falce.
+ASTRI = ((1300, 210), (910, 100))
+# Le strisce del cielo che si vedono al telefono, largo 390 e 375 px; sul computer (1440×900) il cielo si vede da y 56
+# in giù, sotto la testata.
+STRISCE = ((497, 943), (444, 996))
+
+
+def fuori_dalle_parole(stelle, seme):
+    """Le stelle della volta che cadrebbero sulle parole del frontespizio (o sulla luna) vanno in un altro punto del
+    cielo, libero, che si vede dagli stessi schermi: la stessa striscia del telefono, o fuori, dallo stesso lato. Così
+    ogni telefono ha le stelle che aveva, nessuna su una lettera; le altre restano dove sono.
+    Nella striscia del telefono il computer copre di parole quasi tutto il cielo sotto la frase, e lì resta libera solo
+    la fascia in alto: per non ammucchiarle, ci vanno anche dove il computer ha la testata. Fuori dalla striscia
+    restano dove il computer le vede. Il posto è il migliore di 12 punti liberi a caso, quello più lontano dalle altre
+    stelle, così si spargono senza fare mucchi."""
+    def libero(x, y, r):
+        return (all(not (a - r <= x <= c + r and b - r <= y <= d + r) for a, b, c, d in PAROLE_FRONTE)
+                and all(math.hypot(x - ax, y - ay) > 40 + r for ax, ay in ASTRI))
+
+    def schermi(x, y):
+        striscia = tuple(a <= x <= b for a, b in STRISCE)
+        return striscia + (x < 720,) + (() if any(striscia) else (y >= 56,))
+
+    def lontano_dai_bordi(x, y):
+        return all(abs(x - b) > 8 for s in STRISCE for b in s) and abs(y - 56) > 6 and y > 6
+
+    fuori = [s for s in stelle if libero(*s)]
+    nuove = []
+    for k, (x, y, r) in enumerate(stelle):
+        if not libero(x, y, r):
+            rnd = random.Random(seme * 1000 + k)
+            punti = []
+            while len(punti) < 12:
+                x1, y1 = rnd.uniform(0, 1440), rnd.uniform(0, 520)
+                if schermi(x1, y1) == schermi(x, y) and lontano_dai_bordi(x1, y1) and libero(x1, y1, r):
+                    punti.append((x1, y1))
+            x, y = max(punti, key=lambda p: min(math.hypot(p[0] - a, p[1] - b) for a, b, _ in fuori))
+            fuori.append((x, y, r))
+        nuove.append((x, y, r))
+    return nuove
 
 
 def cielo(prefisso):
-    """Il cielo lontano dell'apertura (la «volta»: la classe «cielo» è già della sezione del mito), uguale nel
-    frontespizio e nella soglia: le stelle, e il sole o la luna con il loro alone. Scorrendo si allarga piano intorno
-    alla casa, meno del paesaggio, ed esce dall'alto dello schermo."""
-    return (f'<g class="volta"><g class="volta-stelle">{stelline(17, 0, 0, 1440, 520, 80)}</g>'
+    """Il cielo lontano dell'apertura (la «volta»: la classe «cielo» è già della sezione del mito), nel frontespizio e
+    nella soglia: le stelle e il sole o la luna con il loro alone. Scorrendo si allarga piano intorno alla casa, meno
+    del paesaggio, ed esce dall'alto dello schermo.
+    Le stelle sono le stesse nei due cieli, ma nel frontespizio quelle che cadrebbero sulle parole sono spostate. Nella
+    soglia restano tutte al loro posto: lì le parole non ci sono più (se ne vanno prima che la soglia compaia), e il
+    cielo che si vede, più grande, è proprio quello in mezzo, che senza di loro al telefono resterebbe vuoto."""
+    sposta = fuori_dalle_parole if prefisso == "fr" else None
+    return (f'<g class="volta"><g class="volta-stelle">{stelline(17, 0, 0, 1440, 520, 80, sposta=sposta)}</g>'
             f'{astro("volta", 1300, 210, 80, f"{prefisso}-lume", 18, (26, 23, 13))}</g>')
 
 
