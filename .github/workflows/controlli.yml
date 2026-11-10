@@ -1,0 +1,49 @@
+# A ogni pull request, e a ogni push su main, GitHub lancia i controlli che si lanciano a mano prima di pubblicare, e
+# costruisce il sito come fa GitHub Pages per guardare che dentro ci siano tutti e soli i file pubblici.
+# Niente di questo pubblica o cambia il sito: la pubblicazione resta quella di GitHub Pages dal ramo main.
+name: Controlli
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: controlli-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  controlli:
+    name: I controlli di _lavoro
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Tutti i controlli
+        run: python3 -I _lavoro/controlli/tutti.py
+
+  sito:
+    name: Il sito come lo costruisce GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Niente .nojekyll (senza Jekyll _lavoro andrebbe online)
+        run: test ! -e .nojekyll
+      # Due note finte, fuori da git: se la lista exclude di _config.yml smette di funzionare, escono nel sito
+      # costruito come pagine e il controllo qui sotto le trova.
+      - name: Due note di prova che non devono uscire
+        run: |
+          mkdir -p docs
+          printf '# Prova\n' > docs/PROVA.md
+          printf '# Prova\n' > PROVA.md
+      - name: Costruire il sito con Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Solo i file pubblici, identici
+        run: python3 -I _lavoro/controlli/costruito.py _site

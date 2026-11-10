@@ -1,0 +1,21 @@
+# GitHub Pages costruisce il sito con Jekyll dal ramo main. Di suo Jekyll lascia fuori tutto ciò che comincia con «_»
+# o con «.»: per questo _lavoro, questo file, .github e .gitignore stanno in git ma non vanno online. Qui è scritto
+# il resto.
+#
+# Due cose da non fare mai: aggiungere un file .nojekyll, o pubblicare con una Action che carica l'intera cartella.
+# In tutti e due i casi Jekyll non gira più e _lavoro va online.
+#
+# A ogni pull request GitHub costruisce il sito come farà GitHub Pages e controlla che dentro ci siano tutti e soli i
+# file pubblici (.github/workflows/controlli.yml, _lavoro/controlli/costruito.py).
+
+# Senza questa riga GitHub Pages aggiunge al sito il foglio di stile del suo tema, /assets/css/style.css, che nessuna
+# pagina usa.
+theme: null
+
+# Jekyll trasforma in una pagina ogni file .md, anche senza intestazione: le note e i documenti di lavoro restano
+# fuori dal sito (se sono in git restano comunque pubblici su GitHub). CNAME serve a GitHub Pages per il dominio e non
+# è una pagina: va scritto qui perché una lista propria sostituisce quella di GitHub Pages, che lo esclude da sola.
+exclude:
+  - CNAME
+  - docs
+  - "*.md"

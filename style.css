@@ -107,10 +107,8 @@ html {
   scroll-padding-top: calc(var(--testata) + var(--s1));
 }
 
-/* Su iPhone e iPad il testo segue la dimensione scelta nelle Impostazioni. */
-@supports (font: -apple-system-body) and (-webkit-touch-callout: none) {
-  html { font: -apple-system-body; font-family: var(--libro); line-height: 1.6; }
-}
+/* Su iPhone e iPad il testo non segue la dimensione scelta nelle Impostazioni (font: -apple-system-body): il sito è
+   misurato in rem, e con il testo grande testata e titoli uscivano dallo schermo. Prima servono dei tetti. */
 
 body {
   margin: 0;
