@@ -30,7 +30,7 @@ def testi(p):
 def main():
     if not LISTA.exists():
         print("Parole da rileggere: manca _lavoro/controlli/parole.json, che sta solo sul Mac (fuori da git)")
-        return 0
+        return 3    # per tutti.py vuol dire «saltato»: non ha guardato niente, e non deve sembrare «ok»
     parole = json.loads(LISTA.read_text(encoding="utf-8"))
     intere = r"\b(?:" + "|".join(re.escape(w) for w in parole["intere"]) + r")\b"
     trovate = 0
