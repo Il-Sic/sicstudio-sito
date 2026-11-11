@@ -1419,9 +1419,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-nome-pianeta { fill-opacity: 0.86; }
 .tv-luna-ombra { fill: #22314A; fill-opacity: 0.85; }
 .tv-rondini { stroke: var(--testo); stroke-width: 1.5; stroke-linejoin: round; opacity: 0.5; }
-/* La riga della data ha sotto la carta della pagina: le stelle non le passano fra le lettere. */
+/* La riga della data ha sotto il colore del cielo: le stelle non le passano fra le lettere. */
 .tv-tiratura { position: absolute; inset: 0.6rem auto auto calc(var(--colonna) - 0.5rem); z-index: 1; max-inline-size: calc(100% - 2 * var(--colonna) + 1rem); margin: 0; padding: 0.15rem 0.5rem; border-radius: 3px; background: var(--carta); font: italic 0.95rem/1.35 var(--libro); color: var(--testo-2); }
-/* Il cielo stretto è per le finestre più alte che larghe: lì del disegno si vede solo la fascia di mezzo. */
+/* Il cielo stretto è per le finestre più alte che larghe. */
+/* Al telefono la data va su due righe corte: lunga coprirebbe la luna. */
+@media (max-width: 47.99rem) { .tv-tiratura { max-inline-size: 13rem; } }
 @media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
 @media (max-aspect-ratio: 1/1) {
   .tv-largo { display: none; }
@@ -1433,8 +1435,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .tv-dopo { animation-name: tv-dopo; }
     .tv-nome { animation-name: tv-nomi; }
-    /* Le stelle non si allargano con il cielo (volta-via) mentre ci si avvicina alla casa: restano ferme, come le
-       stelle vere, e i nomi non escono dallo schermo. */
+    /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
     .tv-largo, .tv-stretto { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
   }
 }
@@ -1494,6 +1495,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 /* … e di notte, dove cambia solo ciò che al buio si vede: le foglie, la nebbia, e la neve, che è il chiaro del paesaggio. */
 @media (prefers-color-scheme: dark) {
+  .tv-tiratura { background: #05090F; }
   .tv-velo { fill: #2A3B55; fill-opacity: 0.42; }
   .tv-fiore { stroke: #56616B; }
   .tv-fiore-giallo { stroke: #6B5A2A; }
