@@ -3,7 +3,9 @@
 # il resto.
 #
 # Due cose da non fare mai: aggiungere un file .nojekyll, o pubblicare con una Action che carica l'intera cartella.
-# In tutti e due i casi Jekyll non gira più e _lavoro va online.
+# In tutti e due i casi Jekyll non gira più e _lavoro va online. (Il lavoro della tavola del giorno,
+# .github/workflows/tavola.yml, quando è acceso pubblica con una Action, ma costruisce prima il sito con Jekyll, lo
+# controlla con costruito.py e carica solo quello.)
 #
 # A ogni pull request GitHub costruisce il sito come farà GitHub Pages e controlla che dentro ci siano tutti e soli i
 # file pubblici (.github/workflows/controlli.yml, _lavoro/controlli/costruito.py).
