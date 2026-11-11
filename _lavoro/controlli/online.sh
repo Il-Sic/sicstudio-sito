@@ -12,6 +12,22 @@ TMP=$(mktemp -d)
 problemi=0
 richieste=0
 
+# Le due home, quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml), online hanno la tavola del giorno,
+# che in git non c'è. Per loro vale anche la tavola di oggi o quella di ieri (prima che il lavoro della notte abbia
+# finito), rifatte qui da _lavoro/disegni/tavola.py.
+for giorno in $(TZ=Europe/Rome date +%F) $(TZ=Europe/Rome date -v-1d +%F); do
+  mkdir -p "$TMP/tavola-$giorno/en"
+  cp "$SITO/index.html" "$TMP/tavola-$giorno/index.html"
+  cp "$SITO/en/index.html" "$TMP/tavola-$giorno/en/index.html"
+  python3 -I "$SITO/_lavoro/disegni/tavola.py" "$TMP/tavola-$giorno" $giorno > /dev/null || { print -r -- "NO  la tavola del $giorno non si rifà"; (( problemi++ )) }
+done
+tavola_del_giorno() {
+  local pagina=${1#$SITO/} t
+  [[ $pagina == index.html || $pagina == en/index.html ]] || return 1
+  for t in "$TMP"/tavola-*; do cmp -s "$TMP/risposta" "$t/$pagina" && return 0; done
+  return 1
+}
+
 # prova <indirizzo> <file locale con cui confrontare la risposta> <codice atteso>
 prova() {
   local codice tipo
@@ -19,7 +35,7 @@ prova() {
   (( richieste++ ))
   if [[ $codice != $3 ]]; then
     print -r -- "NO  $1: $codice invece di $3"; (( problemi++ ))
-  elif ! cmp -s "$TMP/risposta" "$2"; then
+  elif ! cmp -s "$TMP/risposta" "$2" && ! tavola_del_giorno "$2"; then
     print -r -- "NO  $1: il contenuto è diverso da ${2#$SITO/}"; (( problemi++ ))
   else
     print -r -- "$3 ${2:e} $tipo" >> "$TMP/tipi"

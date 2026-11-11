@@ -1,0 +1,75 @@
+# La tavola del giorno: ogni notte, e a ogni push su main, costruisce il sito come fa GitHub Pages, scrive nella home
+# la tavola di quel giorno (_lavoro/disegni/tavola.py: il cielo di quella sera, la luna, la stagione, la data) e lo
+# pubblica.
+#
+# È SPENTO finché non si fanno, a mano, due cose nelle impostazioni del repository:
+#   1. Settings › Pages › Build and deployment › Source: «GitHub Actions» (invece di «Deploy from a branch»);
+#   2. Settings › Secrets and variables › Actions › Variables: TAVOLA_DEL_GIORNO con valore «accesa».
+# Per spegnerlo si fa il contrario, in ordine inverso. Senza la variabile i lavori qui sotto vengono saltati e il sito
+# resta quello che GitHub Pages pubblica dal ramo main, con le pagine com'è scritto in git, senza data.
+#
+# Accenderlo cambia il modo di pubblicare: non più GitHub Pages dal ramo, ma questo lavoro, anche a ogni push su main.
+# Le regole di _config.yml restano: il sito lo costruisce Jekyll (così _lavoro resta fuori) e prima di pubblicare si
+# controlla che dentro ci siano tutti e soli i file pubblici. Se un passo fallisce non si pubblica niente e online
+# resta il sito del giorno prima.
+#
+# Da sapere: GitHub ferma da solo i lavori a orario nei repository pubblici dopo 60 giorni senza attività (avvisa
+# prima per email, e si riaccendono dalla scheda Actions). Con il lavoro fermo, online resterebbe una tavola vecchia
+# con la sua data.
+name: La tavola del giorno
+
+on:
+  schedule:
+    - cron: "40 2 * * *"   # le 3:40 d'inverno e le 4:40 d'estate, in Italia: dopo mezzanotte, prima del giorno
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Una pubblicazione alla volta, senza interrompere quella in corso.
+concurrency:
+  group: tavola
+  cancel-in-progress: false
+
+jobs:
+  tavola:
+    name: Il sito con la tavola di oggi
+    if: vars.TAVOLA_DEL_GIORNO == 'accesa'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Niente .nojekyll (senza Jekyll _lavoro andrebbe online)
+        run: test ! -e .nojekyll
+      - name: Costruire il sito con Jekyll
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Solo i file pubblici, identici
+        run: python3 -I _lavoro/controlli/costruito.py _site
+      # Jekyll gira in un contenitore e lascia _site a root: per scriverci la tavola serve riprenderlo.
+      - name: La tavola di oggi nelle due home
+        run: |
+          sudo chown -R "$(id -u):$(id -g)" _site
+          python3 -I _lavoro/disegni/tavola.py _site
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  pubblica:
+    name: Pubblicare
+    needs: tavola
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pubblica.outputs.page_url }}
+    steps:
+      - id: pubblica
+        uses: actions/deploy-pages@v5
