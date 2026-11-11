@@ -26,7 +26,12 @@ done
 tavola_del_giorno() {
   local pagina=${1#$SITO/} t
   (( ${DEL_GIORNO[(Ie)$pagina]} )) || return 1
-  for t in "$TMP"/tavola-*; do cmp -s "$TMP/risposta" "$t/$pagina" && return 0; done
+  # Uguale alla tavola rifatta qui; o uguale a meno dei disegni del cielo e della luna, che GitHub e questo Mac possono
+  # arrotondare in modo diverso (tavola.py --uguali).
+  for t in "$TMP"/tavola-*; do
+    cmp -s "$TMP/risposta" "$t/$pagina" && return 0
+    python3 -I "$SITO/_lavoro/disegni/tavola.py" --uguali "$TMP/risposta" "$t/$pagina" && return 0
+  done
   return 1
 }
 

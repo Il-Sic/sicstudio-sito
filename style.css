@@ -1392,7 +1392,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* ---------- La tavola del giorno ---------- */
 
 /* La home in git è senza data. Quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml), tavola.py scrive
-   nella pagina pubblicata il cielo di quella sera (due volte: largo per il computer, stretto per il telefono), la
+   nella pagina pubblicata il cielo di quella sera (due volte: largo, e stretto per le finestre in piedi), la
    luna, la data e, su <main>, le classi della stagione. Ciò che cadrebbe sulle parole del frontespizio, le linee e i
    nomi delle costellazioni (.tv-dopo) compaiono quando le parole se ne sono andate; senza movimento restano nascosti. */
 .tv-stretto { display: none; }
@@ -1419,22 +1419,29 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-nome-pianeta { fill-opacity: 0.86; }
 .tv-luna-ombra { fill: #22314A; fill-opacity: 0.85; }
 .tv-rondini { stroke: var(--testo); stroke-width: 1.5; stroke-linejoin: round; opacity: 0.5; }
-/* La riga della data ha sotto la carta della pagina: le stelle non le passano fra le lettere. */
+/* La riga della data ha sotto il colore del cielo: le stelle non le passano fra le lettere. */
 .tv-tiratura { position: absolute; inset: 0.6rem auto auto calc(var(--colonna) - 0.5rem); z-index: 1; max-inline-size: calc(100% - 2 * var(--colonna) + 1rem); margin: 0; padding: 0.15rem 0.5rem; border-radius: 3px; background: var(--carta); font: italic 0.95rem/1.35 var(--libro); color: var(--testo-2); }
-@media (max-width: 47.99rem) {
+/* Il cielo stretto è per le finestre più alte che larghe. */
+/* Al telefono la data va su due righe corte: lunga coprirebbe la luna. */
+@media (max-width: 47.99rem) { .tv-tiratura { max-inline-size: 13rem; } }
+@media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
+@media (max-aspect-ratio: 1/1) {
   .tv-largo { display: none; }
   .tv-stretto { display: inline; }
   .tv-nome { font-size: 19px; }
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
-    .tv-tiratura, .tv-dopo, .tv-nome { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
+    .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .tv-dopo { animation-name: tv-dopo; }
     .tv-nome { animation-name: tv-nomi; }
+    /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
+    .tv-largo, .tv-stretto { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
   }
 }
+@keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
 @keyframes tv-dopo { 0%, 7% { opacity: 0; } 15%, 100% { opacity: 1; } }
-@keyframes tv-nomi { 0%, 7% { opacity: 0; } 15%, 36% { opacity: 1; } 48%, 100% { opacity: 0; } }
+@keyframes tv-nomi { 0%, 7% { opacity: 0; } 15%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
 
 /* La stagione: cambia colori che ci sono già, più la nebbia, i fiori e le lucciole. Di giorno… */
 .tv-velo { fill: #FAF7F0; fill-opacity: 0.62; }
@@ -1488,6 +1495,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 /* … e di notte, dove cambia solo ciò che al buio si vede: le foglie, la nebbia, e la neve, che è il chiaro del paesaggio. */
 @media (prefers-color-scheme: dark) {
+  .tv-tiratura { background: #05090F; }
   .tv-velo { fill: #2A3B55; fill-opacity: 0.42; }
   .tv-fiore { stroke: #56616B; }
   .tv-fiore-giallo { stroke: #6B5A2A; }

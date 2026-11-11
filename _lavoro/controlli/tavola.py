@@ -67,6 +67,10 @@ def main():
                 errori += [f"apostrofo dritto in «{a}»" for a in aggiunte if "'" in a]
                 if nome in tavola.PAGINE and not any("tv-tiratura" in (a.get("class") or "") for _, a, _ in albero.tag):
                     errori.append("manca la riga della data")
+                # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
+                spoglia = tavola.senza_cielo(testo)
+                if 'class="volta"' in spoglia or "tv-luna-ombra" in spoglia or "tv-cielo" in spoglia:
+                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo o della luna")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     for riga in problemi:
