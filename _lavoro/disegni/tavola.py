@@ -13,7 +13,8 @@ Nel browser non gira niente: tutto è calcolato qui e scritto nell'HTML.
 Le pagine in git restano quelle di sempre, senza data: questo script non le tocca. Scrive la tavola in una copia del
 sito già costruito, ed è il lavoro giornaliero (.github/workflows/tavola.yml), quando è acceso, a pubblicarla.
 
-    python3 -I _lavoro/disegni/tavola.py <cartella> [AAAA-MM-GG]   la tavola in <cartella>/index.html e /en/index.html
+    python3 -I _lavoro/disegni/tavola.py <cartella> [AAAA-MM-GG]   la tavola nelle due home di <cartella>, e stagione
+                                                                   e luna nelle due pagine dello studio
     python3 -I _lavoro/disegni/tavola.py --prova [AAAA-MM-GG]      la scrive in _lavoro/prove/tavola/, da guardare con
                                                                    servi.py (http://127.0.0.1:8765/_lavoro/prove/tavola/)
     python3 -I _lavoro/disegni/tavola.py --verifica                rifà i conti su date note (esce con 1 se non tornano)
@@ -49,7 +50,10 @@ LAT, LON = 39.3, 16.3
 ROMA = zoneinfo.ZoneInfo("Europe/Rome")
 MESI = {"it": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
         "en": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]}
+# Le due home hanno la tavola intera. Le due pagine dello studio, dove la stessa casa si vede a metà strada, prendono
+# la stessa stagione e la stessa luna, senza cielo vero e senza data.
 PAGINE = {"index.html": "it", "en/index.html": "en"}
+STUDIO = ["studio/index.html", "en/studio/index.html"]
 
 # I nomi nel cielo sono scritti in italiano qui sotto; nella pagina inglese diventano questi (le costellazioni in
 # latino, come si usa). Quelli che mancano restano uguali.
@@ -724,10 +728,22 @@ def tavola(pagina, giorno, lingua):
     return pagina
 
 
+def studio(pagina, giorno):
+    """La pagina dello studio con la stagione e la luna di quel giorno."""
+    vista, cresce, _ = fase(giorno)
+    pagina, a = re.subn(r'<path class="bs-falce solo-notte"[^>]*/>', lambda m: luna_svg(vista, cresce, "translate(815 79) scale(0.58)"), pagina, count=1)
+    pagina, b = re.subn(r'<main id="contenuto" class="pagina-studio">', f'<main id="contenuto" class="pagina-studio {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">', pagina, count=1)
+    if (a, b) != (1, 1):
+        sys.exit(f"tavola.py: nella pagina dello studio non trovo la luna o <main> ({a}, {b}). La pagina è cambiata: va aggiornato studio().")
+    return pagina
+
+
 def scrivi(da, a, giorno):
-    """Legge le due home in «da» e scrive le loro tavole in «a» (la stessa cartella, per il sito già costruito)."""
-    for nome, lingua in PAGINE.items():
-        testo = tavola((da / nome).read_text(encoding="utf-8"), giorno, lingua)
+    """Legge le pagine in «da» e le scrive, con la tavola di quel giorno, in «a» (la stessa cartella, per il sito già
+    costruito)."""
+    for nome in list(PAGINE) + STUDIO:
+        testo = (da / nome).read_text(encoding="utf-8")
+        testo = tavola(testo, giorno, PAGINE[nome]) if nome in PAGINE else studio(testo, giorno)
         (a / nome).parent.mkdir(parents=True, exist_ok=True)
         (a / nome).write_text(testo, encoding="utf-8")
         print(f"{a / nome}: {len(testo.encode('utf-8')) / 1024:.0f} KB")

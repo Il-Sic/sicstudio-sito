@@ -12,18 +12,20 @@ TMP=$(mktemp -d)
 problemi=0
 richieste=0
 
-# Le due home, quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml), online hanno la tavola del giorno,
-# che in git non c'è. Per loro vale anche la tavola di oggi o quella di ieri (prima che il lavoro della notte abbia
-# finito), rifatte qui da _lavoro/disegni/tavola.py.
+# Le due home e le due pagine dello studio, quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml),
+# online hanno la tavola del giorno, che in git non c'è. Per loro vale anche la tavola di oggi o quella di ieri (prima
+# che il lavoro della notte abbia finito), rifatte qui da _lavoro/disegni/tavola.py.
+DEL_GIORNO=(index.html en/index.html studio/index.html en/studio/index.html)
 for giorno in $(TZ=Europe/Rome date +%F) $(TZ=Europe/Rome date -v-1d +%F); do
-  mkdir -p "$TMP/tavola-$giorno/en"
-  cp "$SITO/index.html" "$TMP/tavola-$giorno/index.html"
-  cp "$SITO/en/index.html" "$TMP/tavola-$giorno/en/index.html"
+  for pagina in $DEL_GIORNO; do
+    mkdir -p "$TMP/tavola-$giorno/${pagina:h}"
+    cp "$SITO/$pagina" "$TMP/tavola-$giorno/$pagina"
+  done
   python3 -I "$SITO/_lavoro/disegni/tavola.py" "$TMP/tavola-$giorno" $giorno > /dev/null || { print -r -- "NO  la tavola del $giorno non si rifà"; (( problemi++ )) }
 done
 tavola_del_giorno() {
   local pagina=${1#$SITO/} t
-  [[ $pagina == index.html || $pagina == en/index.html ]] || return 1
+  (( ${DEL_GIORNO[(Ie)$pagina]} )) || return 1
   for t in "$TMP"/tavola-*; do cmp -s "$TMP/risposta" "$t/$pagina" && return 0; done
   return 1
 }

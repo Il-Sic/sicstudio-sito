@@ -1,6 +1,6 @@
 """La tavola del giorno (disegni/tavola.py). Le pagine in git non la contengono: la scrive nel sito già costruito il
-lavoro giornaliero, quando è acceso. Qui la si rifà per un giro di date, nelle due lingue, in una cartella di
-passaggio, e si guarda che ogni pagina resti in regola come le altre:
+lavoro giornaliero, quando è acceso. Qui la si rifà per un giro di date, nelle due home e nelle due pagine dello
+studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regola come le altre:
 - i conti del cielo tornano sulle date note (tavola.py --verifica);
 - HTML ben formato e id unici (come forma.py), niente script né stili in linea e le meta al loro posto (risorse.py);
 - sotto i 150 KB (pesi.py);
@@ -42,8 +42,9 @@ def main():
     with tempfile.TemporaryDirectory() as cartella:
         p = pathlib.Path(cartella) / "pagina.html"
         for giorno in date():
-            for nome, lingua in tavola.PAGINE.items():
-                testo = tavola.tavola((SITO / nome).read_text(encoding="utf-8"), giorno, lingua)
+            for nome in list(tavola.PAGINE) + tavola.STUDIO:
+                testo = (SITO / nome).read_text(encoding="utf-8")
+                testo = tavola.tavola(testo, giorno, tavola.PAGINE[nome]) if nome in tavola.PAGINE else tavola.studio(testo, giorno)
                 p.write_text(testo, encoding="utf-8")
                 pagine += 1
                 pesante = max(pesante, len(testo.encode("utf-8")))
@@ -64,7 +65,7 @@ def main():
                 # le parole che la tavola aggiunge: la riga della data e i nomi nel cielo
                 aggiunte = re.findall(r'<(?:p class="tv-tiratura"|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
                 errori += [f"apostrofo dritto in «{a}»" for a in aggiunte if "'" in a]
-                if not any("tv-tiratura" in (a.get("class") or "") for _, a, _ in albero.tag):
+                if nome in tavola.PAGINE and not any("tv-tiratura" in (a.get("class") or "") for _, a, _ in albero.tag):
                     errori.append("manca la riga della data")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
