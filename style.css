@@ -703,7 +703,16 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .dentro {
   position: relative; isolation: isolate;
   background: radial-gradient(70% 50% at 28% 40%, var(--lume), transparent 70%), var(--muro);
-  padding: var(--s5) var(--colonna) var(--s6);
+  padding: var(--s5) var(--colonna) 3.4rem;
+}
+/* Il pavimento, in fondo alla stanza: il battiscopa e le assi, da un bordo all'altro. Lo scrittoio ci entra con le
+   gambe, così poggia. */
+.dentro::after {
+  content: ""; position: absolute; inset: auto 0 0; z-index: -1; height: 5rem;
+  background:
+    linear-gradient(var(--legno-chiaro) 0 0.4rem, var(--legno-scuro) 0 0.55rem, transparent 0),
+    repeating-linear-gradient(90deg, transparent 0 9rem, rgb(40 25 10 / 0.16) 0 calc(9rem + 1px)),
+    linear-gradient(color-mix(in srgb, var(--legno-scuro) 34%, var(--legno)), color-mix(in srgb, var(--legno-scuro) 62%, var(--legno)));
 }
 /* Le pareti di tronchi, come fuori: compaiono piano sotto il titolo, così la luce della porta diventa il muro senza un
    taglio. */
@@ -712,41 +721,47 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   background: repeating-linear-gradient(180deg, transparent 0 calc(2.75rem - 2px), var(--asse) calc(2.75rem - 2px) 2.75rem);
   -webkit-mask-image: linear-gradient(transparent 0, #000 22rem); mask-image: linear-gradient(transparent 0, #000 22rem);
 }
-/* In una colonna sola (telefono e tablet in verticale) l'ordine è quello dell'HTML, lo stesso per gli occhi, la
-   tastiera e i lettori di schermo: prima Argonauta, poi il quaderno per i territori, in fondo la finestra. Sul computer
-   la stanza è disegnata per aree: finestra e scrittoio a sinistra, lo scaffale a destra. */
-.stanza { display: grid; gap: var(--s4); grid-template-areas: "scaffale" "scrittoio" "finestra"; }
+/* In una colonna sola (telefono e tablet in piedi): le mensole, il cartellino del progetto in vista, la finestra e, per
+   ultimo, lo scrittoio, che poggia sul pavimento. La finestra è un disegno, senza niente da leggere o toccare: sta
+   sopra lo scrittoio, come sul computer, senza cambiare l'ordine per chi legge o usa la tastiera. Sul computer la
+   stanza è disegnata per aree; da quattro progetti in su le mensole prendono tutta la larghezza. */
+.stanza { display: grid; gap: var(--s4); grid-template-areas: "mensole" "cartellino" "finestra" "scrittoio"; }
+.mensole { grid-area: mensole; container-type: inline-size; min-width: 0; }
+.stanza > .cartellino { grid-area: cartellino; }
 @media (min-width: 64rem) {
   .stanza {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); grid-template-areas: "finestra scaffale" "scrittoio scaffale";
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr); grid-template-areas: "finestra mensole" "scrittoio cartellino";
     column-gap: var(--s5); row-gap: var(--s2); align-items: end;
   }
-  .scaffale { align-self: center; }
+  .stanza > .cartellino { align-self: start; margin-top: var(--s2); }
+  .stanza:has(.scaffale > :nth-child(4)) { grid-template-areas: "mensole mensole" "finestra cartellino" "scrittoio cartellino"; }
+  .stanza:has(.scaffale > :nth-child(4)) > .cartellino { align-self: center; }
 }
 
-/* Lo scaffale: i libri in piedi sulla mensola, con la copertina in vista (sul computer un po' di posto per i prossimi);
-   sotto il libro del gioco il suo cartellino, attaccato alla mensola. */
+/* Le mensole: ogni progetto ha un posto largo --volume, e in una fila ce ne stanno quanti ne entrano. Un'app è un
+   libro, un gioco è una scatola; a colori ciò che è uscito, a matita ciò che è in cantiere. Sotto ogni fila c'è la sua
+   asse: uno sfondo che si ripete a ogni riga (il posto, alto --alto come un libro 2:3, e sotto la targhetta, appesa
+   al bordo). */
 .scaffale {
-  grid-area: scaffale; display: grid; align-items: end;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); column-gap: var(--s1);
+  --volume: min(13.5rem, calc((100cqi - var(--s2)) / 2 - 0.5px)); --alto: calc(var(--volume) * 1.5); --targa: 3.7rem; --spesso: 0.85rem;
+  display: grid; grid-template-columns: repeat(auto-fill, var(--volume)); column-gap: var(--s2);
+  margin: 0 calc(-1 * var(--s0)); padding: 0 var(--s0); list-style: none;
+  background:
+    linear-gradient(transparent var(--alto), var(--legno-chiaro) 0 calc(var(--alto) + var(--spesso) * 0.22),
+      var(--legno) 0 calc(var(--alto) + var(--spesso) * 0.62), var(--legno-scuro) 0 calc(var(--alto) + var(--spesso)),
+      rgb(40 25 10 / 0.28) 0, transparent calc(var(--alto) + var(--spesso) + 0.7rem))
+    0 0 / 100% calc(var(--alto) + var(--targa)) repeat-y;
 }
-/* I due libri hanno la loro misura, ma si stringono un poco quando la colonna è più stretta (1024 px, la stanza in due
-   colonne), invece di uscire dallo schermo. */
-@media (min-width: 48rem) { .scaffale { grid-template-columns: minmax(0, 13.5rem) minmax(0, 14rem) minmax(0, 1fr); column-gap: var(--s2); } }
-.scaffale::before {
-  content: ""; grid-row: 1; grid-column: 1 / -1; align-self: end; height: 0.85rem; margin: 0 calc(-1 * var(--s0)) -0.85rem;
-  background: linear-gradient(var(--legno-chiaro) 0 22%, var(--legno) 22% 62%, var(--legno-scuro) 62%); border-radius: 2px;
-  box-shadow: 0 14px 18px -12px rgb(40 25 10 / 0.45);
-}
-.scaffale .libro { display: contents; }
-.scaffale .libro-copertina { grid-area: 1 / 1; }
-.libro-gioco .copertina-matita { grid-area: 1 / 2; }
-.scaffale .cartellino { grid-area: 3 / 1 / 4 / -1; margin-top: var(--s2); }
-.cartellino-gioco {
-  grid-area: 2 / 2; justify-self: center; margin-top: 0.3rem; padding: 0.2rem 0.6rem; rotate: -1.5deg;
+.scaffale:has(> :nth-child(4)) { --volume: min(10.25rem, calc((100cqi - var(--s2)) / 2 - 0.5px)); }
+.posto { display: grid; grid-template: var(--alto) var(--targa) / minmax(0, 1fr); }
+.posto > :first-child { align-self: end; }
+.targhetta {
+  justify-self: center; align-self: start; width: max-content; max-width: calc(100% + 1rem);
+  margin: calc(var(--spesso) + 0.25rem) 0 0; padding: 0.2rem 0.6rem; rotate: -1.5deg;
   background: var(--scheda); border-radius: 2px; box-shadow: 0 1px 3px rgb(30 20 10 / 0.3);
-  font-style: italic; font-size: 0.9375rem; line-height: 1.4;
+  font-style: italic; font-size: 0.9375rem; line-height: 1.4; text-align: center; text-wrap: balance;
 }
+.posto:nth-child(even) .targhetta { rotate: 1.2deg; }
 .cartellino { display: grid; gap: var(--s0); max-inline-size: 32rem; }
 .cartellino-righe { font-size: var(--t2); line-height: 1.45; }
 
@@ -788,8 +803,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .libro-copertina:hover { translate: 0 -6px; box-shadow: 0 1px 2px rgb(30 20 10 / 0.25), 0 30px 44px -20px rgb(30 20 10 / 0.6); }
 }
 
-/* Il libro del gioco: un libro vero, tutto a matita, con la matita appoggiata accanto. Senza titolo. */
-.matita-disegno { display: block; width: 100%; }
+/* I progetti in cantiere: un libro o una scatola, tutti a matita, con la matita appoggiata accanto. Senza titolo. */
+.matita-disegno { display: block; width: 100%; overflow: visible; }
 .mt-contorno, .mt-schizzo, .mt-lato { fill: none; stroke: var(--tratto-matita); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .mt-righe { fill: none; stroke: var(--tratto-matita); stroke-width: 0.8; opacity: 0.55; vector-effect: non-scaling-stroke; }
 .mt-schizzo { opacity: 0.7; }
@@ -823,8 +838,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 /* La finestra sopra il tavolo, più alta che larga: fuori il cielo di prima con il sole o la luna, dentro la pianta.
    In una colonna sola viene dopo il quaderno ed è piccola, per non prendere da sola uno schermo intero. */
-.finestra { grid-area: finestra; justify-self: center; width: min(64%, 15rem); }
-@media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 19rem); margin-left: var(--s3); } }
+.finestra { grid-area: finestra; justify-self: center; width: min(64%, 15rem); margin-bottom: calc(-1 * var(--s2)); }
+@media (min-width: 64rem) { .finestra { justify-self: start; width: min(100%, 19rem); margin: 0 0 0 var(--s3); } }
 .finestra-disegno { width: 100%; height: auto; display: block; }
 .fn-telaio { fill: var(--legno); }
 .fn-cielo { fill: #F7F1E4; }
@@ -1377,7 +1392,6 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .equipaggio-piede, .territori-scrivi { margin-top: var(--s3); }
   .prudenza-riga, .supporto-riga, .cielo-riga, .approdi { gap: var(--s3); }
   .pirati-fermo { padding-block: var(--s5); }
-  .dentro { padding-bottom: var(--s5); }
   .colophon { padding-top: var(--s4); }
 }
 /* Le parole dei pirati, al telefono, si accendono mentre la frase sale nello schermo, senza fermarsi a tutta pagina. */

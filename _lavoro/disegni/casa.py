@@ -4,7 +4,8 @@
 - colle: la collina dell'apertura con il laghetto, il sentiero e la casa piccola (un quinto della casa grande);
 - soglia: la casa da vicino, con la porta che si apre, sopra l'apertura della home;
 - bottega-studio: la casa a metà strada, nell'apertura della pagina dello studio;
-- finestra (con la pianta sul davanzale), matita (il libro del gioco), lampada: le cose dentro la bottega, nella home.
+- finestra (con la pianta sul davanzale), scatola e libro-matita (i progetti in cantiere, sulle mensole), lampada: le
+  cose dentro la bottega, nella home.
 
     python3 -I _lavoro/disegni/casa.py
 
@@ -451,61 +452,73 @@ def finestra():
         '</svg>')
 
 
-def matita():
-    """Il libro del gioco: un libro vero, tutto a matita, quasi alto come Argonauta. Il dorso con le sue fasce, lo
-    spessore delle pagine in cima e sul taglio, la cornice della copertina e il tratteggio lasciati a metà, due righe
-    per un titolo che non c'è ancora; accanto, appoggiata al libro, una matita. Niente nomi, segni o disegni del gioco."""
-    rnd = random.Random(3)
+def a_matita(tipo, seme=3, con_la_matita=True):
+    """Un progetto in cantiere, tutto a matita: un libro (un'app) o una scatola (un gioco), larghi quanto un posto
+    sulla mensola (196 su 216). La cornice lasciata a metà, il tratteggio, due righe per un titolo che non c'è ancora;
+    se si vuole, appoggiata accanto, la matita, che sporge a destra del disegno. Niente nomi, segni o disegni del
+    progetto: dal disegno non si deve capire che cosa sarà."""
+    rnd = random.Random(seme)
     def tratto(x0, y0, x1, y1, passi=6, j=1.4):
         pts = [(x0 + (x1 - x0) * k / passi + rnd.uniform(-j, j), y0 + (y1 - y0) * k / passi + rnd.uniform(-j, j))
                for k in range(passi + 1)]
         return "M" + "L".join(f"{n(x)} {n(y)}" for x, y in pts)
-    # La copertina va da x 0 a 196 e da y 12 a 300; le pagine sporgono dietro di 6 in alto a destra.
-    contorno = " ".join([tratto(1, 12, 196, 12), tratto(196, 11, 197, 300), tratto(197, 299, 1, 300), tratto(0, 300, 1, 12),
-                         tratto(2, 13, 195, 14, j=2), tratto(195, 12, 196, 298, j=2)])
-    pagine = "M1 12L7 6H202L196 12ZM196 12L202 6V294L196 300Z"
-    righe_pagine = (tratto(10, 9.5, 197, 9.5, 5, 0.4) + tratto(14, 7.8, 199, 7.8, 5, 0.4)
-                    + tratto(198, 11, 198, 296, 6, 0.4) + tratto(200, 9, 200, 295, 6, 0.4))
-    dorso = (tratto(15, 13, 15, 299, 8, 0.8) + tratto(17.5, 13, 17.5, 299, 8, 0.8)
-             + "".join(tratto(1, y, 15, y, 2, 0.6) for y in (38, 43, 268, 273)))
-    # La cornice della copertina: tre lati e mezzo, l'ultimo lasciato a metà.
-    cornice = (tratto(32, 34, 180, 33, 6, 1) + tratto(180, 33, 181, 276, 7, 1) + tratto(181, 277, 32, 277, 6, 1)
-               + tratto(31, 277, 32, 170, 4, 1))
-    # Il tratteggio: righe a 45° dall'angolo in alto a sinistra, che la mano ha lasciato sempre più corte verso il
-    # centro della copertina; vicino all'angolo un tratteggio incrociato, più fitto.
-    tratteggio = []
-    for k in range(32):
-        c = 76 + 7 * k + rnd.uniform(-1.2, 1.2)               # la riga x + y = c, dentro la cornice
-        xa, ya = (34.0, c - 34) if c - 34 <= 274 else (c - 274, 274.0)
-        xb, yb = (c - 37, 37.0) if c - 37 <= 177 else (177.0, c - 177)
-        quanto = min(1.0, max(0.18, 1 - (c - 210) / 110)) + rnd.uniform(-0.07, 0.07)
-        xa, ya = xb + (xa - xb) * quanto, yb + (ya - yb) * quanto
-        if xb - xa > 3:
-            tratteggio.append(f"M{n(xa)} {n(ya)}L{n(xb)} {n(yb)}")
-    croce = "".join(f"M{n(37 + 6.5 * k)} 37L{n(71 + 2.5 * k)} {n(71 - 4 * k)}" for k in range(8))
-    titolo = tratto(86, 226, 166, 224, 5, 1.6) + " " + tratto(98, 240, 154, 239, 4, 1.4)
-    # La matita, appoggiata al taglio del libro: la gomma sul ripiano, la punta in alto contro il libro.
-    bx, by, tx, ty = 219.0, 299.0, 200.0, 70.0
-    lx, ly = tx - bx, ty - by
-    lung = math.hypot(lx, ly)
-    ux, uy = lx / lung, ly / lung
-    nx, ny = -uy, ux
-    def pezzo(d0, d1, m0, m1):
-        a = (bx + ux * d0 + nx * m0, by + uy * d0 + ny * m0)
-        b = (bx + ux * d1 + nx * m1, by + uy * d1 + ny * m1)
-        c = (bx + ux * d1 - nx * m1, by + uy * d1 - ny * m1)
-        d = (bx + ux * d0 - nx * m0, by + uy * d0 - ny * m0)
-        return "M" + "L".join(f"{n(x)} {n(y)}" for x, y in (a, b, c, d)) + "Z"
-    lati = f"M{n(bx + ux * 24)} {n(by + uy * 24)}L{n(bx + ux * (lung - 30))} {n(by + uy * (lung - 30))}"
-    return ('<svg class="matita-disegno" viewBox="0 0 226 302" aria-hidden="true" focusable="false">'
-            '<path class="mt-ombra" d="M8 20H204V302H8Z"/>'
-            f'<path class="mt-pagine" d="{pagine}"/><path class="mt-carta" d="M0 12H196V300H0Z"/>'
-            f'<path class="mt-righe" d="{righe_pagine}{"".join(tratteggio)}{croce}"/>'
-            f'<path class="mt-contorno" d="{contorno} {cornice} {dorso}"/><path class="mt-schizzo" d="{titolo}"/>'
-            f'<path class="mt-gomma" d="{pezzo(0, 13, 4.6, 4.6)}"/><path class="mt-ghiera" d="{pezzo(13, 24, 4.9, 4.9)}"/>'
-            f'<path class="mt-matita" d="{pezzo(24, lung - 30, 4.6, 4.6)}"/><path class="mt-legno" d="{pezzo(lung - 30, lung - 8, 4.6, 1.6)}"/>'
-            f'<path class="mt-mina" d="{pezzo(lung - 8, lung, 1.6, 0.2)}"/><path class="mt-lato" d="{lati}"/>'
-            '</svg>')
+    def tratteggio(x0, y0, x1, y1, passo=7.0, pieno=0.55):
+        """Righe a 45° dall'angolo in alto a sinistra, che la mano ha lasciato sempre più corte."""
+        righe = []
+        c = x0 + y0 + 40
+        while c < x1 + y1 - 10:
+            xa, ya = (x0, c - x0) if c - x0 <= y1 else (c - y1, y1)
+            xb, yb = (c - y0, y0) if c - y0 <= x1 else (x1, c - x1)
+            quanto = min(1.0, max(0.15, 1 - (c - (x0 + y0) - (x1 - x0) * pieno) / (x1 - x0))) + rnd.uniform(-0.07, 0.07)
+            xa, ya = xb + (xa - xb) * quanto, yb + (ya - yb) * quanto
+            if xb - xa > 3:
+                righe.append(f"M{n(xa)} {n(ya)}L{n(xb)} {n(yb)}")
+            c += passo + rnd.uniform(-1.2, 1.2)
+        return "".join(righe)
+    if tipo == "libro":
+        # La copertina va da x 0 a 196 e da y 12 a 300; le pagine sporgono dietro di 6 in alto a destra.
+        cima, fianco = 12.0, 202.0
+        ombra, dietro, davanti = "M8 20H204V302H8Z", "M1 12L7 6H202L196 12ZM196 12L202 6V294L196 300Z", "M0 12H196V300H0Z"
+        contorno = " ".join([tratto(1, 12, 196, 12), tratto(196, 11, 197, 300), tratto(197, 299, 1, 300), tratto(0, 300, 1, 12),
+                             tratto(2, 13, 195, 14, j=2), tratto(15, 13, 15, 299, 8, 0.8), tratto(17.5, 13, 17.5, 299, 8, 0.8)]
+                            + [tratto(1, y, 15, y, 2, 0.6) for y in (38, 43, 268, 273)])
+        cornice = tratto(32, 34, 180, 33, 6, 1) + tratto(180, 33, 181, 276, 7, 1) + tratto(181, 277, 32, 277, 6, 1) + tratto(31, 277, 32, 170, 4, 1)
+        righe = tratto(10, 9.5, 197, 9.5, 5, 0.4) + tratto(198, 11, 198, 296, 6, 0.4) + tratto(200, 9, 200, 295, 6, 0.4) + tratteggio(34, 37, 177, 274)
+        titolo = tratto(86, 226, 166, 224, 5, 1.6) + " " + tratto(98, 240, 154, 239, 4, 1.4)
+    else:
+        # La scatola: il davanti va da x 0 a 196 e da y 92 a 300, con il coperchio che scende di 44; il sopra e il
+        # fianco si vedono di scorcio, 16 più in là.
+        cima, fianco = 76.0, 212.0
+        ombra, dietro, davanti = "M8 100H216V302H8Z", "M0 92L16 76H212L196 92ZM196 92L212 76V284L196 300Z", "M0 92H196V300H0Z"
+        contorno = " ".join([tratto(1, 92, 196, 92), tratto(196, 91, 197, 300), tratto(197, 299, 1, 300), tratto(0, 300, 1, 92),
+                             tratto(2, 93, 195, 94, j=2), tratto(1, 92, 17, 76, 2, 0.6), tratto(17, 76, 212, 76, 6, 1),
+                             tratto(212, 76, 196, 92, 2, 0.6), tratto(212, 76, 212, 284, 7, 1), tratto(212, 284, 197, 300, 2, 0.6),
+                             tratto(1, 136, 196, 136, 6, 1), tratto(196, 136, 212, 120, 2, 0.6)])
+        cornice = tratto(26, 158, 172, 157, 6, 1) + tratto(172, 157, 173, 278, 5, 1) + tratto(173, 279, 26, 279, 6, 1) + tratto(25, 279, 26, 215, 3, 1)
+        righe = tratteggio(28, 160, 170, 276) + tratto(8, 84, 204, 84, 5, 0.4) + tratto(204, 96, 204, 290, 6, 0.4)
+        titolo = tratto(58, 112, 140, 110, 5, 1.6) + " " + tratto(74, 123, 124, 122, 4, 1.4)
+    matita = ""
+    if con_la_matita:
+        # La matita, appoggiata al fianco: la gomma sul ripiano, la punta in alto.
+        bx, by, tx, ty = fianco + 19.0, 299.0, fianco, cima + 66
+        lx, ly = tx - bx, ty - by
+        lung = math.hypot(lx, ly)
+        ux, uy = lx / lung, ly / lung
+        nx, ny = -uy, ux
+        def pezzo(d0, d1, m0, m1):
+            a = (bx + ux * d0 + nx * m0, by + uy * d0 + ny * m0)
+            b = (bx + ux * d1 + nx * m1, by + uy * d1 + ny * m1)
+            c = (bx + ux * d1 - nx * m1, by + uy * d1 - ny * m1)
+            d = (bx + ux * d0 - nx * m0, by + uy * d0 - ny * m0)
+            return "M" + "L".join(f"{n(x)} {n(y)}" for x, y in (a, b, c, d)) + "Z"
+        lati = f"M{n(bx + ux * 24)} {n(by + uy * 24)}L{n(bx + ux * (lung - 30))} {n(by + uy * (lung - 30))}"
+        matita = (f'<path class="mt-gomma" d="{pezzo(0, 13, 4.6, 4.6)}"/><path class="mt-ghiera" d="{pezzo(13, 24, 4.9, 4.9)}"/>'
+                  f'<path class="mt-matita" d="{pezzo(24, lung - 30, 4.6, 4.6)}"/><path class="mt-legno" d="{pezzo(lung - 30, lung - 8, 4.6, 1.6)}"/>'
+                  f'<path class="mt-mina" d="{pezzo(lung - 8, lung, 1.6, 0.2)}"/><path class="mt-lato" d="{lati}"/>')
+    return ('<svg class="matita-disegno" viewBox="0 0 216 302" aria-hidden="true" focusable="false">'
+            f'<path class="mt-ombra" d="{ombra}"/><path class="mt-pagine" d="{dietro}"/><path class="mt-carta" d="{davanti}"/>'
+            f'<path class="mt-righe" d="{righe}"/><path class="mt-contorno" d="{contorno} {cornice}"/>'
+            f'<path class="mt-schizzo" d="{titolo}"/>{matita}</svg>')
 
 
 def pianta():
@@ -532,7 +545,7 @@ def lampada():
 
 
 SEGNI = {"cielo-fronte": lambda: cielo("fr"), "colle": colle, "bosco-fronte": bosco_fronte, "soglia": soglia, "bottega-studio": bottega_studio, "finestra": finestra,
-         "matita": matita, "lampada": lampada}
+         "scatola": lambda: a_matita("scatola"), "libro-matita": lambda: a_matita("libro"), "lampada": lampada}
 PAGINE = ["index.html", "en/index.html", "studio/index.html", "en/studio/index.html"]
 
 
