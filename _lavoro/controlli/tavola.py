@@ -5,7 +5,9 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
 - HTML ben formato e id unici (come forma.py), niente script né stili in linea e le meta al loro posto (risorse.py);
 - sotto i 150 KB (pesi.py);
 - ogni classe tv- usata nelle pagine è in style.css, e ogni classe tv- di style.css serve ad almeno una data;
-- apostrofi tipografici nelle parole che la tavola aggiunge.
+- apostrofi tipografici nelle parole che la tavola aggiunge;
+- le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
+Che nessuna stella tocchi davvero una parola lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
 """
 import collections, datetime, importlib.util, pathlib, re, sys, tempfile
 QUI = pathlib.Path(__file__).resolve().parent
@@ -73,6 +75,11 @@ def main():
                     errori.append("senza_cielo() lascia nella pagina pezzi del cielo o della luna")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
+    # le righe delle parole da cui le stelle stanno lontane: tutte e due le lingue, finestre in piedi e sdraiate
+    for lingua in tavola.PAGINE.values():
+        for stretto, forma in ((True, "più alte che larghe"), (False, "più larghe che alte")):
+            if len(tavola.PAROLE.get((stretto, lingua), ())) < 40:
+                problemi.append(f"parole-fronte.json: poche righe misurate in «{lingua}» per le finestre {forma} (si rifanno con strumenti/parole-fronte.mjs)")
     for riga in problemi:
         print(riga)
     print(f"Tavola del giorno: {pagine} pagine rifatte per {len(date())} date, la più pesante {pesante / KB:.0f} KB, {len(problemi)} problemi")

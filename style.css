@@ -1440,8 +1440,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   }
 }
 @keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
-@keyframes tv-dopo { 0%, 7% { opacity: 0; } 15%, 100% { opacity: 1; } }
-@keyframes tv-nomi { 0%, 7% { opacity: 0; } 15%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
+@keyframes tv-dopo { 0%, 10% { opacity: 0; } 18%, 100% { opacity: 1; } }
+@keyframes tv-nomi { 0%, 10% { opacity: 0; } 18%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
 
 /* La stagione: cambia colori che ci sono già, più la nebbia, i fiori e le lucciole. Di giorno… */
 .tv-velo { fill: #FAF7F0; fill-opacity: 0.62; }

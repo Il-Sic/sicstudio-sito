@@ -32,11 +32,13 @@ Che cosa è vero e che cosa no:
 - il luogo è un punto convenzionale (39,3° N, 16,3° E), non la casa di nessuno;
 - le date delle stagioni (quando nevica, quando il faggio arrossa) sono stimate, da correggere con chi ci vive.
 
-Le stelle non cadono mai sulle parole del frontespizio (sembrerebbero accenti): quelle che ci cadrebbero, le linee e i
-nomi compaiono quando le parole se ne sono andate (.tv-dopo in style.css). Le righe delle parole sono quelle misurate
-per casa.py (PAROLE_FRONTE).
+Le stelle non cadono mai sulle parole del frontespizio (sembrerebbero punti o accenti): quelle che ci cadrebbero, le
+linee e i nomi compaiono quando le parole se ne sono andate (.tv-dopo in style.css). Le righe delle parole le misura
+strumenti/parole-fronte.mjs (parole-fronte.json), a una quarantina di misure di finestra e nelle due lingue; lo
+stesso script, con --controlla, guarda nel browser che nessuna stella tocchi una parola.
 """
 import datetime
+import json
 import math
 import pathlib
 import random
@@ -47,7 +49,6 @@ import zoneinfo
 QUI = pathlib.Path(__file__).resolve().parent
 SITO = QUI.parents[1]
 sys.dont_write_bytecode = True
-sys.path.insert(0, str(QUI))
 LAT, LON = 39.3, 16.3
 ROMA = zoneinfo.ZoneInfo("Europe/Rome")
 MESI = {"it": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
@@ -81,13 +82,22 @@ CON_LA_LUNA = {
            "calante": "with a waning moon", "ultimo": "with the moon at last quarter"},
 }
 
-# Le righe delle parole del frontespizio nelle coordinate del cielo, misurate per casa.py: prima al telefono (390×844
-# e 375×667), poi sul computer (1440×900). Se casa.py non le ha più, nessuna stella viene spostata.
-try:
-    from casa import PAROLE_FRONTE
-except Exception:
-    PAROLE_FRONTE = []
-PAROLE = {True: PAROLE_FRONTE[:16], False: PAROLE_FRONTE[16:]} if len(PAROLE_FRONTE) == 22 else {True: PAROLE_FRONTE, False: PAROLE_FRONTE}
+
+
+def _parole():
+    """Le righe delle parole del frontespizio nelle coordinate del disegno, misurate da strumenti/parole-fronte.mjs a
+    tante misure di finestra e nelle due lingue. Il cielo stretto si vede nelle finestre più alte che larghe, quello
+    largo nelle altre (style.css): a ognuno vanno le righe delle sue misure, tutte insieme, perché la pagina non sa
+    su quale finestra verrà aperta."""
+    righe = {}
+    for lingua, misure in json.loads((QUI / "parole-fronte.json").read_text(encoding="utf-8"))["righe"].items():
+        for misura, r in misure.items():
+            larga, alta = (int(v) for v in misura.split("×"))
+            righe.setdefault((larga <= alta, lingua), []).extend(tuple(q) for q in r)
+    return righe
+
+
+PAROLE = _parole()
 
 
 def n(v):
@@ -622,7 +632,7 @@ def disegna_cielo(giorno, stretto, lingua):
     ingrandisci = 1.3 if stretto else 1.0
 
     def dopo(x, y, margine=0):
-        return any(x0 - margine <= x <= x1 + margine and y0 - margine <= y <= y1 + margine for x0, y0, x1, y1 in PAROLE[stretto])
+        return any(x0 - margine <= x <= x1 + margine and y0 - margine <= y <= y1 + margine for x0, y0, x1, y1 in PAROLE.get((stretto, lingua), ()))
 
     f = {False: [], True: []}
     f[False].append("".join(f'<circle cx="{round(x)}" cy="{round(y)}" r="{round(r)}" fill="url(#tv-g)" opacity="{op:.2f}"/>' for x, y, r, op in c["via"]))
@@ -647,7 +657,7 @@ def disegna_cielo(giorno, stretto, lingua):
     for x, y, g, colore in c["stelle"].values():
         misura = 0 if g < 0.5 else 1 if g < 1.5 else 2 if g < 2.5 else 3 if g < 3.3 else 4 if g < 4.0 else 5
         tinta = " tv-calda" if colore >= 1.0 else " tv-fredda" if colore <= 0.02 else ""
-        quando = dopo(x, y, 5 - misura)
+        quando = dopo(x, y, 12 + 2 * (5 - misura))    # al largo dalle parole: di più le stelle più luminose
         if g < 0.95:
             f[quando or dopo(x, y, 14)].append(f'<circle cx="{round(x)}" cy="{round(y)}" r="{n((3.5 - 0.8 * g) * 4.4 * ingrandisci)}" fill="url(#tv-g)" opacity=".3"/>')
         gruppi.setdefault((quando, misura, tinta), []).append(f"M{round(x)} {round(y)}h0")

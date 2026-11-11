@@ -16,6 +16,9 @@
 # Da sapere: GitHub ferma da solo i lavori a orario nei repository pubblici dopo 60 giorni senza attività (avvisa
 # prima per email, e si riaccendono dalla scheda Actions). Con il lavoro fermo, online resterebbe una tavola vecchia
 # con la sua data.
+# Non c'è da aggirarlo: lo strumento più noto per farlo (keepalive-workflow) GitHub l'ha tolto per violazione dei
+# suoi termini, e un controllo a orario in questo stesso repository si fermerebbe insieme a questo. Basta un po' di
+# attività vera ogni due mesi (un commit, una pull request), o riaccenderlo quando arriva l'email.
 name: La tavola del giorno
 
 on:
