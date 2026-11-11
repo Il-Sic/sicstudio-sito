@@ -18,6 +18,8 @@ sito già costruito, ed è il lavoro giornaliero (.github/workflows/tavola.yml),
     python3 -I _lavoro/disegni/tavola.py --prova [AAAA-MM-GG]      la scrive in _lavoro/prove/tavola/, da guardare con
                                                                    servi.py (http://127.0.0.1:8765/_lavoro/prove/tavola/)
     python3 -I _lavoro/disegni/tavola.py --verifica                rifà i conti su date note (esce con 1 se non tornano)
+    python3 -I _lavoro/disegni/tavola.py --uguali <a> <b>          esce con 0 se due pagine sono uguali a meno dei disegni
+                                                                   del cielo e della luna (lo usa controlli/online.sh)
     python3 -I _lavoro/disegni/tavola.py --estrai <bsc5.dat.gz>    rifà stelle.tsv dal catalogo (serve una volta)
 
 Che cosa è vero e che cosa no:
@@ -211,8 +213,9 @@ FUOCO, ALZO, CX = 520.0, math.radians(32), 720.0
 CY = 790 - 2 * FUOCO * math.tan(ALZO / 2)
 
 
-# Al telefono del disegno si vede solo la fascia di mezzo (circa 550 su 1440): lì il cielo è disegnato una seconda
-# volta, più in piccolo, così in quella fascia entra tutto il sud, da sud-est a sud-ovest e fin oltre lo zenit.
+# In una finestra più alta che larga (un telefono, un tablet in piedi) del disegno si vede solo la fascia di mezzo
+# (al telefono circa 550 su 1440): lì il cielo è disegnato una seconda volta, più in piccolo, così in quella fascia
+# entra tutto il sud, da sud-est a sud-ovest e fin oltre lo zenit. Quale dei due si vede lo decide style.css.
 FUOCO_STRETTO = 300.0
 
 
@@ -414,7 +417,12 @@ def cielo_di_sera(giorno, stretto=False, lingua="it"):
     jd = giuliano(a_notte_fatta(giorno))
     fuoco = FUOCO_STRETTO if stretto else FUOCO
     sin_, des_ = (200, 1240) if stretto else (0, 1440)          # ciò che si disegna
-    nomi_sin, nomi_des = (476, 964) if stretto else (0, 1440)   # dove un nome si legge per intero
+    # Dove un nome si legge per intero. Le stelle e i nomi stanno fermi mentre ci si avvicina alla casa (tv-ferme in
+    # style.css), quindi conta solo la parte del cielo che si vede: nel cielo stretto la fascia del telefono più
+    # alto (STRISCE in casa.py), in quello largo quasi tutto. I nomi vicini ai bordi del cielo largo hanno una classe
+    # in più (tv-bordo) e spariscono nelle finestre poco più larghe che alte, dove cadrebbero fuori.
+    nomi_sin, nomi_des = (505, 935) if stretto else (60, 1390)
+    lettera = 5.5 if stretto else 4.3                           # quanto è larga, in media, una lettera di un nome
     siderale = tempo_siderale(jd)
     anni = (jd - 2451545.0) / 365.25
 
@@ -428,7 +436,8 @@ def cielo_di_sera(giorno, stretto=False, lingua="it"):
         return q is not None and sin_ - margine <= q[0] <= des_ + margine and -margine <= q[1] <= 790
 
     def sotto_la_luna(q):
-        return math.hypot(q[0] - (900 if stretto else 1290), q[1] - (90 if stretto else 200)) < 62
+        # la luna sta in due posti (style.css la sposta sotto i 48rem di larghezza): al largo da tutti e due
+        return any(math.hypot(q[0] - lx, q[1] - ly) < 62 for lx, ly in ((1290, 200), (900, 90)))
 
     # le stelle: tutte quelle del catalogo fino a una certa grandezza (al telefono un po' meno), più quelle delle figure
     posti = {}
@@ -453,12 +462,12 @@ def cielo_di_sera(giorno, stretto=False, lingua="it"):
         if len(viste) >= max(2, math.ceil(len(sue) * 0.6)):
             xs, ys = [posti[s][0] for s in viste], [posti[s][1] for s in viste]
             mx = sum(xs) / len(xs)
-            # il nome sta sotto la figura; se lì ci sono già i monti, o un altro nome, sopra o di lato
+            # il nome sta sotto la figura; se la figura è bassa, o lì c'è un altro nome, sopra o di lato
             sotto, sopra = (mx, max(ys) + 24), (mx, min(ys) - 14)
-            lati = [(max(xs) + 14 + 4.2 * len(titolo), sum(ys) / len(ys)), (min(xs) - 14 - 4.2 * len(titolo), sum(ys) / len(ys))]
             luce = sum(10 ** (-0.4 * posti[s][2]) for s in viste)
             titolo = dire(titolo)
-            nomi.append(([sotto, sopra] + lati if max(ys) < 610 else [sopra] + lati + [sotto], titolo, 2 + min(40, luce * 14)))
+            lati = [(max(xs) + 14 + lettera * len(titolo), sum(ys) / len(ys)), (min(xs) - 14 - lettera * len(titolo), sum(ys) / len(ys))]
+            nomi.append(([sotto, sopra] + lati if max(ys) < 440 else [sopra] + lati + [sotto], titolo, 2 + min(40, luce * 14)))
             scritte |= sue
     for s, titolo in SOLE.items():
         if dentro(s) and s not in scritte:
@@ -508,20 +517,24 @@ def cielo_di_sera(giorno, stretto=False, lingua="it"):
             profondi.append((tipo, q[0], q[1], raggio, gira))
             if titolo:
                 titolo = dire(titolo)
-                nomi.append(([(q[0] + raggio + 6 + 4.2 * len(titolo), q[1] + 5), (q[0] - raggio - 6 - 4.2 * len(titolo), q[1] + 5), (q[0], q[1] - raggio - 7), (q[0], q[1] + raggio + 16)], titolo, 20))
+                nomi.append(([(q[0] + raggio + 6 + lettera * len(titolo), q[1] + 5), (q[0] - raggio - 6 - lettera * len(titolo), q[1] + 5), (q[0], q[1] - raggio - 7), (q[0], q[1] + raggio + 16)], titolo, 20))
 
     # due nomi non devono cadere uno sull'altro: per ognuno, il primo dei suoi posti che è libero e sta nel foglio
     messi = []
     for scelte, titolo, peso in sorted(nomi, key=lambda q: -q[2]):
-        largo = 4.3 * len(titolo) + 8
+        largo = lettera * len(titolo) + 8
         # prima si cerca un posto libero che non copra stelle; nebulose e Via Lattea, se non c'è, si accontentano
         for esigente in (True, False):
             if not esigente and peso not in (50, 20, 18, 15):
                 break
             for x, y in scelte:
-                libero = all(abs(x - mx) > largo + 4.3 * len(mt) + 8 or abs(y - my) > 27 for mx, my, mt, _ in messi)
+                libero = all(abs(x - mx) > largo + lettera * len(mt) + 8 or abs(y - my) > 27 for mx, my, mt, _ in messi)
                 pulito = all(abs(x - sx) > largo or abs(y - 5 - sy) > 11 for sx, sy, g, _ in posti.values() if g < 3.7)
-                if libero and (pulito or not esigente) and nomi_sin + largo < x < nomi_des - largo and 30 < y < 700:
+                # né sopra la casa: lì, avvicinandosi, gli abeti tagliano il cielo prima che i nomi se ne vadano. (Ai
+                # lati i nomi bassi restano: sono quelli dello Scorpione e del Sagittario, e i monti che salgono li
+                # coprono come coprono le loro stelle.)
+                sulla_casa = y > 575 and x + largo > 590 and x - largo < 870
+                if libero and (pulito or not esigente) and not sulla_casa and nomi_sin + largo < x < nomi_des - largo and 30 < y < 700:
                     messi.append((x, y, titolo, peso))
                     break
             else:
@@ -643,7 +656,11 @@ def disegna_cielo(giorno, stretto, lingua):
     for x, y, g, nome in c["pianeti"]:
         r = max(2.3, 3.6 - 0.75 * g) * ingrandisci
         f[dopo(x, y, r * 4)].append(f'<circle cx="{n(x)}" cy="{n(y)}" r="{n(r * 4)}" fill="url(#tv-g)" opacity=".34"/><circle class="tv-{nome.lower()}" cx="{n(x)}" cy="{n(y)}" r="{n(r)}"/>')
-    f[True].append("".join(f'<text class="tv-nome{" tv-nome-pianeta" if peso == 50 else ""}" x="{n(x)}" y="{n(y)}">{t}</text>' for x, y, t, peso in c["nomi"]))
+    def classi(x, titolo, peso):
+        mezzo = 4.3 * len(titolo) + 8
+        return "tv-nome" + (" tv-nome-pianeta" if peso == 50 else "") + (" tv-bordo" if not stretto and (x - mezzo < 280 or x + mezzo > 1180) else "")
+
+    f[True].append("".join(f'<text class="{classi(x, t, peso)}" x="{n(x)}" y="{n(y)}">{t}</text>' for x, y, t, peso in c["nomi"]))
     if {"tv-perseidi", "tv-geminidi"} & set(stagione(giorno)):
         f[True].append('<path class="tv-cadente" d="M612 150l-74 58M846 338l-52 42M360 260l-40 30"/>')
     return f'<g>{"".join(f[False])}</g><g class="tv-dopo">{"".join(f[True])}</g>'
@@ -738,6 +755,14 @@ def studio(pagina, giorno):
     return pagina
 
 
+def senza_cielo(pagina):
+    """La pagina senza i disegni del cielo e della luna, che dipendono da conti con seni e coseni: due computer diversi
+    possono arrotondarli in modo diverso, e una stella sul bordo può esserci in uno e non nell'altro. Il resto (le
+    parole, la data, la stagione, tutto ciò che non è tavola) deve invece essere uguale lettera per lettera."""
+    pagina = re.sub(r'<g class="volta">.*?(?=<g class="(?:fr-zoom|sg-avvicina)">)', "<!-- cielo -->", pagina, flags=re.S)
+    return re.sub(r'<g class="solo-notte" transform="[^"]*">.*?</g>', "<!-- luna -->", pagina, flags=re.S)
+
+
 def scrivi(da, a, giorno):
     """Legge le pagine in «da» e le scrive, con la tavola di quel giorno, in «a» (la stessa cartella, per il sito già
     costruito)."""
@@ -811,6 +836,11 @@ def main():
         return estrai(altri[0])
     if "--verifica" in sys.argv:
         return 1 if verifica() else 0
+    if "--uguali" in sys.argv:
+        if len(altri) != 2:
+            sys.exit("tavola.py --uguali <pagina> <pagina>")
+        una, altra = (senza_cielo(pathlib.Path(f).read_text(encoding="utf-8")) for f in altri)
+        return 0 if una == altra else 1
     if "--prova" in sys.argv:
         scrivi(SITO, SITO / "_lavoro" / "prove" / "tavola", giorno)
     elif len(altri) == 1:
