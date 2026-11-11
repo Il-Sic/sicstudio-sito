@@ -171,6 +171,12 @@ def testa(file, d):
             # Su X l'anteprima grande, come su WhatsApp e iMessage, invece della scheda piccola.
             '<meta name="twitter:card" content="summary_large_image">',
         ]
+        if file == "index.html":
+            # Il nome del sito nei risultati di Google: i dati strutturati WebSite, solo nella home del dominio
+            # (developers.google.com/search/docs/appearance/site-names, letto il 9/11/2026). Sono dati, non uno
+            # script: il browser non li esegue e la CSP non li blocca.
+            righe += ['<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", '
+                      f'"name": "Sic Studio", "url": "{DOMINIO}/"}}</script>']
     else:
         righe += ['<meta name="robots" content="noindex">']
     righe += [

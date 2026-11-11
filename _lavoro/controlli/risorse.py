@@ -1,4 +1,5 @@
 """Niente risorse da altri siti, niente script, attributi on…, style= o <style>; in ogni pagina le meta richieste.
+Fanno eccezione solo i dati strutturati (<script type="application/ld+json"> senza src), che il browser non esegue.
 
 Le meta: charset per prima, subito dopo la Content-Security-Policy esatta e il referrer; poi viewport, lang,
 title, description, canonical, theme-color per chiaro e scuro e color-scheme.
@@ -42,6 +43,8 @@ def controlla_pagina(p):
     # Niente script, stili in linea o gestori di eventi.
     for n, a, riga in tag:
         if n in ("script", "style", "iframe", "form", "object", "embed"):
+            if n == "script" and a.get("type") == "application/ld+json" and set(a) == {"type"}:
+                continue                      # dati strutturati: il browser non li esegue
             problemi.append(f"riga {riga}: <{n}>")
         for chiave in a:
             if chiave.lower().startswith("on"):
