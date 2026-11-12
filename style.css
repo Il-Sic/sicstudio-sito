@@ -1550,9 +1550,14 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .tv-nome { animation-name: tv-nomi; }
     /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
     .tv-largo, .tv-stretto, .tv-carta { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
+    /* Nemmeno il sole dell'angolo: svanisce dov'è. Portato via dal cielo che si allarga, quello in alto finirebbe
+       sotto la testata prima di essere svanito del tutto. Quando è svanito (al 10% della strada) il cielo è largo
+       1,09 volte: lo si stringe di altrettanto. */
+    .tv-emblema { transform-box: view-box; transform-origin: 730px 806px; animation-name: fr-via, tv-sole-fermo; }
   }
 }
 @keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
+@keyframes tv-sole-fermo { 10%, 100% { transform: scale(0.9174); } }
 @keyframes tv-dopo { 0%, 10% { opacity: 0; } 18%, 100% { opacity: 1; } }
 @keyframes tv-nomi { 0%, 10% { opacity: 0; } 18%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
 
