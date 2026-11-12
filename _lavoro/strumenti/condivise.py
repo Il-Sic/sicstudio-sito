@@ -14,6 +14,10 @@ import html, pathlib, re, sys
 
 SITO = pathlib.Path(__file__).resolve().parents[2]
 DOMINIO = "https://sicstudio.app"
+# Il numero di Argonauta sull'App Store (solo le cifre). Vuoto finché l'app non è uscita; da quel giorno le pagine di
+# Argonauta hanno in testa la riga con cui Safari, su iPhone e iPad, mostra la fascia «Apri nell'App Store» (lo
+# Smart App Banner di Apple: funziona senza script).
+APP_STORE = ""
 CSP = ("default-src 'self'; img-src 'self' data:; script-src 'none'; object-src 'none'; "
        "base-uri 'none'; form-action 'none'")
 
@@ -148,6 +152,8 @@ def testa(file, d):
         f"<title>{e(d['titolo'])}</title>",
         f'<meta name="description" content="{e(d["descrizione"])}">',
     ]
+    if APP_STORE and casa == "argonauta":
+        righe += [f'<meta name="apple-itunes-app" content="app-id={APP_STORE}">']
     if percorso:
         it, en = (percorso, altro) if lingua == "it" else (altro, percorso)
         righe += [f'<link rel="canonical" href="{DOMINIO}{percorso}">']
