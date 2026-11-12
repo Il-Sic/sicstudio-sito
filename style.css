@@ -1411,18 +1411,27 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    nomi delle costellazioni (.tv-dopo) compaiono quando le parole se ne sono andate; senza movimento restano nascosti. */
 .tv-stretto { display: none; }
 .tv-dopo, .tv-nome { opacity: 0; }
-.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-polvere, .tv-linea, .tv-cadente, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
-.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5 { stroke-width: var(--punto); }
-.tv-stretto :is(.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5) { stroke-width: calc(var(--punto) * 1.3); }
+.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7, .tv-polvere, .tv-velo-stelle, .tv-linea, .tv-cadente, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
+.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7 { stroke-width: var(--punto); }
+.tv-stretto :is(.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7) { stroke-width: calc(var(--punto) * 1.3); }
 .tv-s0 { --punto: 8.4px; }
 .tv-s1 { --punto: 6.4px; }
 .tv-s2 { --punto: 4.6px; }
 .tv-s3 { --punto: 3.3px; }
 .tv-s4 { --punto: 2.3px; stroke-opacity: 0.92; }
 .tv-s5 { --punto: 1.6px; stroke-opacity: 0.78; }
-.tv-calda { stroke: #FFCB9C; }
-.tv-fredda { stroke: #CDE0FF; }
+.tv-s6 { --punto: 1.25px; stroke-opacity: 0.64; }
+.tv-s7 { --punto: 1px; stroke-opacity: 0.48; }
+/* I colori delle stelle, dal loro indice di colore nel catalogo: dalle azzurre come Spiga alle rosse come Antares. */
+.tv-blu { stroke: #B4CBFF; }
+.tv-azzurra { stroke: #D9E6FF; }
+.tv-gialla { stroke: #FFEBBC; }
+.tv-arancio { stroke: #FFCF9A; }
+.tv-rossa { stroke: #FFAC82; }
 .tv-polvere { stroke-width: 1.05; stroke-opacity: 0.55; }
+.tv-velo-stelle { stroke-width: 0.8; stroke-opacity: 0.4; }
+.tv-luna { fill: #F8EBC8; }
+.tv-mari { fill: #5E5A50; fill-opacity: 0.3; }
 .tv-linea { stroke-width: 0.9; stroke-opacity: 0.3; }
 .tv-cadente { stroke-width: 1.4; stroke-opacity: 0.8; }
 .tv-marte { fill: #F3A07A; }
@@ -1435,8 +1444,29 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-rondini { stroke: var(--testo); stroke-width: 1.5; stroke-linejoin: round; opacity: 0.5; }
 /* La riga della data ha sotto il colore del cielo: le stelle non le passano fra le lettere. */
 .tv-tiratura { position: absolute; inset: 0.6rem auto auto calc(var(--colonna) - 0.5rem); z-index: 1; max-inline-size: calc(100% - 2 * var(--colonna) + 1rem); margin: 0; padding: 0.15rem 0.5rem; border-radius: 3px; background: var(--carta); font: italic 0.95rem/1.35 var(--libro); color: var(--testo-2); }
+/* La riga della data è un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo (.definizione)
+   con il sole, la luna, i pianeti e le stelle di quella sera. Il segno è lo stesso delle parole che si aprono. */
+.tv-apri {
+  display: inline; margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: inherit; cursor: pointer; pointer-events: auto;
+  text-decoration: underline dotted var(--oro); text-decoration-thickness: 1.5px; text-underline-offset: 0.24em;
+}
+.tv-apri::after { content: ""; position: absolute; inset: -0.7rem -0.5rem; }
+@media (hover: hover) { .tv-apri:hover { color: var(--testo); } }
+.tv-lunario { max-width: 38rem; max-height: calc(100svh - 2 * var(--s2)); overflow-y: auto; overscroll-behavior: contain; }
+.tv-lunario::backdrop { background: rgb(3 6 11 / 0.5); }
+.tv-voci { display: grid; margin: var(--s1) 0; }
+.tv-voci > div { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 0 var(--s1); padding: 0.7rem 0; border-top: 0.5px solid var(--riga); }
+.tv-voci dt { font: italic 400 1.2rem/1.3 var(--libro); color: var(--testo-2); }
+@media (max-width: 35.99rem) { .tv-voci > div { grid-template-columns: minmax(0, 1fr); } }
+.tv-voci dd { margin: 0; }
+.tv-lune { display: block; width: 100%; max-width: 21rem; height: auto; margin-top: 0.7rem; }
+.tv-lune-ombra { fill: var(--carta-2); stroke: var(--riga); }
+.tv-lune-luce { fill: var(--stella); }
+.tv-lune-giorno { font: 500 12px var(--strumenti); fill: var(--testo-2); text-anchor: middle; }
+.tv-fonti { padding-top: 0.7rem; border-top: 0.5px solid var(--riga); font-size: 0.875rem; line-height: 1.5; color: var(--testo-2); }
+@supports not selector(:popover-open) { .tv-lunario { display: none; } }
 /* Il cielo stretto è per le finestre più alte che larghe. */
-/* Al telefono la data va su due righe corte: lunga coprirebbe la luna. */
+/* Al telefono la data va su due righe corte: lunga coprirebbe il sole. */
 @media (max-width: 47.99rem) { .tv-tiratura { max-inline-size: 13rem; } }
 @media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
 @media (max-aspect-ratio: 1/1) {
@@ -1447,6 +1477,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
+    .tv-tiratura { animation-name: tv-data; }
     .tv-dopo { animation-name: tv-dopo; }
     .tv-nome { animation-name: tv-nomi; }
     /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
@@ -1454,6 +1485,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   }
 }
 @keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
+/* La riga della data va via con le parole, e sparita non si può più toccare. */
+@keyframes tv-data { 0% { opacity: 1; visibility: visible; } 10%, 100% { opacity: 0; visibility: hidden; } }
 @keyframes tv-dopo { 0%, 10% { opacity: 0; } 18%, 100% { opacity: 1; } }
 @keyframes tv-nomi { 0%, 10% { opacity: 0; } 18%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
 

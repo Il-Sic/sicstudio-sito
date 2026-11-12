@@ -117,9 +117,13 @@ async function nellaPagina(passo, margine, controlla) {
         g[2] = Math.max(g[2], (q.right + margine - m.e) / m.a); g[3] = Math.max(g[3], (q.bottom + margine - m.f) / m.d);
       });
     });
+    // le stelle di una stessa misura stanno in un solo tracciato: quanto si vede e dove cade si chiede una volta per tracciato
+    const visti = new Map();
     for (const s of stelle) {
-      if (opacita(s.el) <= 0.05) continue;
-      const k = s.el.getScreenCTM();
+      let v = visti.get(s.el);
+      if (!v) visti.set(s.el, (v = { si: opacita(s.el) > 0.05, k: s.el.getScreenCTM() }));
+      if (!v.si) continue;
+      const k = v.k;
       const sx = k.a * s.x + k.c * s.y + k.e, sy = k.b * s.x + k.d * s.y + k.f, sr = s.r * Math.hypot(k.a, k.b);
       // una stella conta se tocca il rettangolo delle lettere, stretto di un quinto sopra e sotto (lì c'è l'interlinea)
       if (linee.some((q) => sx + sr > q.left - 2 && sx - sr < q.right + 2 && sy + sr > q.top + q.height * 0.2 && sy - sr < q.bottom - q.height * 0.2)) {

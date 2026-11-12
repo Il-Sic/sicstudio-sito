@@ -3,9 +3,11 @@ lavoro giornaliero, quando è acceso. Qui la si rifà per un giro di date, nelle
 studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regola come le altre:
 - i conti del cielo tornano sulle date note (tavola.py --verifica);
 - HTML ben formato e id unici (come forma.py), niente script né stili in linea e le meta al loro posto (risorse.py);
-- sotto i 150 KB (pesi.py);
+- sotto i 400 KB: dal 12/11 il cielo ha tutte le stelle a occhio nudo e la Via Lattea dipinta, e il peso non è più
+  un vincolo (lo ha detto Sic); il limite resta contro gli errori grossolani;
 - ogni classe tv- usata nelle pagine è in style.css, e ogni classe tv- di style.css serve ad almeno una data;
-- apostrofi tipografici nelle parole che la tavola aggiunge;
+- apostrofi tipografici nelle parole che la tavola aggiunge: la riga della data, i nomi nel cielo, il lunario;
+- la riga della data è un pulsante che apre il lunario, e il lunario c'è, una volta;
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
 Che nessuna stella tocchi davvero una parola lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
 """
@@ -59,20 +61,27 @@ def main():
                 ids = collections.Counter(a["id"] for _, a, _ in albero.tag if "id" in a)
                 errori += [f"id ripetuto: {i} ({c} volte)" for i, c in ids.items() if c > 1]
                 errori += risorse.controlla_pagina(p)
-                if len(testo.encode("utf-8")) > 150 * KB:
-                    errori.append(f"{len(testo.encode('utf-8')) / KB:.0f} KB (massimo 150)")
+                if len(testo.encode("utf-8")) > 400 * KB:
+                    errori.append(f"{len(testo.encode('utf-8')) / KB:.0f} KB (massimo 400)")
                 classi = {c for _, a, _ in albero.tag for c in (a.get("class") or "").split() if c.startswith("tv-")}
                 usate |= classi
                 errori += [f"la classe {c} non è in style.css" for c in sorted(classi - nel_css)]
-                # le parole che la tavola aggiunge: la riga della data e i nomi nel cielo
-                aggiunte = re.findall(r'<(?:p class="tv-tiratura"|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
+                # le parole che la tavola aggiunge: la riga della data, i nomi nel cielo e il lunario
+                aggiunte = re.findall(r'<(?:button type="button" class="tv-apri"[^>]*|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
+                lunario = re.findall(r'<!-- lunario:inizio -->(.*?)<!-- lunario:fine -->', testo, flags=re.S)
+                aggiunte += [pezzo for l in lunario for pezzo in re.findall(r'>([^<]+)<', l)] + [v for l in lunario for v in re.findall(r'aria-label="([^"]*)"', l)]
                 errori += [f"apostrofo dritto in «{a}»" for a in aggiunte if "'" in a]
-                if nome in tavola.PAGINE and not any("tv-tiratura" in (a.get("class") or "") for _, a, _ in albero.tag):
-                    errori.append("manca la riga della data")
+                if nome in tavola.PAGINE:
+                    if testo.count('<p class="tv-tiratura"><button type="button" class="tv-apri" popovertarget="lunario">') != 1:
+                        errori.append("manca la riga della data, o non è il pulsante che apre il lunario")
+                    if len(lunario) != 1 or testo.count('id="lunario" popover') != 1:
+                        errori.append("il lunario non c'è una volta sola")
+                    elif len(re.findall(r'class="tv-lune-giorno"', lunario[0])) != 7 or lunario[0].count("<dt>") != 4:
+                        errori.append("al lunario manca una voce o una delle sette lune")
                 # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
                 spoglia = tavola.senza_cielo(testo)
-                if 'class="volta"' in spoglia or "tv-luna-ombra" in spoglia or "tv-cielo" in spoglia:
-                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo o della luna")
+                if 'class="volta"' in spoglia or "tv-luna" in spoglia or "tv-cielo" in spoglia or "tv-lune" in spoglia or "data:image" in spoglia:
+                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna o del lunario")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     # le righe delle parole da cui le stelle stanno lontane: tutte e due le lingue, finestre in piedi e sdraiate
