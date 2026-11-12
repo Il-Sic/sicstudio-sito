@@ -5,7 +5,11 @@ La mano e la coreografia della home restano quelle di casa.py e di style.css. Ca
   vedono a occhio nudo, con il loro colore, le figure e i nomi delle costellazioni, i pianeti, la Via Lattea con la
   sua Grande Fenditura, due nebulose, due ammassi, una galassia, e la luna dove sta davvero quella sera, con la sua
   fase e la sua faccia (nella finestra della bottega resta il suo segno, con la fase di quella notte);
-- di giorno, il sole più basso d'inverno e più alto d'estate, e le rondini da fine marzo a settembre;
+- di giorno, la luce di due ore dopo il mezzogiorno vero: la casa e gli alberi fanno ombra dalla parte opposta al
+  sole, lunga quanto vuole la sua altezza; e quando le parole del frontespizio se ne vanno il foglio diventa una
+  meridiana, con la strada che il sole fa quel giorno, le ore, le strade dei solstizi e degli equinozi, la luna se
+  di giorno si vede, e il sole al suo posto. Finché ci sono le parole il sole sta in un angolo libero del foglio;
+  da fine marzo a settembre ci sono le rondini. Di notte, con abbastanza luna, le ombre sono quelle della luna;
 - sempre, i colori della stagione (classi tv- su <main>, in style.css): il faggio che arrossa, la nebbia di novembre,
   la neve, i fiori, le lucciole;
 - in testa alla scena, la data della tavola: è un pulsante, e apre il lunario del giorno (il sole, la luna e le sue
@@ -39,13 +43,21 @@ Che cosa è vero e che cosa no:
   grande del vero, e i suoi mari sono uno schizzo. Se a quell'ora è tramontata o è fuori dal foglio, nel cielo non
   c'è, e il lunario dice quando sorge o tramonta (ai cinque minuti);
 - gli orari del sole nel lunario valgono per un orizzonte libero, entro un paio di minuti;
+- la strada del sole e il suo posto sono calcolati (entro mezzo grado), con la stessa proiezione del cielo della
+  notte ma in piccolo e più in alto sul foglio, perché ci stia la strada di ogni stagione; le ore sono quelle
+  dell'orologio, con l'ora legale. Il sole dell'angolo, quello che si vede con le parole, è un segno: sale e scende
+  con la stagione, ma non sta al suo posto vero;
+- le ombre vanno dalla parte giusta e sono lunghe il giusto per l'altezza del sole (o della luna), viste di scorcio:
+  ciò che viene verso chi guarda è accorciato di tre quarti (SCORCIO), a occhio. La casa fa ombra come una sagoma
+  piatta, e i monti non ne fanno;
 - il luogo è un punto convenzionale (39,3° N, 16,3° E), non la casa di nessuno;
 - le date delle stagioni (quando nevica, quando il faggio arrossa) sono stimate, da correggere con chi ci vive.
 
 Le stelle non cadono mai sulle parole del frontespizio (sembrerebbero punti o accenti): quelle che ci cadrebbero, le
 linee e i nomi compaiono quando le parole se ne sono andate (.tv-dopo in style.css). Le righe delle parole le misura
 strumenti/parole-fronte.mjs (parole-fronte.json), a una quarantina di misure di finestra e nelle due lingue; lo
-stesso script, con --controlla, guarda nel browser che nessuna stella tocchi una parola.
+stesso script, con --controlla, guarda nel browser che nessuna stella tocchi una parola. Dalle stesse righe viene il
+posto del sole dell'angolo, di giorno (sole_dell_angolo).
 """
 import base64
 import datetime
@@ -842,6 +854,292 @@ def stagione(giorno):
     return classi
 
 
+# ---------- Il giorno: la strada del sole ----------
+# Di giorno il foglio è una meridiana: la strada che il sole fa quel giorno nel cielo del sud, con le ore, e il sole
+# dov'è due ore dopo il mezzogiorno vero (come di notte il cielo è quello di due ore dopo il tramonto). La proiezione
+# e lo sguardo sono quelli della notte (a sud, alzato di 32 gradi), ma in piccolo e più in alto sul foglio: così ci
+# sta la strada di ogni stagione, dal solstizio d'inverno a quello d'estate, sopra i monti e sopra la casa, che con
+# il colmo del tetto (x = 730) segna il sud.
+FUOCO_GIORNO, CX_GIORNO, ORIZZONTE_GIORNO = 285.0, 730.0, 628.0
+DOPO_MEZZOGIORNO = datetime.timedelta(hours=2)
+
+
+def mezzogiorno(giorno):
+    """Il mezzogiorno vero: l'istante in cui il sole passa a sud, a metà fra l'alba e il tramonto."""
+    sorge, tramonta = sole_del_giorno(giorno)
+    return sorge + (tramonta - sorge) / 2
+
+
+def di_giorno(giorno):
+    """L'ora della tavola di giorno: due ore dopo il mezzogiorno vero, con il sole a sud-ovest e le ombre di traverso."""
+    return mezzogiorno(giorno) + DOPO_MEZZOGIORNO
+
+
+def sole_a(quando):
+    """Altezza e azimut del sole in un istante."""
+    jd = giuliano(quando)
+    ar, dec = dove_sole(jd)
+    return in_cielo(ar / 15, dec, tempo_siderale(jd))
+
+
+def sul_foglio_di_giorno(alt, az):
+    p = sul_foglio(alt, az, FUOCO_GIORNO)
+    return p and (p[0] + CX_GIORNO - CX, p[1] + ORIZZONTE_GIORNO - 790)
+
+
+def strada(altezze):
+    """Una strada del sole sul foglio, da una lista di (altezza, azimut): sopra l'orizzonte e un bel pezzo sotto, dove
+    la coprono i monti e il prato (così non resta mai sospesa a mezz'aria), finché sta davanti a chi guarda."""
+    punti = []
+    for alt, az in altezze:
+        p = sul_foglio_di_giorno(alt, az) if alt > -34 else None
+        if p and -200 < p[0] < 1640 and p[1] < 960:
+            punti.append(p)
+    return punti
+
+
+def strada_di(declinazione):
+    """La strada del sole in un giorno in cui ha quella declinazione: dieci minuti alla volta intorno al mezzogiorno."""
+    return strada(in_cielo(0, declinazione, passo * 2.5) for passo in range(-72, 73))
+
+
+def strada_del(giorno):
+    """La strada del sole di quel giorno, da tre ore prima dell'alba a tre ore dopo il tramonto."""
+    sorge, tramonta = sole_del_giorno(giorno)
+    passi = int((tramonta - sorge).total_seconds() // 600) + 37
+    return strada(sole_a(sorge + datetime.timedelta(minutes=10 * (k - 18))) for k in range(passi))
+
+
+def luna_di_giorno(giorno):
+    """La luna all'ora della tavola di giorno, se si vede: (x, y, quanta se ne vede, gradi verso il sole sul foglio),
+    oppure None. Di giorno si distingue quando è abbastanza illuminata e lontana dal sole, e non troppo bassa."""
+    quando = di_giorno(giorno)
+    jd = giuliano(quando)
+    distanza = sole_e_luna(jd)[2]
+    vista = (1 - math.cos(math.radians(distanza))) / 2
+    ar, dec = dove_luna(jd)
+    alt, az = in_cielo(ar / 15, dec, tempo_siderale(jd))
+    alt -= 0.95 * math.cos(math.radians(alt))          # dalla superficie la luna è un po' più bassa
+    if vista < 0.12 or alt < 6:
+        return None
+    p, s = sul_foglio_di_giorno(alt, az), sul_foglio_di_giorno(*sole_a(quando))
+    if not p or not 40 < p[0] < 1400:
+        return None
+    return p[0], p[1], vista, math.degrees(math.atan2(s[1] - p[1], s[0] - p[0])), alt, az
+
+
+def disegna_giorno(giorno, alone, lingua):
+    """La carta del giorno: le strade dei solstizi e degli equinozi (punteggiate), il meridiano, la strada di oggi con
+    le ore, la luna se di giorno si vede, e il sole dov'è all'ora della tavola. Compare quando le parole del
+    frontespizio se ne sono andate, come le figure delle costellazioni di notte."""
+    it = lingua == "it"
+    ora_tavola = di_giorno(giorno)
+    sorge, tramonta = sole_del_giorno(giorno)
+    oggi = sole_e_luna(giuliano(mezzogiorno(giorno)))[3]
+    f, scritte = [], []
+
+    def scritta(x, y, testo, gira=0, classe=""):
+        ruota = f' transform="rotate({n(gira)} {n(x)} {n(y)})"' if abs(gira) > 0.5 else ""
+        scritte.append(f'<text class="tv-nome tv-scritta{classe}" x="{n(x)}" y="{n(y)}"{ruota}>{testo}</text>')
+
+    def linea(punti):
+        return "M" + "L".join(f"{n(x)} {n(y)}" for x, y in punti)
+
+    # le strade degli altri giorni dell'anno; quella troppo vicina alla strada di oggi si salta
+    for declinazione, nome in ((23.44, "21 giugno" if it else "21 June"), (0, "equinozi" if it else "equinoxes"), (-23.44, "21 dicembre" if it else "21 December")):
+        if abs(declinazione - oggi) < 3.4:
+            continue
+        punti = strada_di(declinazione)
+        f.append(f'<path class="tv-strada tv-strada-altra" d="{linea(punti)}"/>')
+        # il nome lungo la strada, due ore prima del mezzogiorno: dal lato opposto alla strada di oggi
+        (x0, y0), (x, y), (x1, y1) = (sul_foglio_di_giorno(*in_cielo(0, declinazione, h)) for h in (-34, -30, -26))
+        scritta(x, y + (16 if declinazione < oggi else -7), nome, math.degrees(math.atan2(y1 - y0, x1 - x0)))
+    # il meridiano: la riga del sud, dal colmo del tetto fin sopra il sole di giugno
+    f.append(f'<path class="tv-strada tv-meridiano" d="M{n(CX_GIORNO)} 806V{n(sul_foglio_di_giorno(90 - LAT + 23.44, 180)[1] - 16)}"/>')
+    # la strada di oggi
+    f.append(f'<path class="tv-strada" d="{linea(strada_del(giorno))}"/>')
+    # le ore dell'orologio lungo la strada: un grano per ogni ora, con il suo numero sopra (non dove sta il sole)
+    grani = []
+    sole_x, sole_y = sul_foglio_di_giorno(*sole_a(ora_tavola))
+    ora = sorge.replace(minute=0, second=0, microsecond=0) + datetime.timedelta(hours=1)
+    while ora < tramonta:
+        alt, az = sole_a(ora)
+        p = sul_foglio_di_giorno(alt, az)
+        if alt > 3 and p and 60 < p[0] < 1380 and math.hypot(p[0] - sole_x, p[1] - sole_y) > 27:
+            grani.append(f"M{n(p[0])} {n(p[1])}h0")
+            scritta(p[0], p[1] - 10, str(ora.hour if it else (ora.hour - 1) % 12 + 1))
+        ora += datetime.timedelta(hours=1)
+    f.append(f'<path class="tv-ora" d="{"".join(grani)}"/>')
+    # la luna, quando di giorno si vede: solo la parte illuminata, girata verso il sole
+    luna = luna_di_giorno(giorno)
+    if luna:
+        x, y, vista, verso, _, _ = luna
+        r = 11
+        forma = (f'<circle class="tv-luna-giorno" cx="{n(x)}" cy="{n(y)}" r="{r}"/>' if vista > 0.988 else
+                 f'<path class="tv-luna-giorno" transform="translate({n(x)} {n(y)}) rotate({n(verso)})" '
+                 f'd="M0 {-r}A{r} {r} 0 0 1 0 {r}A{n(r * abs(1 - 2 * vista))} {r} 0 0 {0 if vista < 0.5 else 1} 0 {-r}Z"/>')
+        f.append(forma)
+        scritta(x, y + r + 17, "la luna" if it else "the moon")
+    # il sole, con l'ora in cui è lì
+    x, y = sole_x, sole_y
+    f.append(f'<circle cx="{n(x)}" cy="{n(y)}" r="62" fill="url(#{alone})"/><circle class="volta-sole" cx="{n(x)}" cy="{n(y)}" r="13"/>')
+    minuti = ora_tavola.hour * 60 + ora_tavola.minute + round(ora_tavola.second / 60)
+    h, m = divmod(minuti, 60)
+    scritta(x, y + 33, f"{h}:{m:02d}" if it else f"{(h - 1) % 12 + 1}:{m:02d} {'am' if h < 12 else 'pm'}")
+    return "".join(f) + "".join(scritte)
+
+
+# ---------- Le ombre ----------
+# La casa e gli alberi fanno ombra dalla parte opposta al sole dell'ora della tavola, lunga quanto vuole la sua
+# altezza: corta e di fianco d'estate, lunga e verso chi guarda d'inverno. Di notte, se c'è abbastanza luna, l'ombra
+# è quella della luna. Le sagome si leggono dalla scena della soglia così com'è nella pagina; la scena del
+# frontespizio è la stessa in piccolo e riprende lo stesso disegno. Chi guarda sta a nord e guarda a sud: l'est è a
+# sinistra, e ciò che viene verso nord scende nel foglio, accorciato perché il prato è visto di scorcio.
+SCORCIO = 0.26
+
+
+def punti_di(d):
+    """I poligoni di un percorso fatto solo di M, L, H, V e Z, con coordinate assolute."""
+    poligoni, x, y = [], 0.0, 0.0
+    for comando, numeri in re.findall(r"([MLHVZ])([^MLHVZ]*)", d):
+        v = [float(q) for q in re.findall(r"-?\d+(?:\.\d+)?", numeri)]
+        if comando == "M":
+            poligoni.append([])
+        if comando in "ML":
+            for k in range(0, len(v), 2):
+                x, y = v[k], v[k + 1]
+                poligoni[-1].append((x, y))
+        elif comando in "HV":
+            for q in v:
+                x, y = (q, y) if comando == "H" else (x, q)
+                poligoni[-1].append((x, y))
+    return [p for p in poligoni if len(p) > 2]
+
+
+def tondo(cx, cy, rx, ry, lati=28):
+    return [(cx + rx * math.cos(2 * math.pi * k / lati), cy + ry * math.sin(2 * math.pi * k / lati)) for k in range(lati)]
+
+
+def cose_in_piedi(pagina, spoglio=False):
+    """Ciò che sta in piedi sul prato nella scena della soglia, come lista di (sagoma, y del piede); e come quella
+    scena sta in piccolo nel frontespizio: (scala, spostamento in x, spostamento in y). Con la neve il faggio è
+    spoglio, e della sua chioma resta solo il tronco."""
+    lontana, scena = pagina.split('<div class="soglia">')[:2]
+
+    def percorso(classe, dove=scena):
+        return re.search(rf'<path class="{classe}"[^>]*? d="([^"]*)"', dove).group(1)
+
+    def rettangolo(classe, dove=scena):
+        x, y, larga, alta = (float(v) for v in re.search(rf'<rect class="{classe}" x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', dove).groups())
+        return x, y, x + larga, y + alta
+
+    cose = []
+    # la casa: la facciata con il tetto e il camino, tutta d'un pezzo
+    (sx, sy), (cx, cy), (dx, dy) = punti_di(percorso("cs-tetto"))[0]
+    muro, pietra, camino, cima = rettangolo("cs-muro"), rettangolo("cs-pietra"), rettangolo("cs-camino"), rettangolo("cs-camino-cima")
+    falda = lambda x: sy + (cy - sy) * (x - sx) / (cx - sx)        # l'altezza del tetto, sulla falda di sinistra
+    piede = pietra[3]
+    cose.append(([(pietra[0], piede), (pietra[0], pietra[1]), (muro[0], pietra[1]), (muro[0], sy), (sx, sy), (camino[0], falda(camino[0])), (camino[0], cima[3]),
+                  (cima[0], cima[3]), (cima[0], cima[1]), (cima[2], cima[1]), (cima[2], cima[3]), (camino[2], cima[3]), (camino[2], falda(camino[2])), (cx, cy), (dx, dy),
+                  (muro[2], dy), (muro[2], pietra[1]), (pietra[2], pietra[1]), (pietra[2], piede)], piede))
+    # gli alberi: ogni chioma ha il piede in fondo al suo tronco; i tronchi nascosti dietro la casa arrivano a terra dietro il muro
+    tronchi = []
+    for q in punti_di(percorso("cs-tronco")):
+        x0, x1, y0, y1 = min(x for x, _ in q), max(x for x, _ in q), min(y for _, y in q), max(y for _, y in q)
+        tronchi.append([x0, y0, x1, muro[3] + 2 if y1 < muro[3] - 60 and sx < (x0 + x1) / 2 < dx else y1, False])
+    for classe in ("cs-abete", "cs-abete-lontano"):
+        for sagoma in punti_di(percorso(classe)):
+            punta = min(sagoma, key=lambda p: p[1])[0]
+            tronco = min(tronchi, key=lambda t: abs((t[0] + t[2]) / 2 - punta))
+            tronco[4] = True
+            cose.append((sagoma, tronco[3]))
+    for classe in ("cs-pino",) if spoglio else ("cs-faggio", "cs-pino"):
+        for x, y, rx, ry, largo in re.findall(r"M(-?[\d.]+) (-?[\d.]+)a([\d.]+) ([\d.]+) 0 1 0 (-?[\d.]+) 0", percorso(classe)):
+            x, y, rx, ry, largo = float(x), float(y), float(rx), float(ry), float(largo)
+            centro = x + largo / 2
+            liberi = [t for t in tronchi if not t[4] and centro - rx < (t[0] + t[2]) / 2 < centro + rx] or tronchi
+            cose.append((tondo(centro, y, rx, ry), min(liberi, key=lambda t: abs((t[0] + t[2]) / 2 - centro))[3]))
+    cose += [([(x0, y1), (x0, y0), (x1, y0), (x1, y1)], y1) for x0, y0, x1, y1, _ in tronchi]
+    # la legnaia, il ceppo e i cespugli
+    legnaia = punti_di(percorso("cs-legna-fondo"))[0]
+    cose.append((legnaia, max(y for _, y in legnaia)))
+    x0, y0, x1, y1 = rettangolo("cs-ceppo")
+    cose.append(([(x0, y1), (x0, y0), (x1, y0), (x1, y1)], y1))
+    for x, y, r in re.findall(r'<circle cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/>', re.search(r'<g class="cs-cespugli">(.*?)</g>', scena, re.S).group(1)):
+        cose.append((tondo(float(x), float(y), float(r), float(r)), float(y) + 0.85 * float(r)))
+    # la stessa scena, in piccolo, nel frontespizio: lo dice il muro della casa
+    piccolo = rettangolo("cs-muro", lontana)
+    scala = (piccolo[2] - piccolo[0]) / (muro[2] - muro[0])
+    return cose, (scala, piccolo[0] - scala * muro[0], piccolo[1] - scala * muro[1])
+
+
+def coricata(alt, az):
+    """Di quanto si sposta sul foglio, in orizzontale e in verticale, l'ombra di un punto alto uno, con la luce a
+    quell'altezza e a quell'azimut. Con la luce alle spalle di chi guarda le ombre andrebbero verso i monti: None."""
+    lunga = min(1 / math.tan(math.radians(alt)), 3.0)
+    kx, ky = math.sin(math.radians(az)) * lunga, -math.cos(math.radians(az)) * lunga * SCORCIO
+    return (kx, ky) if ky >= 0 else None
+
+
+def ombra(cose, verso, cifre=0):
+    """Le ombre di quelle cose, in un solo percorso: ogni sagoma coricata sul prato intorno al suo piede. I pezzi
+    girano tutti nello stesso verso, così dove si sovrappongono fanno un'ombra sola e non un buco."""
+    kx, ky = verso
+    pezzi = []
+    for sagoma, piede in cose:
+        q = [(x + kx * (piede - y), piede + ky * (piede - y)) for x, y in sagoma]
+        if sum(x0 * y1 - x1 * y0 for (x0, y0), (x1, y1) in zip(q, q[1:] + q[:1])) < 0:
+            q.reverse()
+        pezzi.append("M" + "L".join(f"{round(x, cifre):g} {round(y, cifre):g}" for x, y in q) + "Z")
+    return "".join(pezzi)
+
+
+# Gli alberi dei boschi lontani, alla buona, alti 100 con il piede in (0, 0): l'abete, il faggio, il pino.
+ALBERI = {"ab": [[(-25, 0), (0, -100), (25, 0)]],
+          "fg": [tondo(0, -60, 34, 34, 10), [(-4, 0), (-4, -40), (4, -40), (4, 0)]],
+          "pn": [tondo(0, -78, 34, 13, 10), [(-3, 0), (-3, -70), (3, -70), (3, 0)]]}
+
+
+def ombra_del_bosco(bosco, verso):
+    """Le ombre degli alberi di un bosco lontano (un gruppo di <use> con il posto e la misura di ogni albero)."""
+    cose = []
+    for tipo, x, y, scala in re.findall(r'<use href="#[a-z]+-(ab|fg|pn)" transform="translate\((-?[\d.]+) (-?[\d.]+)\) scale\(([\d.]+)\)"/>', bosco):
+        x, y, scala = float(x), float(y), float(scala)
+        cose += [([(x + scala * a, y + scala * b) for a, b in sagoma], y) for sagoma in ALBERI[tipo]]
+    return ombra(cose, verso, 1)
+
+
+def luci(giorno):
+    """Le luci che fanno ombra quel giorno: il sole dell'ora della tavola e, di notte, la luna, se è alta e ce n'è
+    abbastanza. Una lista di (nome, classe di style.css che dice quando si vede, spostamento dell'ombra)."""
+    sera = cielo_di_sera(giorno)
+    alt, az = sera["luna_alta"]
+    trovate = [("sole", "solo-giorno", coricata(*sole_a(di_giorno(giorno))))]
+    if alt > 12 and sera["chiarore"] > 0.3:
+        trovate.append(("luna", "solo-notte", coricata(alt, az)))
+    return [luce for luce in trovate if luce[2]]
+
+
+def ombre(pagina, giorno):
+    """I tre pezzi da mettere nella pagina: le ombre nel frontespizio (in piccolo), nella soglia, e di nuovo nella
+    soglia sopra il sentiero, che è disegnato dopo gli alberi (dentro un ritaglio a forma di sentiero)."""
+    cose, (scala, x, y) = cose_in_piedi(pagina, "tv-neve" in stagione(giorno))
+    prima = "".join(f'<g class="{quando}"><path id="tv-ombra-{nome}" class="tv-ombra" d="{ombra(cose, verso)}"/></g>' for nome, quando, verso in luci(giorno))
+    riprese = "".join(f'<g class="{quando}"><use href="#tv-ombra-{nome}"/></g>' for nome, quando, _ in luci(giorno))
+    sentiero = re.search(r'<path class="sg-sentiero" d="([^"]*)"/>', pagina).group(1)
+    return (f'<!-- ombre:inizio --><g transform="translate({x:.4g} {y:.4g}) scale({scala:.4g})">{prima}</g><!-- ombre:fine -->',
+            f'<!-- ombre:inizio -->{riprese}<!-- ombre:fine -->',
+            f'<!-- ombre:inizio --><clipPath id="tv-sul-sentiero"><path d="{sentiero}"/></clipPath><g clip-path="url(#tv-sul-sentiero)">{riprese}</g><!-- ombre:fine -->')
+
+
+def con_le_ombre_dei_boschi(pagina, giorno):
+    """La pagina con, sotto ogni bosco lontano, le ombre dei suoi alberi: più leggere, perché sono lontane."""
+    def sotto(m):
+        return ("<!-- ombre:inizio -->" + "".join(f'<g class="{quando}"><path class="tv-ombra tv-ombra-lontana" d="{ombra_del_bosco(m.group(0), verso)}"/></g>'
+                                                  for _, quando, verso in luci(giorno)) + "<!-- ombre:fine -->" + m.group(0))
+    return re.sub(r'<g class="cs-bosco-lontan(?:issim)?o">.*?</g>', sotto, pagina, flags=re.S)
+
+
 # ---------- Il disegno ----------
 
 def luna_svg(vista, cresce, dove="translate(1290 200)"):
@@ -943,10 +1241,17 @@ def disegna_cielo(giorno, stretto, lingua):
     return f'<g>{"".join(f[False])}</g><g class="tv-dopo">{"".join(f[True])}</g>'
 
 
+def sole_dell_angolo(giorno, stretto):
+    """Dove sta il sole di giorno finché ci sono le parole del frontespizio: nelle finestre in piedi (stretto)
+    nell'angolo in alto; nelle altre a destra, da y = 300 al solstizio d'estate a y = 450 a quello d'inverno."""
+    if stretto:
+        return 905, 64
+    declinazione = sole_e_luna(giuliano(mezzogiorno(giorno)))[3]
+    return 1245, 300 + 150 * (23.44 - declinazione) / 46.88
+
+
 def volta(giorno, alone, quale=0, lingua="it"):
     """Il cielo della tavola. La prima scena lo disegna, in due misure; la seconda lo riprende tale e quale."""
-    declinazione = sole_e_luna(giuliano(datetime.datetime(giorno.year, giorno.month, giorno.day, 12, 0, tzinfo=ROMA)))[3]
-    sole_y = 330 - (90 - LAT + declinazione - 27) / 47 * 180
     if quale == 0:
         sfumi = "".join(f'<radialGradient id="tv-{nome}"><stop offset="0" stop-color="{colore}" stop-opacity="{forza}"/><stop offset="1" stop-color="{colore}" stop-opacity="0"/></radialGradient>'
                         for nome, colore, forza in (("g", "#DCE6F6", 1), ("r", "#E98FB2", 0.9), ("b", "#8DB7F2", 0.8)))
@@ -955,8 +1260,10 @@ def volta(giorno, alone, quale=0, lingua="it"):
                   + '</radialGradient>')
         cielo = (f'<defs>{sfumi}</defs><g id="tv-cielo-largo" class="tv-largo">{disegna_cielo(giorno, False, lingua)}</g>'
                  f'<g id="tv-cielo-stretto" class="tv-stretto">{disegna_cielo(giorno, True, lingua)}</g>')
+        carta = f'<g id="tv-carta-giorno" class="tv-carta"><g class="tv-dopo">{disegna_giorno(giorno, alone, lingua)}</g></g>'
     else:
         cielo = '<use href="#tv-cielo-largo"/><use href="#tv-cielo-stretto"/>'
+        carta = '<use href="#tv-carta-giorno"/>'
     rondini = ""
     if (3, 25) <= (giorno.month, giorno.day) <= (9, 20):
         caso = random.Random(giorno.toordinal())
@@ -965,10 +1272,18 @@ def volta(giorno, alone, quale=0, lingua="it"):
             x, y, s = caso.uniform(96, 372), caso.uniform(236, 392), caso.uniform(0.8, 1.35)   # sotto la riga della data
             voli.append(f"M{n(x)} {n(y)}q{n(3.5 * s)} {n(-4.6 * s)} {n(7 * s)} {n(-0.6 * s)}q{n(3.8 * s)} {n(-4 * s)} {n(7.4 * s)} {n(0.8 * s)}")
         rondini = f'<path class="tv-rondini solo-giorno" d="{"".join(voli)}"/>'
-    # Di giorno il sole, al suo posto nel disegno. Di notte la luna non sta più qui: è nel cielo, dove sta davvero.
-    astro = (f'<circle cx="1300" cy="{n(sole_y)}" r="80" fill="url(#{alone})" class="solo-giorno"/>'
-             f'<circle class="volta-sole solo-giorno" cx="1300" cy="{n(sole_y)}" r="18"/>')
-    return f'<g class="volta"><g class="volta-stelle">{cielo}</g>{rondini}<g class="volta-astro">{astro}</g></g>'
+    # Di giorno, con le parole, il sole non può stare al suo posto vero: finirebbe dietro le parole. Sta dove le
+    # parole lasciano libero il foglio a ogni misura di finestra (le stesse righe misurate che tengono lontane le
+    # stelle): nelle finestre larghe a destra, più alto d'estate e più basso d'inverno, ma mai così in alto da
+    # finire sotto la testata sugli schermi bassi; in quelle in piedi nell'angolo in alto, accanto alla data. Quando
+    # le parole se ne vanno lascia il posto alla carta del giorno, dove il sole è dov'è davvero. Di notte la luna non
+    # sta più qui: è nel cielo, dove sta davvero.
+    def emblema(classe, x, y):
+        return (f'<g class="{classe}"><circle cx="{n(x)}" cy="{n(y)}" r="80" fill="url(#{alone})"/>'
+                f'<circle class="volta-sole" cx="{n(x)}" cy="{n(y)}" r="18"/></g>')
+
+    astro = emblema("tv-emblema-largo", *sole_dell_angolo(giorno, False)) + emblema("tv-emblema-stretto", *sole_dell_angolo(giorno, True))
+    return f'<g class="volta"><g class="volta-stelle">{cielo}</g><g class="solo-giorno">{carta}</g>{rondini}<g class="tv-astro solo-giorno"><g class="tv-emblema">{astro}</g></g></g>'
 
 
 def stagionali(giorno):
@@ -1059,6 +1374,20 @@ def lunario(giorno, lingua):
         lungo = quanti(ore, "hour", "hours") + (f" and {quanti(minuti, 'minute', 'minutes')}" if minuti else "")
         rispetto = "the same as yesterday" if cambia == 0 else f"{quanti(abs(cambia), 'minute', 'minutes')} {'longer' if cambia > 0 else 'shorter'} than yesterday"
         sole = f"It rises at {ora(sorge)} and sets at {ora(tramonta)}. The day lasts {lungo}: {rispetto}."
+    # di giorno: l'ora delle ombre, dov'è il sole a quell'ora e quanto sono lunghe
+    ora_ombre = di_giorno(giorno)
+    alt, az = sole_a(ora_ombre)
+    lunga = 1 / math.tan(math.radians(alt))
+    passo = 0 if lunga < 0.66 else 1 if lunga < 0.85 else 2 if lunga < 1.25 else 3 if lunga < 1.75 else 4 if lunga < 2.25 else 5
+    if it:
+        quanto_lunga = ("poco più della metà di", "tre quarti di", "quanto", "una volta e mezza", "due volte", "due volte e mezza")[passo]
+        sole += (f" Le ombre della tavola sono quelle delle {ora(ora_ombre)}, due ore dopo il mezzogiorno vero, con il sole {dove(alt, az)}: "
+                 f"un’ombra è lunga {quanto_lunga} ciò che la fa. Quando le parole del titolo se ne vanno, sul foglio compare la strada che il sole fa oggi, con le ore.")
+    else:
+        quanto_lunga = ("just over half the length of", "three quarters the length of", "as long as", "one and a half times as long as", "twice as long as",
+                        "two and a half times as long as")[passo]
+        sole += (f" The shadows on the plate are those of {ora(ora_ombre)}, two hours after true noon, with the sun {dove(alt, az)}: "
+                 f"a shadow is {quanto_lunga} what casts it. When the title’s words leave, the path the sun takes today appears on the sheet, with its hours.")
 
     # la luna: com'è, dov'è all'ora della tavola, quando tramonta o sorge
     vista, _, nome = fase(giorno)
@@ -1078,6 +1407,13 @@ def lunario(giorno, lingua):
             luna += f" È tramontata {verso_le(prima[-1])}, prima dell’ora della tavola." if it else f" It set {verso_le(prima[-1])}, before the time of the plate."
         elif poi:
             luna += f" Sorge {verso_le(poi[0])}, dopo l’ora della tavola." if it else f" It rises {verso_le(poi[0])}, after the time of the plate."
+
+    if any(nome == "luna" for nome, _, _ in luci(giorno)):
+        luna += " Stanotte le ombre sul prato sono le sue." if it else " Tonight the shadows on the grass are cast by the moon."
+    di_giorno_c_e = luna_di_giorno(giorno)
+    if di_giorno_c_e:
+        luna += (f" Di giorno, alle {ora(ora_ombre)}, è {dove(di_giorno_c_e[4], di_giorno_c_e[5], True)}." if it
+                 else f" By day, at {ora(ora_ombre)}, it is {dove(di_giorno_c_e[4], di_giorno_c_e[5])}.")
 
     # la luna delle sette sere che vengono
     sere, dette = [], []
@@ -1129,14 +1465,16 @@ def lunario(giorno, lingua):
         voci = (("Il sole", sole), ("La luna", luna + lune), ("I pianeti", pianeti), ("Le stelle", stelle))
         fonti = ("Le stelle vengono dal Bright Star Catalogue (Hoffleit e Warren, 1991), con i loro colori. Il sole, la luna e i pianeti sono "
                  "calcolati, e gli orari valgono per un orizzonte libero. La luna è disegnata più grande del vero; le linee delle figure e il "
-                 "chiarore della Via Lattea sono un disegno.")
+                 "chiarore della Via Lattea sono un disegno. Di giorno la strada del sole è disegnata più in piccolo del cielo della notte, perché "
+                 "ci stia tutta; le ombre vanno dalla parte giusta e sono lunghe il giusto, viste di scorcio.")
         chiudi = "Chiudi"
     else:
         apre = f"The sky on the plate is the one at {ora(ora_tavola)}, two hours after sunset, looking south from Calabria."
         voci = (("The sun", sole), ("The moon", luna + lune), ("The planets", pianeti), ("The stars", stelle))
         fonti = ("The stars come from the Bright Star Catalogue (Hoffleit and Warren, 1991), with their colours. The sun, the moon and the planets "
                  "are computed, and the times hold for a clear horizon. The moon is drawn larger than life; the lines of the figures and the "
-                 "glow of the Milky Way are a drawing.")
+                 "glow of the Milky Way are a drawing. By day the sun’s path is drawn smaller than the night sky, so that all of it fits; "
+                 "the shadows fall the right way and are the right length, seen foreshortened.")
         chiudi = "Close"
     return ('<!-- lunario:inizio --><div class="definizione tv-lunario" id="lunario" popover>\n'
             f'  <p class="definizione-termine">{data}</p>\n  <p>{apre}</p>\n  <dl class="tv-voci">\n'
@@ -1166,6 +1504,12 @@ def tavola(pagina, giorno, lingua):
     cambia(r'<main id="contenuto" class="pagina-casa">', f'<main id="contenuto" class="pagina-casa {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">')
     dietro, sopra = stagionali(giorno)
     cambia(r'<!-- colle:inizio -->(<path class="fr-collina"[^>]*/>)', lambda m: dietro + "<!-- colle:inizio -->" + m.group(1) + sopra)
+    # le ombre della casa e degli alberi: sul prato delle due scene, sotto i tronchi, e sopra il sentiero della soglia
+    lontane, vicine, sul_sentiero = ombre(pagina, giorno)
+    sul_prato = iter((lontane, vicine))
+    cambia(r'<path class="cs-tronco"', lambda m: next(sul_prato) + m.group(0), 2)
+    cambia(r'<path class="sg-sentiero" d="[^"]*"/>', lambda m: m.group(0) + sul_sentiero)
+    pagina = con_le_ombre_dei_boschi(pagina, giorno)
     mancano = [schema for schema, fatto in conta if not fatto]
     if mancano:
         sys.exit(f"tavola.py: nella pagina ({lingua}) non trovo: {mancano}. La home è cambiata: va aggiornato tavola().")
@@ -1188,6 +1532,7 @@ def senza_cielo(pagina):
     parole, la data, la stagione, tutto ciò che non è tavola) deve invece essere uguale lettera per lettera."""
     pagina = re.sub(r'<g class="volta">.*?(?=<g class="(?:fr-zoom|sg-avvicina)">)', "<!-- cielo -->", pagina, flags=re.S)
     pagina = re.sub(r'<!-- lunario:inizio -->.*?<!-- lunario:fine -->', "<!-- lunario -->", pagina, flags=re.S)   # anche il lunario è fatto di quei conti
+    pagina = re.sub(r'<!-- ombre:inizio -->.*?<!-- ombre:fine -->', "<!-- ombre -->", pagina, flags=re.S)         # e le ombre
     return re.sub(r'<g class="solo-notte" transform="[^"]*">.*?</g>', "<!-- luna -->", pagina, flags=re.S)
 
 
@@ -1259,6 +1604,19 @@ def verifica():
     prova("luna piena del 17 settembre 2024: minuti fra il tramonto del sole e il sorgere della luna", (sorge - tramonto(piena)).total_seconds() / 60, 0, 25)
     alba = sole_del_giorno(datetime.date(2026, 6, 21))[0]
     prova("alba del 21/6, in ore", alba.hour + alba.minute / 60, 5.5, 0.15)
+    # il giorno: a mezzogiorno vero il sole sta a sud, alto quanto vogliono la latitudine e la stagione
+    for giorno, declinazione in ((datetime.date(2026, 6, 21), 23.44), (datetime.date(2026, 12, 21), -23.44)):
+        alt, az = sole_a(mezzogiorno(giorno))
+        prova(f"mezzogiorno vero del {giorno.day}/{giorno.month}: azimut del sole", az, 180, 0.4)
+        prova("  e altezza", alt, 90 - LAT + declinazione, 0.05)
+    quando = mezzogiorno(datetime.date(2026, 11, 3))
+    prova("mezzogiorno vero del 3/11, quando il sole è più in anticipo: in ore", quando.hour + quando.minute / 60, 11 + 38.5 / 60, 0.04)
+    # le ombre: con il sole a sud vengono dritte verso chi guarda, con il sole a ovest vanno a sinistra; a 45 gradi sono lunghe quanto le cose
+    kx, ky = coricata(45, 180)
+    prova("ombra con il sole a sud, alto 45 gradi: di fianco", kx, 0, 0.001)
+    prova("  e verso chi guarda", ky, SCORCIO, 0.001)
+    prova("ombra con il sole a ovest, alto 45 gradi: di fianco", coricata(45, 270)[0], -1, 0.001)
+    prova("ombre dalla scena della soglia: quante cose in piedi", len(cose_in_piedi((SITO / "index.html").read_text(encoding="utf-8"))[0]), 29, 3)
     return sbagliati
 
 
