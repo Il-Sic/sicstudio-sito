@@ -5,7 +5,7 @@ import pathlib, subprocess, sys
 
 QUI = pathlib.Path(__file__).resolve().parent
 CONTROLLI = ["privacy", "risorse", "collegamenti", "forma", "contrasto", "pesi", "movimento", "exif", "schermate",
-             "indirizzi", "apostrofi", "parole", "tavola"]
+             "indirizzi", "apostrofi", "parole", "tavola", "generati"]
 # Un controllo che non ha potuto guardare esce con 3: non è un problema, ma nel riassunto non deve sembrare «ok».
 # Lo fa parole.py quando manca la sua lista, che sta solo sul Mac: su GitHub è sempre così.
 SALTATO = 3
