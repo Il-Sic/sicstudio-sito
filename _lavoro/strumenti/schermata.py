@@ -8,9 +8,11 @@ le offre per prime, con srcset e sizes, e il JPEG resta la riserva. Con --pagine
 schermate già nelle pagine (tutte, o quelle date), dai file che ci sono in img/schermate: va lanciato quando le copie
 cambiano larghezza o una schermata le ha per la prima volta. L'<img> resta com'è, con il suo testo alternativo.
 """
-import functools, pathlib, re, subprocess, sys
+import functools, pathlib, re, sys
 
 SITO = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(SITO / "_lavoro" / "controlli"))
+import comune  # noqa: E402
 CARTELLA = SITO / "img" / "schermate"
 SCURO = "(prefers-color-scheme: dark)"
 
@@ -28,10 +30,12 @@ FIGURA = re.compile(r'(?P<a>[ \t]*)<picture>\n(?:[ \t]*<source [^>]*>\n)*(?P<b>[
 
 @functools.cache
 def misure(p):
-    out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", str(p)], capture_output=True, text=True).stdout
-    w = int(out.split("pixelWidth:")[1].split()[0])
-    h = int(out.split("pixelHeight:")[1].split()[0])
-    return w, h
+    """Larghezza e altezza di un'immagine, lette dal file come fanno i controlli (prima le chiedeva a sips, che c'è
+    solo sul Mac: così lo script gira anche su GitHub, dentro costruisci.py --verifica)."""
+    m = comune.misure(p)
+    if m is None:
+        sys.exit(f"schermata.py: non capisco le misure di {p}")
+    return m[1], m[2]
 
 
 def candidati(nome, tema, formato):

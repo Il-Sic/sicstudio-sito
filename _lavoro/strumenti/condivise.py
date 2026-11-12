@@ -284,7 +284,7 @@ def piede(file, d):
         f'      <p class="crediti" id="crediti">{p["crediti"]}</p>',
         '    </div>',
         '  </div>',
-        "  <!-- [P.IVA]: da mettere quando c'è, così: <p>P.IVA 01234567890</p> -->",
+        # La partita IVA, quando c'è, va qui dentro, in una riga <p> del colophon (va indicata nella home del sito).
         '</footer>',
     ])
 
@@ -299,33 +299,37 @@ def scheletro(d):
 
 
 def aggiorna(file, d, nuove):
+    """Riscrive le tre parti di una pagina. Ritorna quanti problemi ha trovato: la pagina che manca, o una parte i cui
+    segni non ci sono una volta sola (scritti male, tolti o doppi)."""
     p = SITO / file
     if not p.exists():
         if not nuove:
             print(f"manca {file}")
-            return
+            return 1
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(scheletro(d), encoding="utf-8")
         print(f"creata {file}")
     testo = p.read_text(encoding="utf-8")
     prima = testo
+    problemi = 0
     for parte, funzione in PARTI.items():
         modello = re.compile(rf"(<!-- {parte}:inizio -->\n).*?(<!-- {parte}:fine -->)", re.S)
-        if not modello.search(testo):
-            print(f"{file}: mancano i segni di «{parte}»")
-            continue
-        testo = modello.sub(lambda m: m.group(1) + funzione(file, d) + "\n" + m.group(2), testo)
+        testo, quante = modello.subn(lambda m: m.group(1) + funzione(file, d) + "\n" + m.group(2), testo)
+        if quante != 1:
+            print(f"{file}: i segni di «{parte}» ci sono {quante} volte invece di una")
+            problemi += 1
     testo = re.sub(r'<html lang="[a-z]+"', f'<html lang="{d["lingua"]}"', testo, count=1)
-    if testo != prima:
+    if testo != prima and not problemi:
         p.write_text(testo, encoding="utf-8")
         print(f"aggiornata {file}")
+    return problemi
 
 
 def main():
     nuove = "--nuove" in sys.argv
-    for file, d in PAGINE.items():
-        aggiorna(file, d, nuove)
+    problemi = sum(aggiorna(file, d, nuove) for file, d in PAGINE.items())
+    return 1 if problemi else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -546,23 +546,31 @@ def lampada():
 
 SEGNI = {"cielo-fronte": lambda: cielo("fr"), "colle": colle, "bosco-fronte": bosco_fronte, "soglia": soglia, "bottega-studio": bottega_studio, "finestra": finestra,
          "scatola": lambda: a_matita("scatola"), "libro-matita": lambda: a_matita("libro"), "lampada": lampada}
-PAGINE = ["index.html", "en/index.html", "studio/index.html", "en/studio/index.html"]
+# I disegni che ogni pagina deve avere. Un progetto in cantiere in più sulle mensole vuol dire un segno in più qui.
+CASA = ["cielo-fronte", "colle", "bosco-fronte", "soglia", "finestra", "scatola", "lampada"]
+PAGINE = {"index.html": CASA, "en/index.html": CASA, "studio/index.html": ["bottega-studio"], "en/studio/index.html": ["bottega-studio"]}
 
 
 def main():
-    for f in PAGINE:
+    """Esce con 1, senza scrivere la pagina, se un segno atteso non c'è una volta sola (scritto male, tolto o
+    doppio) o se nella pagina c'è un segno di questo script che non è fra gli attesi."""
+    problemi = 0
+    for f, attesi in PAGINE.items():
         p = SITO / f
         t = p.read_text(encoding="utf-8")
-        cambiati = []
+        guai = []
         for segno, fn in SEGNI.items():
             a, b = f"<!-- {segno}:inizio -->", f"<!-- {segno}:fine -->"
-            if a not in t:
-                continue
-            t = re.sub(re.escape(a) + r".*?" + re.escape(b), lambda m: a + fn() + b, t, flags=re.S)
-            cambiati.append(segno)
+            t, quante = re.subn(re.escape(a) + r".*?" + re.escape(b), lambda m: a + fn() + b, t, flags=re.S)
+            if quante != (1 if segno in attesi else 0):
+                guai.append(f"«{segno}» c'è {quante} volte invece di {1 if segno in attesi else 0}")
+        if guai:
+            print(f"{f}: " + "; ".join(guai))
+            problemi += len(guai)
+            continue
         p.write_text(t, encoding="utf-8")
-        print(f, ", ".join(cambiati) or "niente")
-    return 0
+        print(f, ", ".join(attesi))
+    return 1 if problemi else 0
 
 
 if __name__ == "__main__":

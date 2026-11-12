@@ -1,6 +1,7 @@
-# La tavola del giorno: ogni notte, e a ogni push su main, costruisce il sito come fa GitHub Pages, scrive nella home
-# la tavola di quel giorno (_lavoro/disegni/tavola.py: il cielo di quella sera, la luna, la stagione, la data) e lo
-# pubblica.
+# La tavola del giorno: ogni notte, poco dopo mezzanotte, e a ogni push su main, costruisce il sito come fa GitHub
+# Pages, scrive nella home
+# la tavola di quel giorno (_lavoro/disegni/tavola.py: il cielo di quella sera, la luna, la stagione, la data) e
+# lo pubblica.
 #
 # È SPENTO finché non si fanno, a mano, due cose nelle impostazioni del repository:
 #   1. Settings › Pages › Build and deployment › Source: «GitHub Actions» (invece di «Deploy from a branch»);
@@ -21,9 +22,15 @@
 # attività vera ogni due mesi (un commit, una pull request), o riaccenderlo quando arriva l'email.
 name: La tavola del giorno
 
+# Gli orari sono in UTC, e GitHub non li rispetta al minuto: il primo lancio a orario (11/11/2026) è partito con sette
+# ore di ritardo, e nei momenti di carico un lancio può saltare. Per questo sono tre: i primi due cadono dieci minuti
+# dopo la mezzanotte italiana, uno d'estate e uno d'inverno (l'altro rifà la tavola che c'è già), il terzo è di
+# riserva al mattino. Fino al primo che arriva, online resta la tavola di ieri con la sua data.
 on:
   schedule:
-    - cron: "40 2 * * *"   # le 3:40 d'inverno e le 4:40 d'estate, in Italia: dopo mezzanotte, prima del giorno
+    - cron: "10 22 * * *"   # 00:10 in Italia con l'ora legale
+    - cron: "10 23 * * *"   # 00:10 in Italia con l'ora solare
+    - cron: "40 3 * * *"    # di riserva: le 4:40 o le 5:40 del mattino
   push:
     branches: [main]
   workflow_dispatch:
