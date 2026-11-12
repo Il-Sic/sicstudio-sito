@@ -5,7 +5,8 @@
 //
 //     node _lavoro/strumenti/parole-fronte.mjs               misura, e scrive disegni/parole-fronte.json
 //     node _lavoro/strumenti/parole-fronte.mjs --controlla   guarda la prova (tavola.py --prova) a queste misure e ad
-//                                                            altre mai misurate: nessuna stella deve toccare una parola
+//                                                            altre mai misurate: nessuna stella deve toccare una parola,
+//                                                            e le parole devono stare sopra gli alberi della casa
 //
 // Si rilancia quando cambiano le parole o le loro misure in style.css; poi «tavola.py --prova» e «--controlla».
 // Servono Node 22 o più, Google Chrome (lo guida senza finestra, dal suo protocollo di debug) e il server del sito
@@ -77,7 +78,8 @@ async function chrome() {
 }
 
 // Gira nella pagina. Scorre il frontespizio finché le parole si vedono; a ogni passo prende i rettangoli delle righe.
-// Se «controlla», conta anche le stelle della tavola che in quel momento si vedono e toccano una riga.
+// Se «controlla», conta anche le stelle della tavola che in quel momento si vedono e toccano una riga, e misura quanto
+// resta fra l'ultima riga e la cima degli alberi della casa quando le parole si vedono tutte («sopra», in px).
 async function nellaPagina(passo, margine, controlla) {
   await document.fonts.ready;
   const fotogramma = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -90,6 +92,8 @@ async function nellaPagina(passo, margine, controlla) {
   const giro = document.createTreeWalker(parole, NodeFilter.SHOW_TEXT);
   while (giro.nextNode()) if (giro.currentNode.textContent.trim()) testi.push(giro.currentNode);
   const righe = {}, toccano = new Set();
+  const casa = [...disegno.querySelectorAll('.fr-terra :is(.cs-abete, .cs-abete-lontano, .cs-tetto, .cs-faggio, .cs-pino)')];
+  let sopra = Infinity;
   // le stelle e i pianeti del cielo che si vede a questa misura (largo o stretto)
   const cielo = controlla && [...disegno.querySelectorAll('.tv-largo, .tv-stretto')].find((g) => getComputedStyle(g).display !== 'none');
   const stelle = [];
@@ -117,6 +121,10 @@ async function nellaPagina(passo, margine, controlla) {
         g[2] = Math.max(g[2], (q.right + margine - m.e) / m.a); g[3] = Math.max(g[3], (q.bottom + margine - m.f) / m.d);
       });
     });
+    if (controlla && linee.length && testi.every((t) => opacita(t.parentElement) > 0.9)) {
+      const fondo = Math.max(...linee.map((q) => q.bottom)), sx = Math.min(...linee.map((q) => q.left)), dx = Math.max(...linee.map((q) => q.right));
+      for (const el of casa) { const q = el.getBoundingClientRect(); if (q.right > sx && q.left < dx) sopra = Math.min(sopra, q.top - fondo); }
+    }
     // le stelle di una stessa misura stanno in un solo tracciato: quanto si vede e dove cade si chiede una volta per tracciato
     const visti = new Map();
     for (const s of stelle) {
@@ -134,13 +142,13 @@ async function nellaPagina(passo, margine, controlla) {
   scrollTo(0, 0);
   return {
     righe: Object.values(righe).map((g) => [Math.floor(g[0]), Math.floor(g[1]), Math.ceil(g[2]), Math.ceil(g[3])]),
-    stelle: stelle.length, toccano: [...toccano],
+    stelle: stelle.length, toccano: [...toccano], sopra: Number.isFinite(sopra) ? Math.round(sopra) : null,
   };
 }
 
 const controlla = process.argv.includes('--controlla');
 const b = await chrome();
-let problemi = 0;
+let problemi = 0, vicine = Infinity;
 try {
   if (controlla) {
     for (const [lingua, pagina] of Object.entries(PAGINE)) {
@@ -148,9 +156,12 @@ try {
         const e = await b.guarda(`${SITO}/_lavoro/prove/tavola${pagina}`, m, nellaPagina, PASSO, MARGINE, true);
         if (!e.stelle) { console.log(`${lingua} ${m}: non trovo il cielo della tavola (prima «tavola.py --prova»)`); problemi++; continue; }
         if (e.toccano.length) { console.log(`${lingua} ${m.replace('x', '×')}: ${e.toccano.length} stelle sulle parole, a ${e.toccano.join(' ')}`); problemi += e.toccano.length; }
+        // le parole stanno sopra la casa: almeno 12 px fra l'ultima riga e la cima degli alberi
+        if (e.sopra !== null && e.sopra < 12) { console.log(`${lingua} ${m.replace('x', '×')}: le parole arrivano a ${e.sopra} px dalla cima degli alberi della casa`); problemi++; }
+        if (e.sopra !== null) vicine = Math.min(vicine, e.sopra);
       }
     }
-    console.log(problemi ? `${problemi} problemi` : `Nessuna stella sulle parole: ${MISURE.length + ALTRE.length} misure, due lingue.`);
+    console.log(problemi ? `${problemi} problemi` : `Nessuna stella sulle parole, e le parole stanno sopra la casa (almeno ${vicine} px): ${MISURE.length + ALTRE.length} misure, due lingue.`);
   } else {
     const righe = {};
     for (const [lingua, pagina] of Object.entries(PAGINE)) {
