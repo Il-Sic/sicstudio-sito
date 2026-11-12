@@ -12,8 +12,9 @@ La mano e la coreografia della home restano quelle di casa.py e di style.css. Ca
   da fine marzo a settembre ci sono le rondini. Di notte, con abbastanza luna, le ombre sono quelle della luna;
 - sempre, i colori della stagione (classi tv- su <main>, in style.css): il faggio che arrossa, la nebbia di novembre,
   la neve, i fiori, le lucciole;
-- in testa alla scena, la data della tavola: è un pulsante, e apre il lunario del giorno (il sole, la luna e le sue
-  prossime sette sere, i pianeti, le stelle, le fonti), un foglio che si apre senza JavaScript (popover).
+- nella testata, la luna del giorno nella sua fase e la data accanto (sul disegno non c'è scritto nulla): sono un
+  pulsante, e aprono il lunario del giorno (il sole, la luna e le sue prossime sette sere, i pianeti, le stelle, le
+  fonti), un foglio che si apre senza JavaScript (popover).
 Nel browser non gira niente: tutto è calcolato qui e scritto nell'HTML.
 
 Le pagine in git restano quelle di sempre, senza data: questo script non le tocca. Scrive la tavola in una copia del
@@ -1269,7 +1270,7 @@ def volta(giorno, alone, quale=0, lingua="it"):
         caso = random.Random(giorno.toordinal())
         voli = []
         for _ in range(caso.randint(3, 6)):
-            x, y, s = caso.uniform(96, 372), caso.uniform(236, 392), caso.uniform(0.8, 1.35)   # sotto la riga della data
+            x, y, s = caso.uniform(96, 372), caso.uniform(236, 392), caso.uniform(0.8, 1.35)   # in alto a sinistra, lontano dalle parole
             voli.append(f"M{n(x)} {n(y)}q{n(3.5 * s)} {n(-4.6 * s)} {n(7 * s)} {n(-0.6 * s)}q{n(3.8 * s)} {n(-4 * s)} {n(7.4 * s)} {n(0.8 * s)}")
         rondini = f'<path class="tv-rondini solo-giorno" d="{"".join(voli)}"/>'
     # Di giorno, con le parole, il sole non può stare al suo posto vero: finirebbe dietro le parole. Sta dove le
@@ -1305,20 +1306,44 @@ def stagionali(giorno):
     return dietro, sopra
 
 
-def riga_della_data(giorno, lingua):
-    """«Tavola dell’11 novembre 2026, con la luna crescente.»"""
-    luna = CON_LA_LUNA[lingua][fase(giorno)[2]]
-    mese = MESI[lingua][giorno.month - 1]
+GIORNI = {"it": ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"],
+          "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
+MESI_BREVI = {"it": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
+              "en": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]}
+
+
+def luna_piccola(quanta):
+    """La luna di una sera in un tondo di raggio 13, crescente: l'ombra e, sopra, la parte illuminata. Calante è la
+    stessa allo specchio."""
+    if quanta > 0.988:
+        luce = '<circle class="tv-lune-luce" r="13"/>'
+    elif quanta < 0.012:
+        luce = ""
+    else:
+        luce = f'<path class="tv-lune-luce" d="M0 -13A13 13 0 0 1 0 13A{n(13 * abs(1 - 2 * quanta))} 13 0 0 {0 if quanta < 0.5 else 1} 0 -13Z"/>'
+    return f'<circle class="tv-lune-ombra" r="13"/>{luce}'
+
+
+def oggi_in_testata(giorno, lingua):
+    """La luna del giorno, nella sua fase, e la data accanto: stanno nella testata, come la data in quella di un
+    giornale, e sono il pulsante che apre il lunario. Sul disegno non c'è scritto nulla. La data ha due forme, «giovedì
+    12 novembre» dove c'è posto e «12 nov» al telefono; chi non vede sente la frase intera."""
+    quanta, cresce, come = fase(giorno)
+    mese, settimana = MESI[lingua][giorno.month - 1], GIORNI[lingua][giorno.weekday()]
     if lingua == "en":
-        return f"Plate for {giorno.day} {mese} {giorno.year}, {luna}."
-    del_ = "dell’" if giorno.day in (1, 8, 11) else "del "
-    return f"Tavola {del_}{'1º' if giorno.day == 1 else giorno.day} {mese} {giorno.year}, {luna}."
+        lunga, corta = f"{settimana} {giorno.day} {mese}", f"{giorno.day} {MESI_BREVI[lingua][giorno.month - 1]}"
+        nome = f"Plate for {lunga} {giorno.year}, {CON_LA_LUNA[lingua][come]}: open the almanac"
+    else:
+        numero = "1º" if giorno.day == 1 else giorno.day
+        lunga, corta = f"{settimana} {numero} {mese}", f"{numero} {MESI_BREVI[lingua][giorno.month - 1]}"
+        nome = f"Tavola di {lunga} {giorno.year}, {CON_LA_LUNA[lingua][come]}: apri il lunario"
+    luna = (f'<svg class="tv-sigillo" viewBox="-15 -15 30 30" aria-hidden="true" focusable="false"><g{"" if cresce else " transform=" + chr(34) + "scale(-1 1)" + chr(34)}>'
+            f'{luna_piccola(quanta)}</g></svg>')
+    return (f'<button type="button" class="tv-oggi" popovertarget="lunario" aria-label="{nome}">{luna}'
+            f'<span class="tv-oggi-lunga">{lunga}</span><span class="tv-oggi-corta">{corta}</span></button>\n    ')
 
 
 # ---------- Il lunario: le stesse cose della tavola, dette a parole ----------
-
-GIORNI = {"it": ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"],
-          "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
 VERSO = {"it": ["nord", "nord-est", "est", "sud-est", "sud", "sud-ovest", "ovest", "nord-ovest"],
          "en": ["the north", "the north-east", "the east", "the south-east", "the south", "the south-west", "the west", "the north-west"]}
 LA_LUNA_E = {"it": {"nuova": "È nuova: non si vede.", "crescente": "È crescente, illuminata per {quanto}%.", "primo": "È al primo quarto, illuminata per {quanto}%.",
@@ -1330,7 +1355,7 @@ FASI = {"it": {"nuova": "nuova", "crescente": "crescente", "primo": "primo quart
 
 
 def lunario(giorno, lingua):
-    """Il lunario del giorno: il foglio che si apre dalla riga della data, con il sole, la luna, i pianeti e le
+    """Il lunario del giorno: il foglio che si apre dalla luna della testata, con il sole, la luna, i pianeti e le
     stelle di quella sera detti a parole, e la luna delle sette sere che vengono. Tutto viene dagli stessi conti
     della tavola; gli orari della luna sono arrotondati ai cinque minuti, perché i conti non sono più fini di così."""
     it = lingua == "it"
@@ -1421,14 +1446,8 @@ def lunario(giorno, lingua):
         sera = giorno + datetime.timedelta(days=k)
         quanta, cresce, come = fase(sera)
         x = 24 + 48 * k
-        if quanta > 0.988:
-            luce = '<circle class="tv-lune-luce" r="13"/>'
-        elif quanta < 0.012:
-            luce = ""
-        else:
-            luce = f'<path class="tv-lune-luce" d="M0 -13A13 13 0 0 1 0 13A{n(13 * abs(1 - 2 * quanta))} 13 0 0 {0 if quanta < 0.5 else 1} 0 -13Z"/>'
         giorno_breve = f"{GIORNI[lingua][sera.weekday()][:3]} {sera.day}"
-        sere.append(f'<g transform="translate({x} 18){"" if cresce else " scale(-1 1)"}"><circle class="tv-lune-ombra" r="13"/>{luce}</g>'
+        sere.append(f'<g transform="translate({x} 18){"" if cresce else " scale(-1 1)"}">{luna_piccola(quanta)}</g>'
                     f'<text class="tv-lune-giorno" x="{x}" y="52">{giorno_breve}</text>')
         dette.append(f"{giorno_breve} {FASI[lingua][come]}")
     lune = (f'<svg class="tv-lune" viewBox="0 0 336 60" role="img" aria-label="{"La luna delle prossime sere" if it else "The moon on the coming evenings"}: {", ".join(dette)}">'
@@ -1498,8 +1517,8 @@ def tavola(pagina, giorno, lingua):
     # anche la luna che si vede dalla finestra della bottega ha la fase di quella notte
     vista, cresce, _ = fase(giorno)
     cambia(r'<path class="fn-falce solo-notte"[^>]*/>', lambda m: luna_svg(vista, cresce, "translate(214 72) scale(0.56)"))
-    # la riga della data è un pulsante: apre il lunario, che sta in fondo a <main>
-    cambia(r'<div class="frontespizio-parole">', lambda m: f'<p class="tv-tiratura"><button type="button" class="tv-apri" popovertarget="lunario">{riga_della_data(giorno, lingua)}</button></p>\n      ' + m.group(0))
+    # la luna del giorno e la data stanno nella testata: sono il pulsante che apre il lunario, che sta in fondo a <main>
+    cambia(r'<nav class="menu-largo"', lambda m: oggi_in_testata(giorno, lingua) + m.group(0))
     cambia(r'</main>', lambda m: lunario(giorno, lingua) + m.group(0))
     cambia(r'<main id="contenuto" class="pagina-casa">', f'<main id="contenuto" class="pagina-casa {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">')
     dietro, sopra = stagionali(giorno)
@@ -1533,6 +1552,7 @@ def senza_cielo(pagina):
     pagina = re.sub(r'<g class="volta">.*?(?=<g class="(?:fr-zoom|sg-avvicina)">)', "<!-- cielo -->", pagina, flags=re.S)
     pagina = re.sub(r'<!-- lunario:inizio -->.*?<!-- lunario:fine -->', "<!-- lunario -->", pagina, flags=re.S)   # anche il lunario è fatto di quei conti
     pagina = re.sub(r'<!-- ombre:inizio -->.*?<!-- ombre:fine -->', "<!-- ombre -->", pagina, flags=re.S)         # e le ombre
+    pagina = re.sub(r'<svg class="tv-sigillo".*?</svg>', "<!-- luna di oggi -->", pagina, flags=re.S)              # e la luna della testata
     return re.sub(r'<g class="solo-notte" transform="[^"]*">.*?</g>', "<!-- luna -->", pagina, flags=re.S)
 
 

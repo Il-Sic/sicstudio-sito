@@ -6,8 +6,9 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
 - sotto i 400 KB: dal 12/11 il cielo ha tutte le stelle a occhio nudo e la Via Lattea dipinta, e il peso non è più
   un vincolo (lo ha detto Sic); il limite resta contro gli errori grossolani;
 - ogni classe tv- usata nelle pagine è in style.css, e ogni classe tv- di style.css serve ad almeno una data;
-- apostrofi tipografici nelle parole che la tavola aggiunge: la riga della data, i nomi nel cielo, il lunario;
-- la riga della data è un pulsante che apre il lunario, e il lunario c'è, una volta;
+- apostrofi tipografici nelle parole che la tavola aggiunge: la data della testata, i nomi nel cielo, il lunario;
+- la luna del giorno e la data stanno nella testata, una volta, e sono il pulsante che apre il lunario; la data ha
+  la forma lunga e quella breve, e il nome per chi non vede le contiene; il lunario c'è, una volta;
 - di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
@@ -69,14 +70,20 @@ def main():
                 classi = {c for _, a, _ in albero.tag for c in (a.get("class") or "").split() if c.startswith("tv-")}
                 usate |= classi
                 errori += [f"la classe {c} non è in style.css" for c in sorted(classi - nel_css)]
-                # le parole che la tavola aggiunge: la riga della data, i nomi nel cielo e il lunario
-                aggiunte = re.findall(r'<(?:button type="button" class="tv-apri"[^>]*|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
+                # le parole che la tavola aggiunge: la data della testata, i nomi nel cielo e il lunario
+                aggiunte = re.findall(r'<(?:span class="tv-oggi-[a-z]+"|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
+                aggiunte += re.findall(r'class="tv-oggi"[^>]*aria-label="([^"]*)"', testo)
                 lunario = re.findall(r'<!-- lunario:inizio -->(.*?)<!-- lunario:fine -->', testo, flags=re.S)
                 aggiunte += [pezzo for l in lunario for pezzo in re.findall(r'>([^<]+)<', l)] + [v for l in lunario for v in re.findall(r'aria-label="([^"]*)"', l)]
                 errori += [f"apostrofo dritto in «{a}»" for a in aggiunte if "'" in a]
                 if nome in tavola.PAGINE:
-                    if testo.count('<p class="tv-tiratura"><button type="button" class="tv-apri" popovertarget="lunario">') != 1:
-                        errori.append("manca la riga della data, o non è il pulsante che apre il lunario")
+                    oggi = re.findall(r'<button type="button" class="tv-oggi" popovertarget="lunario" aria-label="([^"]*)"><svg class="tv-sigillo"[^>]*><g[^>]*>'
+                                      r'<circle class="tv-lune-ombra" r="13"/>.*?</g></svg><span class="tv-oggi-lunga">([^<]+)</span><span class="tv-oggi-corta">([^<]+)</span></button>',
+                                      testo.split("<!-- testata:fine -->")[0])
+                    if len(oggi) != 1 or testo.count('class="tv-oggi"') != 1:
+                        errori.append("nella testata non c'è, una volta, il pulsante con la luna e la data che apre il lunario")
+                    elif oggi[0][1] not in oggi[0][0] or not oggi[0][2][:1].isdigit() or str(giorno.year) not in oggi[0][0]:
+                        errori.append(f"la data della testata non torna con il suo nome: {oggi[0]}")
                     if len(lunario) != 1 or testo.count('id="lunario" popover') != 1:
                         errori.append("il lunario non c'è una volta sola")
                     elif len(re.findall(r'class="tv-lune-giorno"', lunario[0])) != 7 or lunario[0].count("<dt>") != 4:
@@ -93,8 +100,8 @@ def main():
                         errori.append("un numero della tavola non è un numero (nan o inf)")
                 # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
                 spoglia = tavola.senza_cielo(testo)
-                if any(pezzo in spoglia for pezzo in ('class="volta"', "tv-luna", "tv-cielo", "tv-lune", "data:image", "tv-ombra", "tv-carta", "tv-strada")):
-                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna, del lunario o delle ombre")
+                if any(pezzo in spoglia for pezzo in ('class="volta"', "tv-luna", "tv-cielo", "tv-lune", "data:image", "tv-ombra", "tv-carta", "tv-strada", "tv-sigillo")):
+                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna, del lunario, delle ombre o la luna della testata")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     # le righe delle parole da cui le stelle stanno lontane: tutte e due le lingue, finestre in piedi e sdraiate
