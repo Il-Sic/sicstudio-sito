@@ -1462,7 +1462,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-lune { display: block; width: 100%; max-width: 21rem; height: auto; margin-top: 0.7rem; }
 .tv-lune-ombra { fill: var(--carta-2); stroke: var(--riga); }
 .tv-lune-luce { fill: var(--stella); }
-.tv-lune-giorno { font: 500 13px var(--strumenti); fill: var(--testo-2); text-anchor: middle; }
+.tv-lune-giorno { font: 500 12px var(--strumenti); fill: var(--testo-2); text-anchor: middle; }
 .tv-fonti { padding-top: 0.7rem; border-top: 0.5px solid var(--riga); font-size: 0.875rem; line-height: 1.5; color: var(--testo-2); }
 @supports not selector(:popover-open) { .tv-lunario { display: none; } }
 /* Il cielo stretto è per le finestre più alte che larghe. */
