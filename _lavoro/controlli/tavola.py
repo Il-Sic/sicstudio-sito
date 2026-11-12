@@ -11,7 +11,8 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
 - di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
-Che nessuna stella tocchi davvero una parola lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
+Che nessuna stella tocchi davvero una parola, e che le parole stiano sopra gli alberi della casa a ogni misura di
+finestra, lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
 """
 import collections, datetime, importlib.util, pathlib, re, sys, tempfile
 QUI = pathlib.Path(__file__).resolve().parent

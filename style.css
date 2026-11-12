@@ -472,6 +472,23 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .frontespizio-nome { margin-top: clamp(1.5rem, 5svh, 3.5rem); }
 .frontespizio-nome h1 { font-size: clamp(3.4rem, 1.5rem + 9vw, 7.5rem); letter-spacing: -0.035em; line-height: 0.92; }
 .frontespizio-nome p { margin-top: var(--s0); font-style: italic; font-size: clamp(1.15rem, 1rem + 0.7vw, 1.5rem); color: var(--testo-2); }
+/* Sugli schermi larghi e bassi (i portatili) le parole non devono finire sugli abeti della casa. La scena è il disegno
+   di 1440 per 900 che riempie la finestra (slice) ancorato in basso, e la cima degli abeti sta a 213 dal fondo: da lì
+   si sa quanto posto c'è (--abeti, dall'alto della scena). Tolti lo spazio sopra il motto, lo stacco prima del nome,
+   la firma e un po' d'aria (4,4rem), il resto se lo dividono le quattro righe del motto e il nome, che è alto 2,206
+   volte una riga: 6,51 righe in tutto. Dove il posto basta non cambia niente. Se cambiano queste misure, le righe
+   delle parole vanno rimisurate (strumenti/parole-fronte.mjs). */
+@media (min-width: 48rem) {
+  .frontespizio-parole {
+    --palco: max(100svh - var(--testata), 34rem);
+    --sopra: clamp(4.25rem, min(14svh, 22svh - 4.2rem), 8.5rem);
+    --abeti: calc(var(--palco) - max(14.82vw, var(--palco) * 0.2371));
+    --riga-alta: max(1.55rem, calc((var(--abeti) - var(--sopra) - clamp(1.5rem, 5svh, 3.5rem) - 4.4rem) / 6.51));
+    padding-top: var(--sopra);
+  }
+  .frase-terra, .frase-cielo { font-size: min(clamp(1.55rem, 0.9rem + 3vw, 3.4rem), var(--riga-alta)); }
+  .frontespizio-nome h1 { font-size: min(clamp(3.4rem, 1.5rem + 9vw, 7.5rem), calc(var(--riga-alta) * 2.206)); }
+}
 
 /* ---------- La casa dello studio: la stessa in cima al sentiero, sulla soglia e nello studio ---------- */
 
