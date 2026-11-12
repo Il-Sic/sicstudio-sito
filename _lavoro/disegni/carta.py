@@ -298,19 +298,29 @@ def main():
         _, fot, _, _ = fotogrammi()
         print(f"prova: {f} ({f.stat().st_size} byte), {len(fot)} fotogrammi")
         return 0
+    # Esce con 1, senza scrivere il file, se i segni della carta non ci sono una volta sola.
+    problemi = 0
     for lingua, file in PAGINE.items():
         p = SITO / file
         testo = p.read_text(encoding="utf-8")
         a, b = "<!-- carta:inizio -->", "<!-- carta:fine -->"
-        testo = re.sub(re.escape(a) + r".*?" + re.escape(b), lambda m: a + blocco(lingua) + b, testo, flags=re.S)
+        testo, quante = re.subn(re.escape(a) + r".*?" + re.escape(b), lambda m: a + blocco(lingua) + b, testo, flags=re.S)
+        if quante != 1:
+            print(f"{file}: i segni della carta ci sono {quante} volte invece di una")
+            problemi += 1
+            continue
         p.write_text(testo, encoding="utf-8")
         print(file, len(testo), "byte")
     p = SITO / "style.css"
     stile = p.read_text(encoding="utf-8")
-    stile = re.sub(r"/\* carta:inizio .*?/\* carta:fine \*/", lambda m: css(), stile, flags=re.S)
-    p.write_text(stile, encoding="utf-8")
-    print("style.css", len(stile), "byte")
-    return 0
+    stile, quante = re.subn(r"/\* carta:inizio .*?/\* carta:fine \*/", lambda m: css(), stile, flags=re.S)
+    if quante != 1:
+        print(f"style.css: i segni della carta ci sono {quante} volte invece di una")
+        problemi += 1
+    else:
+        p.write_text(stile, encoding="utf-8")
+        print("style.css", len(stile), "byte")
+    return 1 if problemi else 0
 
 
 if __name__ == "__main__":
