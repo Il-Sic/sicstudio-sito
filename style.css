@@ -582,8 +582,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 
 /* La soglia: la casa da vicino. Ferma, la porta è aperta e la luce esce sul sentiero; con lo scorrimento ci si
-   avvicina, la porta si apre e la luce riempie lo schermo, fino al muro della bottega. */
-.soglia { position: relative; height: min(70svh, 44rem); overflow: clip; }
+   avvicina, la porta si apre e la luce riempie lo schermo, fino al muro della bottega. Con la tavola del giorno, ferma,
+   è più alta e la casa è più lontana: sopra c'è la carta del cielo (--soglia-alta, più sotto). */
+.soglia { position: relative; height: var(--soglia-alta, min(70svh, 44rem)); overflow: clip; }
 .sg-raggio { fill: #FFD27A; opacity: 0; }
 .sg-luce { fill: var(--luce-soglia); opacity: 0; }
 .sg-alone { opacity: 0; }
@@ -1424,10 +1425,21 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 /* La home in git è senza data. Quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml), tavola.py scrive
    nella pagina pubblicata il cielo di quella sera (due volte: largo, e stretto per le finestre in piedi), la
-   luna, la data e, su <main>, le classi della stagione. Ciò che cadrebbe sulle parole del frontespizio, le linee e i
-   nomi delle costellazioni (.tv-dopo) compaiono quando le parole se ne sono andate; senza movimento restano nascosti. */
+   luna, la data e, su <main>, .tv-tavola e le classi della stagione. Ciò che cadrebbe sulle parole del frontespizio, le
+   linee e i nomi delle costellazioni, e di giorno la carta con la strada del sole (.tv-dopo) compaiono quando le
+   parole se ne sono andate. */
 .tv-stretto, .tv-emblema-stretto { display: none; }
-.tv-dopo, .tv-nome { opacity: 0; }
+.tv-dopo, .tv-nome { opacity: var(--tv-dopo, 0); }
+/* Senza lo scorrimento animato (i browser che non ce l'hanno, «riduci movimento», le finestre basse) le parole restano
+   nella prima scena e un «dopo» non c'è: la tavola intera sta nella seconda, dove parole non ce ne sono. La soglia
+   diventa alta quanto lo schermo e la casa sta alla distanza a cui, scorrendo, si leggono i nomi (la misura da cui
+   parte sg-avvicina: tavola.py tiene i nomi fuori dai suoi abeti); la porta è aperta come prima. Il cielo lì è ripreso
+   con <use>, dove una regola come «.soglia .tv-dopo» non arriva: scende una variabile. Con lo scorrimento animato
+   queste regole non si vedono: le coprono le animazioni, e l'altezza la decide il palco. */
+.tv-tavola { --soglia-alta: max(34rem, 100svh - var(--testata)); }
+.tv-tavola .soglia { --tv-dopo: 1; }
+.tv-tavola .sg-avvicina { transform: scale(0.406); }
+.tv-tavola .soglia .tv-emblema { display: none; }
 .tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7, .tv-polvere, .tv-velo-stelle, .tv-linea, .tv-cadente, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
 .tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7 { stroke-width: var(--punto); }
 .tv-stretto :is(.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7) { stroke-width: calc(var(--punto) * 1.3); }
@@ -1518,9 +1530,16 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @supports not selector(:popover-open) { .tv-oggi { display: none; } }
 @media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
 @media (max-aspect-ratio: 1/1) {
-  .tv-largo, .tv-emblema-largo { display: none; }
-  .tv-stretto, .tv-emblema-stretto { display: inline; }
+  .tv-largo { display: none; }
+  .tv-stretto { display: inline; }
   .tv-nome { font-size: 19px; }
+}
+/* Il sole dell'angolo sta a destra solo dove la scena è abbastanza larga da contenerlo. Nelle finestre quasi quadrate,
+   e sui telefoni sdraiati (dove la scena resta alta 34rem e ai lati si taglia), cadrebbe oltre il bordo: lì sta in
+   alto, come nelle finestre in piedi. */
+@media (max-aspect-ratio: 5/4), (max-width: 45.99rem) and (max-height: 39.5rem) {
+  .tv-emblema-largo { display: none; }
+  .tv-emblema-stretto { display: inline; }
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
