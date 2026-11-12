@@ -55,7 +55,10 @@ Che cosa è vero e che cosa no:
 - le date delle stagioni (quando nevica, quando il faggio arrossa) sono stimate, da correggere con chi ci vive.
 
 Le stelle non cadono mai sulle parole del frontespizio (sembrerebbero punti o accenti): quelle che ci cadrebbero, le
-linee e i nomi compaiono quando le parole se ne sono andate (.tv-dopo in style.css). Le righe delle parole le misura
+linee e i nomi compaiono quando le parole se ne sono andate (.tv-dopo in style.css). Dove la pagina non si muove con
+lo scorrimento (i browser senza animazioni legate allo scorrimento, «riduci movimento») un dopo non c'è: la tavola
+intera, di notte con le figure e i nomi e di giorno con la strada del sole, sta nella seconda scena, sopra la casa
+(.tv-tavola, la classe che questo script mette su <main>, in style.css). Le righe delle parole le misura
 strumenti/parole-fronte.mjs (parole-fronte.json), a una quarantina di misure di finestra e nelle due lingue; lo
 stesso script, con --controlla, guarda nel browser che nessuna stella tocchi una parola. Dalle stesse righe viene il
 posto del sole dell'angolo, di giorno (sole_dell_angolo).
@@ -1244,7 +1247,9 @@ def disegna_cielo(giorno, stretto, lingua):
 
 def sole_dell_angolo(giorno, stretto):
     """Dove sta il sole di giorno finché ci sono le parole del frontespizio: nelle finestre in piedi (stretto)
-    nell'angolo in alto; nelle altre a destra, da y = 300 al solstizio d'estate a y = 450 a quello d'inverno."""
+    nell'angolo in alto; nelle altre a destra, da y = 300 al solstizio d'estate a y = 450 a quello d'inverno. Quale
+    dei due si vede lo decide style.css: quello in alto anche nelle finestre quasi quadrate e sui telefoni sdraiati,
+    dove quello di destra cadrebbe oltre il bordo della scena."""
     if stretto:
         return 905, 64
     declinazione = sole_e_luna(giuliano(mezzogiorno(giorno)))[3]
@@ -1276,7 +1281,7 @@ def volta(giorno, alone, quale=0, lingua="it"):
     # Di giorno, con le parole, il sole non può stare al suo posto vero: finirebbe dietro le parole. Sta dove le
     # parole lasciano libero il foglio a ogni misura di finestra (le stesse righe misurate che tengono lontane le
     # stelle): nelle finestre larghe a destra, più alto d'estate e più basso d'inverno, ma mai così in alto da
-    # finire sotto la testata sugli schermi bassi; in quelle in piedi nell'angolo in alto, accanto alla data. Quando
+    # finire sotto la testata sugli schermi bassi; in quelle in piedi nell'angolo in alto. Quando
     # le parole se ne vanno lascia il posto alla carta del giorno, dove il sole è dov'è davvero. Di notte la luna non
     # sta più qui: è nel cielo, dove sta davvero.
     def emblema(classe, x, y):
@@ -1520,7 +1525,7 @@ def tavola(pagina, giorno, lingua):
     # la luna del giorno e la data stanno nella testata: sono il pulsante che apre il lunario, che sta in fondo a <main>
     cambia(r'<nav class="menu-largo"', lambda m: oggi_in_testata(giorno, lingua) + m.group(0))
     cambia(r'</main>', lambda m: lunario(giorno, lingua) + m.group(0))
-    cambia(r'<main id="contenuto" class="pagina-casa">', f'<main id="contenuto" class="pagina-casa {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">')
+    cambia(r'<main id="contenuto" class="pagina-casa">', f'<main id="contenuto" class="pagina-casa tv-tavola {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">')
     dietro, sopra = stagionali(giorno)
     cambia(r'<!-- colle:inizio -->(<path class="fr-collina"[^>]*/>)', lambda m: dietro + "<!-- colle:inizio -->" + m.group(1) + sopra)
     # le ombre della casa e degli alberi: sul prato delle due scene, sotto i tronchi, e sopra il sentiero della soglia

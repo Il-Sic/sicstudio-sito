@@ -11,6 +11,8 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
   la forma lunga e quella breve, e il nome per chi non vede le contiene; il lunario c'è, una volta;
 - di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
+- <main> porta la classe tv-tavola, e style.css ha le regole che, dove la pagina non scorre animata, mostrano la
+  tavola intera nella seconda scena (la variabile --tv-dopo e l'altezza --soglia-alta);
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
 Che nessuna stella tocchi davvero una parola, e che le parole stiano sopra gli alberi della casa a ogni misura di
 finestra, lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
@@ -96,6 +98,8 @@ def main():
                         errori.append(f"il sole della carta del giorno è fuori dalla fascia che si vede ({x:.0f}, {y:.0f})")
                     if testo.count('id="tv-ombra-sole"') != 1 or testo.count('<use href="#tv-ombra-sole"/>') != 2 or testo.count('class="tv-ombra tv-ombra-lontana"') < 3:
                         errori.append("le ombre del sole non ci sono nelle due scene, sopra il sentiero e sotto i boschi")
+                    if not re.search(r'<main id="contenuto" class="pagina-casa tv-tavola tv-[a-z]+', testo):
+                        errori.append("<main> non porta tv-tavola e la stagione: senza scorrimento animato la tavola non si vedrebbe")
                     if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', testo):
                         errori.append("un numero della tavola non è un numero (nan o inf)")
                 # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
@@ -104,6 +108,11 @@ def main():
                     errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna, del lunario, delle ombre o la luna della testata")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
+    # la tavola ferma: ciò che compare «dopo» si vede nella soglia, alta quanto lo schermo, e non con il sole dell'angolo
+    for regola in (".tv-dopo, .tv-nome { opacity: var(--tv-dopo, 0); }", ".tv-tavola .soglia { --tv-dopo: 1; }", ".tv-tavola .soglia .tv-emblema { display: none; }",
+                   "height: var(--soglia-alta, "):
+        if regola not in css:
+            problemi.append(f"style.css: manca «{regola}», che mostra la tavola dove la pagina non scorre animata")
     # le righe delle parole da cui le stelle stanno lontane: tutte e due le lingue, finestre in piedi e sdraiate
     for lingua in tavola.PAGINE.values():
         for stretto, forma in ((True, "più alte che larghe"), (False, "più larghe che alte")):
