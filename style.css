@@ -1472,16 +1472,18 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    da <main> con una variabile. */
 .tv-ombra { fill: var(--ombra, #3D3220); fill-opacity: var(--ombra-forza, 0.15); }
 .tv-ombra-lontana { fill-opacity: calc(var(--ombra-forza, 0.15) * 0.6); }
-/* La riga della data ha sotto il colore del cielo: le stelle non le passano fra le lettere. */
-.tv-tiratura { position: absolute; inset: 0.6rem auto auto calc(var(--colonna) - 0.5rem); z-index: 1; max-inline-size: calc(100% - 2 * var(--colonna) + 1rem); margin: 0; padding: 0.15rem 0.5rem; border-radius: 3px; background: var(--carta); font: italic 0.95rem/1.35 var(--libro); color: var(--testo-2); }
-/* La riga della data è un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo (.definizione)
-   con il sole, la luna, i pianeti e le stelle di quella sera. Il segno è lo stesso delle parole che si aprono. */
-.tv-apri {
-  display: inline; margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: inherit; cursor: pointer; pointer-events: auto;
-  text-decoration: underline dotted var(--oro); text-decoration-thickness: 1.5px; text-underline-offset: 0.24em;
+/* La luna del giorno e la data stanno nella testata, come la data in quella di un giornale: sul disegno non c'è
+   scritto nulla. Sono un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo
+   (.definizione) con il sole, la luna, i pianeti e le stelle di quella sera. La luna è nella sua fase: l'ombra ha
+   il colore dell'inchiostro di giorno e del cielo di notte, la luce è l'oro della stella del marchio. */
+.tv-oggi {
+  display: inline-flex; align-items: center; gap: 0.5rem; flex: none; min-height: 2.75rem; margin: 0 0 0 1rem; padding: 0 0.4rem;
+  border: 0; background: none; font: italic 1rem/1 var(--libro); color: var(--testo-2); white-space: nowrap; cursor: pointer;
 }
-.tv-apri::after { content: ""; position: absolute; inset: -0.7rem -0.5rem; }
-@media (hover: hover) { .tv-apri:hover { color: var(--testo); } }
+@media (hover: hover) { .tv-oggi:hover { color: var(--testo); } }
+.tv-sigillo { flex: none; width: 1.25rem; height: 1.25rem; overflow: visible; }
+.tv-sigillo .tv-lune-ombra { fill: var(--matita); fill-opacity: 0.5; stroke: var(--testo-2); stroke-opacity: 0.55; stroke-width: 1.2; }
+.tv-oggi-corta { display: none; }
 .tv-lunario { max-width: 38rem; max-height: calc(100svh - 2 * var(--s2)); overflow-y: auto; overscroll-behavior: contain; }
 .tv-lunario::backdrop { background: rgb(3 6 11 / 0.5); }
 .tv-voci { display: grid; margin: var(--s1) 0; }
@@ -1496,8 +1498,24 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-fonti { padding-top: 0.7rem; border-top: 0.5px solid var(--riga); font-size: 0.875rem; line-height: 1.5; color: var(--testo-2); }
 @supports not selector(:popover-open) { .tv-lunario { display: none; } }
 /* Il cielo stretto è per le finestre più alte che larghe. */
-/* Al telefono la data va su due righe corte: lunga coprirebbe il sole. */
-@media (max-width: 47.99rem) { .tv-tiratura { max-inline-size: 13rem; } }
+/* Dove il menu è largo ma il posto è poco, e al telefono, la data è quella breve. */
+@media (max-width: 63.99rem) {
+  .tv-oggi-lunga { display: none; }
+  .tv-oggi-corta { display: inline; }
+}
+@media (max-width: 47.99rem) {
+  .tv-oggi { margin-left: auto; gap: 0.4rem; font-size: 0.95rem; }
+  .tv-oggi ~ .apri-menu { margin-left: 0; }
+}
+/* Sui telefoni più stretti resta la luna sola: con la data il nome dello studio andrebbe su due righe. Sotto i
+   300 px non c'è posto nemmeno per quella. */
+@media (max-width: 21.49rem) {
+  .tv-oggi { justify-content: center; min-width: 2.75rem; padding: 0; }
+  .tv-oggi-corta { display: none; }
+}
+@media (max-width: 18.74rem) { .tv-oggi { display: none; } }
+/* Senza i fogli che si aprono il pulsante non aprirebbe nulla. */
+@supports not selector(:popover-open) { .tv-oggi { display: none; } }
 @media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
 @media (max-aspect-ratio: 1/1) {
   .tv-largo, .tv-emblema-largo { display: none; }
@@ -1508,8 +1526,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     /* Il sole dell'angolo (.tv-emblema: uno per le finestre larghe e uno per quelle in piedi, dove le parole lasciano
        libero il foglio) va via con le parole: poi c'è quello della carta del giorno, al suo posto. */
-    .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
-    .tv-tiratura { animation-name: tv-data; }
+    .tv-dopo, .tv-nome, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .tv-dopo { animation-name: tv-dopo; }
     .tv-nome { animation-name: tv-nomi; }
     /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
@@ -1517,8 +1534,6 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   }
 }
 @keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
-/* La riga della data va via con le parole, e sparita non si può più toccare. */
-@keyframes tv-data { 0% { opacity: 1; visibility: visible; } 10%, 100% { opacity: 0; visibility: hidden; } }
 @keyframes tv-dopo { 0%, 10% { opacity: 0; } 18%, 100% { opacity: 1; } }
 @keyframes tv-nomi { 0%, 10% { opacity: 0; } 18%, 28% { opacity: 1; } 38%, 100% { opacity: 0; } }
 
@@ -1574,7 +1589,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 /* … e di notte, dove cambia solo ciò che al buio si vede: le foglie, la nebbia, e la neve, che è il chiaro del paesaggio. */
 @media (prefers-color-scheme: dark) {
-  .tv-tiratura { background: #05090F; }
+  .tv-sigillo .tv-lune-ombra { fill: #0D1420; fill-opacity: 1; stroke: var(--matita); stroke-opacity: 0.9; }
   .tv-velo { fill: #2A3B55; fill-opacity: 0.42; }
   .tv-ombra { fill: #01040A; fill-opacity: 0.34; }
   .tv-ombra-lontana { fill-opacity: 0.2; }
