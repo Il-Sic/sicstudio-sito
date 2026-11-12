@@ -8,6 +8,8 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
 - ogni classe tv- usata nelle pagine è in style.css, e ogni classe tv- di style.css serve ad almeno una data;
 - apostrofi tipografici nelle parole che la tavola aggiunge: la riga della data, i nomi nel cielo, il lunario;
 - la riga della data è un pulsante che apre il lunario, e il lunario c'è, una volta;
+- di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
+  si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
 Che nessuna stella tocchi davvero una parola lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
 """
@@ -78,10 +80,20 @@ def main():
                         errori.append("il lunario non c'è una volta sola")
                     elif len(re.findall(r'class="tv-lune-giorno"', lunario[0])) != 7 or lunario[0].count("<dt>") != 4:
                         errori.append("al lunario manca una voce o una delle sette lune")
+                    # la carta del giorno e le ombre
+                    if testo.count('id="tv-carta-giorno"') != 1 or testo.count('<use href="#tv-carta-giorno"/>') != 1:
+                        errori.append("la carta del giorno non c'è una volta, o la soglia non la riprende")
+                    x, y = tavola.sul_foglio_di_giorno(*tavola.sole_a(tavola.di_giorno(giorno)))
+                    if not (530 < x < 925 and 185 < y < 560):
+                        errori.append(f"il sole della carta del giorno è fuori dalla fascia che si vede ({x:.0f}, {y:.0f})")
+                    if testo.count('id="tv-ombra-sole"') != 1 or testo.count('<use href="#tv-ombra-sole"/>') != 2 or testo.count('class="tv-ombra tv-ombra-lontana"') < 3:
+                        errori.append("le ombre del sole non ci sono nelle due scene, sopra il sentiero e sotto i boschi")
+                    if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', testo):
+                        errori.append("un numero della tavola non è un numero (nan o inf)")
                 # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
                 spoglia = tavola.senza_cielo(testo)
-                if 'class="volta"' in spoglia or "tv-luna" in spoglia or "tv-cielo" in spoglia or "tv-lune" in spoglia or "data:image" in spoglia:
-                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna o del lunario")
+                if any(pezzo in spoglia for pezzo in ('class="volta"', "tv-luna", "tv-cielo", "tv-lune", "data:image", "tv-ombra", "tv-carta", "tv-strada")):
+                    errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna, del lunario o delle ombre")
                 problemi += [f"{dove}: {e}" for e in errori]
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     # le righe delle parole da cui le stelle stanno lontane: tutte e due le lingue, finestre in piedi e sdraiate

@@ -438,7 +438,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* Il cielo, uguale nelle due scene: le stelle (di notte) e il sole o la luna, che al telefono sta più a sinistra. */
 .volta-falce { fill: var(--stella); }
 .volta { transform-box: view-box; transform-origin: 730px 806px; }
-.volta-astro { transform-box: fill-box; transform-origin: center; }
+.volta-astro, .tv-astro { transform-box: fill-box; transform-origin: center; }
 @media (max-width: 47.99rem) { .volta-astro { translate: -390px -110px; } }
 .lg-acqua { fill: #BCCFCD; }
 .lg-luce { fill: #E2EBE6; }
@@ -617,7 +617,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     }
     .fr-scena { height: 100%; min-height: 0; }
     .fr-terra { animation: fr-scendi linear both; animation-timeline: --fronte; animation-range: contain 0% contain 23.9%; }
-    .volta-astro { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
+    .volta-astro, .tv-astro { animation: fr-accendi linear both; animation-timeline: --fronte; animation-range: contain 5.2% contain 19.5%; }
     .volta-stelle { animation: fr-stelle linear both; animation-timeline: --fronte; animation-range: contain 2.1% contain 19.5%; }
     .frase-terra { animation: fr-sali linear both; animation-timeline: --fronte; animation-range: contain 0% contain 9.6%; }
     .frase-cielo { animation: fr-appari linear both; animation-timeline: --fronte; animation-range: contain 10.4% contain 20%; }
@@ -654,7 +654,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .frontespizio-palco { height: 415svh; }
     .frontespizio + .dentro { margin-top: calc(var(--testata) - 126svh); padding-top: calc(var(--s5) + 26svh); }
     .fr-terra { animation-range: contain 0% contain 20%; }
-    .volta-astro { animation-range: contain 4.4% contain 16.4%; }
+    .volta-astro, .tv-astro { animation-range: contain 4.4% contain 16.4%; }
     .volta-stelle { animation-range: contain 1.8% contain 16.4%; }
     .frase-terra { animation-range: contain 0% contain 8.1%; }
     .frase-cielo { animation-range: contain 8.8% contain 16.7%; }
@@ -1409,7 +1409,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    nella pagina pubblicata il cielo di quella sera (due volte: largo, e stretto per le finestre in piedi), la
    luna, la data e, su <main>, le classi della stagione. Ciò che cadrebbe sulle parole del frontespizio, le linee e i
    nomi delle costellazioni (.tv-dopo) compaiono quando le parole se ne sono andate; senza movimento restano nascosti. */
-.tv-stretto { display: none; }
+.tv-stretto, .tv-emblema-stretto { display: none; }
 .tv-dopo, .tv-nome { opacity: 0; }
 .tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7, .tv-polvere, .tv-velo-stelle, .tv-linea, .tv-cadente, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
 .tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7 { stroke-width: var(--punto); }
@@ -1442,6 +1442,19 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-nome-pianeta { fill-opacity: 0.86; }
 .tv-luna-ombra { fill: #22314A; fill-opacity: 0.85; }
 .tv-rondini { stroke: var(--testo); stroke-width: 1.5; stroke-linejoin: round; opacity: 0.5; }
+/* Di giorno la carta è una meridiana, a inchiostro: la strada del sole di quel giorno con un grano per ogni ora, le
+   strade dei solstizi e degli equinozi punteggiate, il meridiano che sale dal colmo del tetto, la luna se si vede. */
+.tv-strada { fill: none; stroke: var(--testo); stroke-width: 1.1; stroke-opacity: 0.5; stroke-linecap: round; stroke-linejoin: round; }
+.tv-strada-altra { stroke-width: 1.4; stroke-opacity: 0.36; stroke-dasharray: 0.1 6.4; }
+.tv-meridiano { stroke-width: 1; stroke-opacity: 0.3; stroke-dasharray: 2 5; }
+.tv-ora { fill: none; stroke: var(--testo); stroke-width: 5; stroke-opacity: 0.62; stroke-linecap: round; }
+.tv-scritta { fill: var(--testo); fill-opacity: 0.62; }
+.tv-luna-giorno { fill: #FFF; stroke: var(--testo); stroke-width: 0.8; stroke-opacity: 0.3; }
+/* Le ombre della casa e degli alberi, coricate sul prato dalla parte opposta al sole (di notte, alla luna). Nella
+   soglia sono riprese con <use>, dove una regola come «.tv-neve .tv-ombra» non arriva: il colore sulla neve scende
+   da <main> con una variabile. */
+.tv-ombra { fill: var(--ombra, #3D3220); fill-opacity: var(--ombra-forza, 0.15); }
+.tv-ombra-lontana { fill-opacity: calc(var(--ombra-forza, 0.15) * 0.6); }
 /* La riga della data ha sotto il colore del cielo: le stelle non le passano fra le lettere. */
 .tv-tiratura { position: absolute; inset: 0.6rem auto auto calc(var(--colonna) - 0.5rem); z-index: 1; max-inline-size: calc(100% - 2 * var(--colonna) + 1rem); margin: 0; padding: 0.15rem 0.5rem; border-radius: 3px; background: var(--carta); font: italic 0.95rem/1.35 var(--libro); color: var(--testo-2); }
 /* La riga della data è un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo (.definizione)
@@ -1470,18 +1483,20 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @media (max-width: 47.99rem) { .tv-tiratura { max-inline-size: 13rem; } }
 @media (max-aspect-ratio: 7/5) { .tv-bordo { display: none; } }
 @media (max-aspect-ratio: 1/1) {
-  .tv-largo { display: none; }
-  .tv-stretto { display: inline; }
+  .tv-largo, .tv-emblema-largo { display: none; }
+  .tv-stretto, .tv-emblema-stretto { display: inline; }
   .tv-nome { font-size: 19px; }
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
-    .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
+    /* Il sole dell'angolo (.tv-emblema: uno per le finestre larghe e uno per quelle in piedi, dove le parole lasciano
+       libero il foglio) va via con le parole: poi c'è quello della carta del giorno, al suo posto. */
+    .tv-tiratura, .tv-dopo, .tv-nome, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .tv-tiratura { animation-name: tv-data; }
     .tv-dopo { animation-name: tv-dopo; }
     .tv-nome { animation-name: tv-nomi; }
     /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
-    .tv-largo, .tv-stretto { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
+    .tv-largo, .tv-stretto, .tv-carta { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
   }
 }
 @keyframes tv-ferme { 50%, 100% { transform: scale(0.69); } }
@@ -1522,7 +1537,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .tv-inverno { --prato: #AEA78E; }
   .tv-monti-neve :is(.fr-monti, .sg-monti, .bs-monti, .fn-monti) { fill: #E2E8EC; }
   /* la neve fino a casa: il tetto, il lago gelato; il sentiero è battuto, più scuro della neve */
-  .tv-neve { --prato: #E7EBE9; }
+  .tv-neve { --prato: #E7EBE9; --ombra: #3F6594; --ombra-forza: 0.22; }
   .tv-neve :is(.fr-colli, .sg-colli, .bs-colli) { fill: #D8DFE2; }
   .tv-neve .fn-colli { fill: #DCE3E6; }
   .tv-neve .fn-abeti { fill: #5F7B6D; }
@@ -1544,6 +1559,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @media (prefers-color-scheme: dark) {
   .tv-tiratura { background: #05090F; }
   .tv-velo { fill: #2A3B55; fill-opacity: 0.42; }
+  .tv-ombra { fill: #01040A; fill-opacity: 0.34; }
+  .tv-ombra-lontana { fill-opacity: 0.2; }
   .tv-fiore { stroke: #56616B; }
   .tv-fiore-giallo { stroke: #6B5A2A; }
   .tv-lucciola { opacity: 0.95; }
