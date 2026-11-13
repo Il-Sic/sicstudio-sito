@@ -115,11 +115,24 @@ PAROLE = {
     },
 }
 
-# Il marchio: un sentiero a tre tornanti che sale verso una stella a cinque punte (_lavoro/disegni/marchio-2.py).
-MARCHIO = ('<svg class="marchio" viewBox="0 0 64 64" aria-hidden="true" focusable="false">'
-           '<path class="marchio-via" d="M12 53H40A7 7 0 0 0 40 39H21A7 7 0 0 1 21 25H34"/>'
-           '<path class="marchio-stella" d="M48 8L49.94 13.33L55.61 13.53L51.14 17.02L52.7 22.47L48 19.3L43.3 22.47L44.86 17.02L40.39 13.53L46.06 13.33Z"/>'
-           '</svg>')
+# Il marchio: il sentiero a tre tornanti, senza stella, pieno di cielo dal tramonto alla notte (il logo del 13/11/2026,
+# _lavoro/disegni/marchio-3.py, che ha gli stessi colori). Due sfumature, quella della carta e quella della notte:
+# le mostrano e le nascondono .solo-giorno e .solo-notte. Gli id portano il posto, perché in una pagina i marchi sono due.
+VIA = "M12 53H40A7 7 0 0 0 40 39H21A7 7 0 0 1 21 25H34"
+CIELO = {"giorno": (("0", "#F3A97A"), ("0.09", "#B8628C"), ("0.22", "#4B3C8E"), ("0.45", "#1E2466"), ("1", "#0A0F2E")),
+         "notte": (("0", "#F7B984"), ("0.14", "#DE7C98"), ("0.36", "#8A6CD0"), ("0.62", "#5162D2"), ("1", "#3447B8"))}
+
+
+def marchio(posto):
+    """Il marchio per un posto della pagina ("testata" o "piede")."""
+    sfumature = "".join(
+        f'<linearGradient id="cielo-{posto}-{tema}" x1="0" y1="21.5" x2="0" y2="56.5" gradientUnits="userSpaceOnUse">'
+        + "".join(f'<stop offset="{o}" stop-color="{c}"/>' for o, c in colori) + '</linearGradient>'
+        for tema, colori in CIELO.items())
+    vie = "".join(f'<path class="marchio-via solo-{tema}" d="{VIA}" stroke="url(#cielo-{posto}-{tema})"/>' for tema in CIELO)
+    return f'<svg class="marchio" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs>{sfumature}</defs>{vie}</svg>'
+
+
 ICONA_MENU = ('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
               '<path d="M4 8.5h16M4 15.5h16"/></svg>')
 
@@ -219,7 +232,7 @@ def testata(file, d):
         return f'<a href="{h}" hreflang="{p["altra_lingua"]}" lang="{p["altra_lingua"]}">{p["altra"]}</a>'
     righe = [f'<a class="salta" href="#contenuto">{p["salta"]}</a>', f'<header class="testata testata-{casa or "fuori"}">',
              '  <div class="testata-riga">']
-    righe.append(f'    <a class="casa" href="{u["home"]}" aria-label="{p["casa"]}">{MARCHIO}<span>Sic Studio</span></a>')
+    righe.append(f'    <a class="casa" href="{u["home"]}" aria-label="{p["casa"]}">{marchio("testata")}<span>Sic Studio</span></a>')
     if casa == "argonauta":
         attuale = ' aria-current="page"' if d["voce"] == "argonauta" else ""
         righe.append(f'    <span class="testata-sep" aria-hidden="true">/</span>'
@@ -275,7 +288,7 @@ def piede(file, d):
     return "\n".join([
         '<footer class="colophon">',
         '  <div class="colophon-riga">',
-        f'    <div class="colophon-firma">{MARCHIO}',
+        f'    <div class="colophon-firma">{marchio("piede")}',
         '      <p><strong>Sic Studio</strong> di Vincenzo Siciliano</p>',
         f'      <p>{p["luogo"]}</p>',
         '    </div>',

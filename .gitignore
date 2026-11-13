@@ -31,7 +31,7 @@ _lavoro/riferimenti/*
 _lavoro/controlli/parole.json
 
 # I disegni della prima passata, che non servono più (il marchio di Argo, la rosa dei venti, il timbro), e i PNG di
-# passaggio di png.py e png-2.py.
+# passaggio di png.py.
 _lavoro/disegni/marchio.py
 _lavoro/disegni/rosa.py
 _lavoro/disegni/timbro.py
