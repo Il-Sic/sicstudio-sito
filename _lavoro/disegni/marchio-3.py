@@ -2,12 +2,14 @@
 dal tramonto alla notte. È la S del logo scelto da Sic, la direzione G rifinita con la S della direzione A; il kit del
 logo (sic-studio-logo-kit.zip, nella cartella del progetto) ha tutte le sue forme e la guida.
 
-Nel sito il marchio è sempre sotto i 48 px, e lì la S è senza stelle: solo il cielo che sfuma, CARTA sui fondi chiari
-e NOTTE su quelli scuri. Nelle pagine è dentro l'HTML (condivise.py, marchio(), con gli stessi colori).
+Nella testata e nel piede il marchio è la S del kit con le sue stelle: img/marchio-giorno.svg (carta) e
+img/marchio-notte.svg, dalla cartella web/ del kit, con la Via Lattea fine quanto basta per gli schermi 3x
+(condivise.py, MARCHIO). Sulla copertina di Argonauta la S è piccola, e lì è solo il cielo che sfuma, nell'HTML.
 
 Scrive img/icona.svg, la favicon: l'icona piccola del kit ridisegnata sulla griglia di 16 pixel, così i tre tratti
 cadono su pixel interi e restano netti anche a 32. favicon.ico (16, 32 e 48 px) e apple-touch-icon.png sono quelli
-del kit (cartella web/): li fanno gli script del kit (kit_g.py e raster.js, con Playwright), non si rifanno qui.
+del kit (cartella web/), come le due S con le stelle: li fanno gli script del kit (kit_g.py e raster.js, con
+Playwright), non si rifanno qui.
 
     python3 -I _lavoro/disegni/marchio-3.py
 """

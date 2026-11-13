@@ -216,8 +216,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 .progetto { font-style: italic; }
 .testata-sep { color: var(--matita); font-weight: 300; }
-.marchio { width: 1.75rem; height: 1.75rem; flex: none; }
-/* Il marchio è pieno di cielo (_lavoro/disegni/marchio-3.py): le sfumature sono nell'HTML, una per tema. */
+/* La S del logo con le sue stelle (img/marchio-giorno.svg e -notte.svg): alta quasi il doppio delle maiuscole del
+   nome, come nel logo del kit. Sulla copertina di Argonauta è più piccola, solo cielo, disegnata nell'HTML. */
+.marchio { width: auto; height: 1.625rem; flex: none; }
 .marchio-via { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 
 .menu-largo { margin-left: auto; }
@@ -288,8 +289,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .colophon-nota { grid-column: 1 / -1; }
 }
 .colophon-firma { display: grid; gap: 0.15rem; justify-items: start; align-content: start; }
-.colophon-firma .marchio { width: 2.75rem; height: 2.75rem; margin-bottom: var(--s0); }
-.colophon-firma .marchio-via { stroke-width: 6; }
+.colophon-firma .marchio { height: 2.25rem; margin-bottom: var(--s0); }
 .colophon-firma p { font: 400 1.0625rem/1.4 var(--libro); color: var(--testo); }
 .colophon-firma p + p { font-style: italic; color: var(--testo-2); }
 .colophon-pagine { display: grid; gap: var(--s1) var(--s3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
