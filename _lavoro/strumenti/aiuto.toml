@@ -454,7 +454,8 @@ parola.en = "Badge"
 vuol-dire.it = "Una medaglia d’oro per un traguardo: rotte, missioni, schede nuove."
 vuol-dire.en = "A gold medal for a milestone: routes, missions, new cards."
 cerca.it = '\bbadge\b'
-cerca.en = '\bbadges?\b'
+# Anche a inizio frase: «Badges are gold medals…».
+cerca.en = '\b[Bb]adges?\b'
 
 [[parole.voce]]
 parola.it = "Livello"
@@ -465,7 +466,8 @@ Cresce con i punti esperienza delle tappe e delle rotte; ha un nome, da Apprendi
 vuol-dire.en = '''
 It grows with the experience points of stages and routes; it has a name, from Apprentice
   to Argonaut.'''
-cerca.it = '\blivell[oi]\b'
+# «Un livello di luoghi», nella risposta sulla rete, è un'altra cosa: lì la parola non apre questa voce.
+cerca.it = '\blivell[oi]\b(?! di luoghi)'
 cerca.en = '\blevels?\b'
 
 [[parole.voce]]
