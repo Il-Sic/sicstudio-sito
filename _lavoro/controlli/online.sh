@@ -12,10 +12,10 @@ TMP=$(mktemp -d)
 problemi=0
 richieste=0
 
-# Le due home e le due pagine dello studio, quando il lavoro giornaliero è acceso (.github/workflows/tavola.yml),
-# online hanno la tavola del giorno, che in git non c'è. Per loro vale anche la tavola di oggi o quella di ieri (prima
-# che il lavoro della notte abbia finito), rifatte qui da _lavoro/disegni/tavola.py.
-DEL_GIORNO=(index.html en/index.html studio/index.html en/studio/index.html)
+# Le due home, le due pagine dello studio e la scena di Argonauta, quando il lavoro giornaliero è acceso
+# (.github/workflows/tavola.yml), online hanno la tavola del giorno, che in git non c'è. Per loro vale anche la tavola
+# di oggi o quella di ieri (prima che il lavoro della notte abbia finito), rifatte qui da _lavoro/disegni/tavola.py.
+DEL_GIORNO=(index.html en/index.html studio/index.html en/studio/index.html img/scena.svg)
 for giorno in $(TZ=Europe/Rome date +%F) $(TZ=Europe/Rome date -v-1d +%F); do
   for pagina in $DEL_GIORNO; do
     mkdir -p "$TMP/tavola-$giorno/${pagina:h}"

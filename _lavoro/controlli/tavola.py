@@ -13,11 +13,15 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
 - <main> porta la classe tv-tavola, e style.css ha le regole che, dove la pagina non scorre animata, mostrano la
   tavola intera nella seconda scena (la variabile --tv-dopo e l'altezza --soglia-alta);
-- le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra.
+- le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra;
+- la scena di Argonauta (img/scena.svg) di ogni data: XML ben formato, sotto i 150 KB, niente script, id unici e ogni
+  riferimento a un id che c'è, ogni classe con la sua regola; il velo e la luna d'angolo del disegno non ci sono più,
+  la luna c'è le sere che è in cielo, e senza_cielo() toglie tutto ciò che è fatto di seni e coseni.
 Che nessuna stella tocchi davvero una parola, e che le parole stiano sopra gli alberi della casa a ogni misura di
 finestra, lo guarda nel browser strumenti/parole-fronte.mjs --controlla, a mano.
 """
-import collections, datetime, importlib.util, pathlib, re, sys, tempfile
+import collections, datetime, importlib.util, math, pathlib, re, sys, tempfile
+import xml.etree.ElementTree as ElementTree
 QUI = pathlib.Path(__file__).resolve().parent
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(QUI))
@@ -42,6 +46,48 @@ def date():
     return sorted(giorni)
 
 
+def controlla_scena(svg, giorno):
+    """I problemi della scena di Argonauta di quel giorno."""
+    errori = []
+    try:
+        ElementTree.fromstring(svg)
+    except ElementTree.ParseError as e:
+        return [f"non è XML ben formato ({e})"]
+    if len(svg.encode("utf-8")) > 150 * KB:
+        errori.append(f"{len(svg.encode('utf-8')) / KB:.0f} KB (massimo 150)")
+    if "<script" in svg or re.search(r"\son[a-z]+=", svg) or re.search(r'href="(?!#|data:image/png;base64,)', svg):
+        errori.append("uno script, un gestore di eventi o un riferimento fuori dal disegno")
+    ids = collections.Counter(re.findall(r'\sid="([^"]+)"', svg))
+    errori += [f"id ripetuto: {i} ({c} volte)" for i, c in ids.items() if c > 1]
+    errori += [f"riferimento a un id che non c'è: #{r}" for r in sorted(set(re.findall(r'url\(#([^)]+)\)|href="#([^"]+)"', svg)) - {("", "")}) for r in r if r and r not in ids]
+    stile = svg.split("<style>")[1].split("</style>")[0]
+    regole = set(re.findall(r"\.(sc-[a-z0-9-]+)", stile))
+    usate = {c for classi in re.findall(r'class="([^"]*)"', svg) for c in classi.split()}
+    errori += [f"la classe {c} non ha una regola" for c in sorted(usate - regole)]
+    if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', svg):
+        errori.append("un numero non è un numero (nan o inf)")
+    if 'class="sc-velo"' in svg or 'fill="url(#sc-g-luna)"' in svg or ".sc-velo { display: none; }" not in stile:
+        errori.append("c'è ancora il velo o la luna d'angolo del disegno, o il velo non è spento")
+    if svg.count("<!-- cielo:inizio -->") != 3 or svg.count("<!-- cielo:fine -->") != 3:
+        errori.append("i segni del cielo non sono tre coppie")
+    jd = tavola.giuliano(tavola.a_notte_fatta(giorno))
+    luna = tavola.luna_vista_da_qui(jd, tavola.tempo_siderale(jd))
+    in_cielo = luna[2] > 0.5 and luna[4] > 0.03
+    di_sera = re.search(r'<g class="sc-solo-notte"><!-- cielo:inizio -->(.*?)<!-- cielo:fine -->', svg, re.S)
+    if not di_sera or in_cielo != ('<g class="sc-luna" clip-path="url(#sc-c-luna)">' in di_sera.group(1)):
+        errori.append(f"la luna {'non ' if in_cielo else ''}è in cielo quella sera, e la scena {'non ' if in_cielo else ''}la mostra")
+    elif len(re.findall(r"h0", di_sera.group(1))) < 20:            # con la luna piena e alta se ne vedono poche: una trentina
+        errori.append("meno di venti stelle nel cielo di quella sera")
+    spoglia = tavola.senza_cielo(svg).split("</style>", 1)[1]
+    if any(pezzo in spoglia for pezzo in ("data:image", "sc-luna-giorno", "sc-scia", "url(#sc-g-luna-vera)")) or re.search(r'class="sc-s\d', spoglia):
+        errori.append("senza_cielo() lascia nella scena pezzi del cielo o della luna")
+    for classe in tavola.stagione(giorno):
+        for nome, (di_giorno, _) in tavola.COLORI_SCENA.get(classe, {}).items():
+            if not re.search(rf"\.{nome} \{{ [a-z-]+: {di_giorno}; \}}", stile):
+                errori.append(f"manca il colore di {nome} per {classe}")
+    return errori
+
+
 def main():
     problemi = []
     if tavola.verifica():
@@ -49,6 +95,8 @@ def main():
     css = (SITO / "style.css").read_text(encoding="utf-8")
     nel_css = set(re.findall(r"\.(tv-[a-z0-9-]+)", css))
     usate, pagine, pesante = set(), 0, 0
+    disegno = (SITO / tavola.SCENA).read_text(encoding="utf-8")
+    scene, pesante_scena = 0, 0
     with tempfile.TemporaryDirectory() as cartella:
         p = pathlib.Path(cartella) / "pagina.html"
         for giorno in date():
@@ -107,6 +155,9 @@ def main():
                 if any(pezzo in spoglia for pezzo in ('class="volta"', "tv-luna", "tv-cielo", "tv-lune", "data:image", "tv-ombra", "tv-carta", "tv-strada", "tv-sigillo")):
                     errori.append("senza_cielo() lascia nella pagina pezzi del cielo, della luna, del lunario, delle ombre o la luna della testata")
                 problemi += [f"{dove}: {e}" for e in errori]
+            problemi += [f"{tavola.SCENA} del {giorno.isoformat()}: {e}" for e in controlla_scena(tavola.scena(disegno, giorno), giorno)]
+            scene += 1
+            pesante_scena = max(pesante_scena, len(tavola.scena(disegno, giorno).encode("utf-8")))
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     # la tavola ferma: ciò che compare «dopo» si vede nella soglia, alta quanto lo schermo, e non con il sole dell'angolo
     for regola in (".tv-dopo, .tv-nome { opacity: var(--tv-dopo, 0); }", ".tv-tavola .soglia { --tv-dopo: 1; }", ".tv-tavola .soglia .tv-emblema { display: none; }",
@@ -120,7 +171,8 @@ def main():
                 problemi.append(f"parole-fronte.json: poche righe misurate in «{lingua}» per le finestre {forma} (si rifanno con strumenti/parole-fronte.mjs)")
     for riga in problemi:
         print(riga)
-    print(f"Tavola del giorno: {pagine} pagine rifatte per {len(date())} date, la più pesante {pesante / KB:.0f} KB, {len(problemi)} problemi")
+    print(f"Tavola del giorno: {pagine} pagine e {scene} scene di Argonauta rifatte per {len(date())} date, la pagina più pesante {pesante / KB:.0f} KB, "
+          f"la scena {pesante_scena / KB:.0f} KB, {len(problemi)} problemi")
     return 1 if problemi else 0
 
 

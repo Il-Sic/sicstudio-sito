@@ -1,7 +1,7 @@
 # La tavola del giorno: ogni notte, poco dopo mezzanotte, e a ogni push su main, costruisce il sito come fa GitHub
 # Pages, scrive nella home
-# la tavola di quel giorno (_lavoro/disegni/tavola.py: il cielo di quella sera, la luna, la stagione, la data) e
-# lo pubblica.
+# la tavola di quel giorno (_lavoro/disegni/tavola.py: il cielo di quella sera, la luna, la stagione, la data) e lo
+# stesso giorno nella scena di Argonauta (img/scena.svg), e pubblica il sito.
 #
 # È SPENTO finché non si fanno, a mano, due cose nelle impostazioni del repository:
 #   1. Settings › Pages › Build and deployment › Source: «GitHub Actions» (invece di «Deploy from a branch»);
@@ -61,7 +61,7 @@ jobs:
       - name: Solo i file pubblici, identici
         run: python3 -I _lavoro/controlli/costruito.py _site
       # Jekyll gira in un contenitore e lascia _site a root: per scriverci la tavola serve riprenderlo.
-      - name: La tavola di oggi nelle due home
+      - name: La tavola di oggi nelle due home e nella scena di Argonauta
         run: |
           sudo chown -R "$(id -u):$(id -g)" _site
           python3 -I _lavoro/disegni/tavola.py _site
