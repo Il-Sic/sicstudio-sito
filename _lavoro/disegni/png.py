@@ -5,7 +5,7 @@ un quadrato, poi sips ritaglia il centro e la fa JPEG, e strumenti/pulisci.py le
     python3 -I _lavoro/disegni/png.py
 
 La scena viene dai disegni dell'app, in _lavoro/riferimenti/svg-sito/ (scena.svg e scena.css), che restano fuori da
-git: lo script si usa sul Mac che li ha. Le icone (apple-touch-icon.png e favicon.ico) le fa png-2.py.
+git: lo script si usa sul Mac che li ha. Le icone (apple-touch-icon.png e favicon.ico) vengono dal kit del logo (disegni/marchio-3.py).
 """
 import pathlib, re, subprocess, tempfile
 

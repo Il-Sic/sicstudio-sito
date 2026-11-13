@@ -20,7 +20,7 @@
   --mare-pieno: #08739A;      /* i pulsanti pieni con la scritta bianca */
   --mare-velo: rgb(8 115 154 / 0.09);
   --oro: #8F5B00;             /* ArgoReward: la stella, le cose conquistate */
-  --stella: #D99A1E;          /* la stella del marchio, sulla carta */
+  --stella: #D99A1E;          /* l'oro della luna e delle stelle, sulla carta */
   --rosso: #B3261E;           /* il 112 e gli avvisi */
   --vetro: rgb(250 247 240 / 0.74);
 
@@ -217,8 +217,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .progetto { font-style: italic; }
 .testata-sep { color: var(--matita); font-weight: 300; }
 .marchio { width: 1.75rem; height: 1.75rem; flex: none; }
-.marchio-via { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
-.marchio-stella { fill: var(--stella); }
+/* Il marchio è pieno di cielo (_lavoro/disegni/marchio-3.py): le sfumature sono nell'HTML, una per tema. */
+.marchio-via { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 
 .menu-largo { margin-left: auto; }
 .menu { list-style: none; display: flex; align-items: center; gap: var(--s0); }
@@ -288,7 +288,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .colophon-nota { grid-column: 1 / -1; }
 }
 .colophon-firma { display: grid; gap: 0.15rem; justify-items: start; align-content: start; }
-.colophon-firma .marchio { width: 2.75rem; height: 2.75rem; color: var(--testo); margin-bottom: var(--s0); }
+.colophon-firma .marchio { width: 2.75rem; height: 2.75rem; margin-bottom: var(--s0); }
 .colophon-firma .marchio-via { stroke-width: 6; }
 .colophon-firma p { font: 400 1.0625rem/1.4 var(--libro); color: var(--testo); }
 .colophon-firma p + p { font-style: italic; color: var(--testo-2); }
@@ -1487,7 +1487,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* La luna del giorno e la data stanno nella testata, come la data in quella di un giornale: sul disegno non c'è
    scritto nulla. Sono un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo
    (.definizione) con il sole, la luna, i pianeti e le stelle di quella sera. La luna è nella sua fase: l'ombra ha
-   il colore dell'inchiostro di giorno e del cielo di notte, la luce è l'oro della stella del marchio. */
+   il colore dell'inchiostro di giorno e del cielo di notte, la luce è l'oro di --stella. */
 .tv-oggi {
   display: inline-flex; align-items: center; gap: 0.5rem; flex: none; min-height: 2.75rem; margin: 0 0 0 1rem; padding: 0 0.4rem;
   border: 0; background: none; font: italic 1rem/1 var(--libro); color: var(--testo-2); white-space: nowrap; cursor: pointer;
