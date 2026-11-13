@@ -14,14 +14,18 @@ La mano e la coreografia della home restano quelle di casa.py e di style.css. Ca
   la neve, i fiori, le lucciole;
 - nella testata, la luna del giorno nella sua fase e la data accanto (sul disegno non c'è scritto nulla): sono un
   pulsante, e aprono il lunario del giorno (il sole, la luna e le sue prossime sette sere, i pianeti, le stelle, le
-  fonti), un foglio che si apre senza JavaScript (popover).
-Nel browser non gira niente: tutto è calcolato qui e scritto nell'HTML.
+  fonti), un foglio che si apre senza JavaScript (popover);
+- nella scena di Argonauta (img/scena.svg, la nave sul mare: in cima alla sua pagina e sulla copertina del suo libro
+  nella home), lo stesso cielo di sera intorno alla luna, con la sua scia sul mare; di giorno la luna del pomeriggio,
+  se si vede; sempre la stagione (vedi «La scena di Argonauta», più sotto).
+Nel browser non gira niente: tutto è calcolato qui e scritto nell'HTML e nella scena.
 
 Le pagine in git restano quelle di sempre, senza data: questo script non le tocca. Scrive la tavola in una copia del
 sito già costruito, ed è il lavoro giornaliero (.github/workflows/tavola.yml), quando è acceso, a pubblicarla.
 
-    python3 -I _lavoro/disegni/tavola.py <cartella> [AAAA-MM-GG]   la tavola nelle due home di <cartella>, e stagione
-                                                                   e luna nelle due pagine dello studio
+    python3 -I _lavoro/disegni/tavola.py <cartella> [AAAA-MM-GG]   la tavola nelle due home di <cartella>, stagione e
+                                                                   luna nelle due pagine dello studio, e il giorno
+                                                                   nella scena di Argonauta
     python3 -I _lavoro/disegni/tavola.py --prova [AAAA-MM-GG]      la scrive in _lavoro/prove/tavola/, da guardare con
                                                                    servi.py (http://127.0.0.1:8765/_lavoro/prove/tavola/)
     python3 -I _lavoro/disegni/tavola.py --verifica                rifà i conti su date note (esce con 1 se non tornano)
@@ -51,6 +55,9 @@ Che cosa è vero e che cosa no:
 - le ombre vanno dalla parte giusta e sono lunghe il giusto per l'altezza del sole (o della luna), viste di scorcio:
   ciò che viene verso chi guarda è accorciato di tre quarti (SCORCIO), a occhio. La casa fa ombra come una sagoma
   piatta, e i monti non ne fanno;
+- nella scena di Argonauta il cielo, la luna e la sua fase sono quelli di quella sera, ma lo sguardo no: si gira verso
+  la luna (e si alza, se è alta) perché la luna stia in un angolo libero del disegno, e i monti del disegno fanno da
+  orizzonte. La scia sul mare e la luce cinerea sono un disegno; il sole di giorno è un segno, come quello dell'angolo;
 - il luogo è un punto convenzionale (39,3° N, 16,3° E), non la casa di nessuno;
 - le date delle stagioni (quando nevica, quando il faggio arrossa) sono stimate, da correggere con chi ci vive.
 
@@ -87,6 +94,10 @@ MESI = {"it": ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "lu
 # la stessa stagione e la stessa luna, senza cielo vero e senza data.
 PAGINE = {"index.html": "it", "en/index.html": "en"}
 STUDIO = ["studio/index.html", "en/studio/index.html"]
+# La scena di Argonauta (la nave sul mare in cima alle due pagine di Argonauta, e la copertina del suo libro nelle due
+# home) prende il cielo di quella sera, la luna e la stagione: la si riscrive, le pagine restano come sono.
+SCENA = "img/scena.svg"
+ARGONAUTA = ["argonauta/index.html", "en/argonauta/index.html"]
 
 # I nomi nel cielo sono scritti in italiano qui sotto; nella pagina inglese diventano questi (le costellazioni in
 # latino, come si usa). Quelli che mancano restano uguali.
@@ -1311,6 +1322,476 @@ def stagionali(giorno):
     return dietro, sopra
 
 
+# ---------- La scena di Argonauta ----------
+# img/scena.svg è la nave Argo sul mare con gli eroi a bordo, il disegno dell'app: sta in cima alla pagina di Argonauta,
+# in italiano e in inglese, ed è la copertina del suo libro nello scaffale della home (aprendo il libro la copertina
+# diventa l'apertura della pagina). Con la tavola anche lei vive il giorno vero:
+# - di sera, il cielo di due ore dopo il tramonto, lo stesso della home: le stelle a occhio nudo con il loro colore, i
+#   pianeti, la Via Lattea e la luna, con la sua fase, la sua faccia girata come quella sera e la sua scia sul mare. Lo
+#   sguardo della scena si gira verso la luna: così la luna c'è ogni sera che è in cielo, al suo posto fra le stelle
+#   vere, in un angolo libero del disegno (sopra la quercia del vello; se lì starebbe dietro la chioma, fra la vela e
+#   la quercia, o a sinistra). Se è alta, la scena alza lo sguardo quanto basta; senza luna guarda a sud. Il cielo
+#   comincia dal crinale dei monti lontani, come se i monti stessero sull'orizzonte: dietro di loro le stelle e la luna
+#   tramontano;
+# - di giorno il sole è un segno, come quello dell'angolo nella home: più alto d'estate e più basso d'inverno. La luna
+#   c'è se a metà pomeriggio si vede, pallida, con la parte illuminata verso il sole (quello vero);
+# - sempre, la stagione, con le date della home (stagione()): il prato che d'estate ingiallisce, le chiome che
+#   d'autunno si fanno d'oro e di ruggine, la neve sui monti, la nebbia sul mare, i fiori, le rondini, le lucciole, le
+#   stelle cadenti d'agosto e di dicembre, che vengono dal loro radiante.
+# Di notte il disegno dell'app stende sulla scena un velo scuro e mette la luna sopra il velo. Qui il velo non c'è: ogni
+# colore di ciò che stava sotto è già velato con lo stesso conto (due terzi del colore e un terzo del velo), così la
+# luna e le stelle stanno dietro la vela, gli alberi e i monti senza che il velo le spenga. La notte del disegno resta
+# quella di prima: provata pixel per pixel, a meno degli arrotondamenti.
+# Le parti fatte di seni e coseni (il cielo, la luna, la scia) stanno fra due segni, <!-- cielo:inizio --> e
+# <!-- cielo:fine -->, che senza_cielo() toglie quando confronta il sito online con quello rifatto qui.
+
+SCENA_F, SCENA_CX, SCENA_ORIZZONTE = 190.0, 200.0, 150.0     # la lente, la x del centro, la y dell'orizzonte del cielo
+SCENA_LUNA = 15.0                                             # il raggio della luna di notte (di giorno è più piccola)
+VELO, VELO_FORZA = (0x06, 0x10, 0x1F), 0.32                   # il velo della notte del disegno (.sc-velo)
+# Le classi che il disegno usa sopra il velo (la luna, il vello che di notte brilla, la lanterna): restano com'erano.
+SOPRA_IL_VELO = {"sc-velo", "sc-luna", "sc-alone-luna-0", "sc-alone-luna-1", "sc-vello", "sc-vello-luce", "sc-lume-0", "sc-lume-1",
+                 "sc-lanterna", "sc-lanterna-corpo", "sc-lanterna-bordo", "sc-lanterna-accesa", "sc-lanterna-tetto", "sc-gancio"}
+# Ciò che sta davanti al cielo, a grandi linee (per scegliere dove mettere la luna): le chiome dei due alberi a
+# sinistra e della quercia, la vela con il pennone, l'albero e la sua palla d'oro, lo scafo, il fregio di poppa.
+DAVANTI = [("tondo", 13, 154, 17), ("tondo", 40, 164, 16), ("ellisse", 373, 117, 37, 30), ("rett", 124, 50, 276, 147),
+           ("rett", 195, 20, 205, 150), ("rett", 30, 145, 330, 200), ("rett", 63, 92, 127, 218), ("tondo", 200, 26, 6)]
+# I posti liberi per la luna, in ordine di preferenza: la x, di sera e di giorno (di giorno a destra c'è il sole).
+POSTI_DI_SERA, POSTI_DI_GIORNO = (372, 312, 24), (24, 312, 372)
+# I colori della stagione: di giorno, e di notte prima del velo (None: quello di sempre).
+COLORI_SCENA = {
+    "tv-primavera": {"sc-v-prato": ("#7BAA5C", "#46684F"), "sc-v-chioma": ("#5A8C4A", "#355A4A"), "sc-v-chioma-scura": ("#477546", "#2C4E44")},
+    "tv-estate": {"sc-v-prato": ("#B9A75C", "#5F6149"), "sc-v-chioma": ("#4A7A42", "#2F5045"), "sc-v-chioma-scura": ("#3A6140", "#27453F"),
+                  "sc-cielo-0": ("#72C1EC", None), "sc-cielo-1": ("#9CD7F2", None), "sc-cielo-2": ("#47AFD6", None), "sc-mare-0": ("#1FA4C8", None)},
+    "tv-autunno": {"sc-v-prato": ("#8E9A5A", "#4D5A4A"), "sc-cielo-0": ("#93C8E6", None), "sc-cielo-1": ("#B6DCEC", None)},
+    "tv-inverno": {"sc-v-prato": ("#6A955C", "#3F5D52"), "sc-cielo-0": ("#A3CBE2", None), "sc-cielo-1": ("#C3E0EC", None), "sc-cielo-2": ("#76B1CB", None),
+                   "sc-mare-0": ("#3893B4", "#123F55"), "sc-mare-1": ("#0F5B7C", None)},
+    "tv-foglie": {"sc-v-chioma": ("#A98A3C", "#4F4A34"), "sc-v-chioma-scura": ("#8A6331", "#433829")},
+}
+# Le regole che la scena aggiunge al suo stile: le stelle (tonde, per misura e per colore, come nella home), i pianeti,
+# la luna, la scia, le cose della stagione; di notte quelle che cambiano.
+STILE_SCENA = """.sc-s0, .sc-s1, .sc-s2, .sc-s3, .sc-s4, .sc-s5, .sc-s6 { fill: none; stroke: #FFF; stroke-linecap: round; }
+.sc-s0 { stroke-width: 3.1; } .sc-s1 { stroke-width: 2.5; } .sc-s2 { stroke-width: 1.95; } .sc-s3 { stroke-width: 1.5; }
+.sc-s4 { stroke-width: 1.15; stroke-opacity: .9; } .sc-s5 { stroke-width: .9; stroke-opacity: .7; } .sc-s6 { stroke-width: .75; stroke-opacity: .5; }
+.sc-tb { stroke: #C4D6FF; } .sc-ta { stroke: #E1EBFF; } .sc-tg { stroke: #FFF0C8; } .sc-to { stroke: #FFD9AC; } .sc-tr { stroke: #FFBE98; }
+.sc-p-venere { fill: #FFF; } .sc-p-giove { fill: #FBEED0; } .sc-p-saturno { fill: #F2DC9C; } .sc-p-marte { fill: #F3A07A; }
+.sc-mari { fill: #6A6252; fill-opacity: .2; }
+.sc-cinerea { fill: #C9D6EE; }
+.sc-luna-giorno { fill: #FFF; fill-opacity: .85; }
+.sc-scia { fill: none; stroke: #FFF0C4; stroke-width: 1.7; stroke-linecap: round; }
+.sc-neve { fill: #FFF; fill-opacity: .62; }
+.sc-nebbia { fill: #FFF; fill-opacity: .3; }
+.sc-fiore { fill: none; stroke: #FFFDF5; stroke-width: 1.7; stroke-linecap: round; }
+.sc-fiore-giallo { stroke: #F4CB4C; }
+.sc-lucciola, .sc-lucciola-alone { fill: none; stroke: #EEF59A; stroke-width: 2; stroke-linecap: round; }
+.sc-lucciola-alone { stroke-width: 7; stroke-opacity: .2; }
+.sc-rondini { fill: none; stroke: #27384A; stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; stroke-opacity: .62; }
+.sc-cadente { fill: #FFF; fill-opacity: .9; }
+.sc-brilla-0 { animation: sc-brilla 1.42s ease-in-out -.3s infinite alternate; }
+.sc-brilla-1 { animation: sc-brilla 1.74s ease-in-out -1.1s infinite alternate; }
+.sc-brilla-2 { animation: sc-brilla 2.3s ease-in-out -1.9s infinite alternate; }
+.sc-lucciole-0 { animation: sc-brilla 1.1s ease-in-out -.4s infinite alternate; }
+.sc-lucciole-1 { animation: sc-brilla 1.6s ease-in-out -1s infinite alternate; }
+"""
+STILE_SCENA_DI_NOTTE = """.sc-neve { fill: #B7C3D6; fill-opacity: .2; }
+.sc-nebbia { fill: #7A8AA4; fill-opacity: .22; }
+.sc-fiore { stroke: #7D8794; }
+.sc-fiore-giallo { stroke: #8A7A44; }
+"""
+
+
+class Sguardo:
+    """Dove guarda la scena: l'azimut che cade in x = cx e quanto è alzata (in radianti). È la proiezione stereografica
+    della home: l'orizzonte, davanti, sta a y = SCENA_ORIZZONTE; alzando lo sguardo scende, dietro i monti."""
+
+    def __init__(self, verso=180.0, alzo=0.0, cx=SCENA_CX):
+        self.verso, self.alzo, self.cx = verso, alzo, cx
+
+    def __call__(self, alt, az):
+        a, z = math.radians(alt), math.radians(az - self.verso + 180)
+        est, nord, su = math.cos(a) * math.sin(z), math.cos(a) * math.cos(z), math.sin(a)
+        avanti = -nord * math.cos(self.alzo) + su * math.sin(self.alzo)
+        if avanti < -0.2:
+            return None
+        k = 2 * SCENA_F / (1 + avanti)
+        return self.cx - k * est, SCENA_ORIZZONTE - k * (nord * math.sin(self.alzo) + su * math.cos(self.alzo))
+
+    def indietro(self, x, y):
+        """Il contrario: altezza e azimut del punto del cielo che cade in (x, y), o (None, None) se è sotto l'orizzonte."""
+        xx, yy = (self.cx - x) / (2 * SCENA_F), (SCENA_ORIZZONTE - y) / (2 * SCENA_F)
+        avanti = (1 - xx * xx - yy * yy) / (1 + xx * xx + yy * yy)
+        est, sopra = xx * (1 + avanti), yy * (1 + avanti)
+        nord, su = -avanti * math.cos(self.alzo) + sopra * math.sin(self.alzo), avanti * math.sin(self.alzo) + sopra * math.cos(self.alzo)
+        if su <= 0.005:
+            return None, None
+        return math.degrees(math.asin(min(1.0, su))), (math.degrees(math.atan2(est, nord)) + self.verso - 180) % 360
+
+
+@functools.lru_cache(maxsize=None)
+def crinale_dei_monti(d):
+    """I punti del crinale dei monti lontani, dal loro disegno (una M, una L, poi curve Q e una L finale)."""
+    primo = [float(v) for v in re.match(r"M-?[\d.]+ [\d.]+L(-?[\d.]+) ([\d.]+)", d).groups()]
+    punti, da = [tuple(primo)], tuple(primo)
+    for curva in re.findall(r"Q([^QLZ]*)", d):
+        cx_, cy_, ax, ay = map(float, re.findall(r"-?\d+(?:\.\d+)?", curva))
+        for k in range(1, 17):
+            t = k / 16
+            punti.append(((1 - t) ** 2 * da[0] + 2 * (1 - t) * t * cx_ + t * t * ax, (1 - t) ** 2 * da[1] + 2 * (1 - t) * t * cy_ + t * t * ay))
+        da = (ax, ay)
+    ultimo = re.findall(r"L(-?[\d.]+) ([\d.]+)L-?[\d.]+ [\d.]+Z$", d)
+    return tuple(punti + [tuple(map(float, ultimo[0]))])
+
+
+def sotto_il_crinale(crinale, x, y):
+    for (a, b), (c, d) in zip(crinale, crinale[1:]):
+        if a <= x <= c:
+            return y >= (b + (d - b) * (x - a) / (c - a) if c > a else b)
+    return y >= (crinale[0][1] if x < crinale[0][0] else crinale[-1][1])
+
+
+def si_vede(crinale, x, y, r=SCENA_LUNA):
+    """Quanta parte di un disco in (x, y) resta scoperta: né dietro i monti né dietro ciò che sta davanti."""
+    def coperto(px, py):
+        if sotto_il_crinale(crinale, px, py):
+            return True
+        for f in DAVANTI:
+            if (f[0] == "tondo" and (px - f[1]) ** 2 + (py - f[2]) ** 2 <= f[3] ** 2
+                    or f[0] == "ellisse" and ((px - f[1]) / f[3]) ** 2 + ((py - f[2]) / f[4]) ** 2 <= 1
+                    or f[0] == "rett" and f[1] <= px <= f[3] and f[2] <= py <= f[4]):
+                return True
+        return False
+    punti = [(x + r * i / 5, y + r * j / 5) for i in range(-5, 6) for j in range(-5, 6) if i * i + j * j <= 25]
+    return sum(not coperto(*p) for p in punti) / len(punti)
+
+
+def luna_vista_da_qui(jd, siderale):
+    """La luna a quell'istante: ascensione retta e declinazione, altezza (vista da chi sta sulla Terra) e azimut, e
+    quanta se ne vede."""
+    ar, dec = dove_luna(jd)
+    alt, az = in_cielo(ar / 15, dec, siderale)
+    return ar, dec, alt - 0.95 * math.cos(math.radians(alt)), az, (1 - math.cos(math.radians(sole_e_luna(jd)[2]))) / 2
+
+
+def guarda_la_luna(luna, posti, crinale, alto):
+    """Lo sguardo verso la luna: la luna cade in uno dei posti, alla sua altezza vera sopra l'orizzonte, e se è più alta
+    di «alto» la scena alza lo sguardo quanto basta. Il posto è il primo da cui si vede quasi tutta."""
+    _, _, alt, az, _ = luna
+    migliore = None
+    for i, x in enumerate(posti):
+        s = Sguardo(az, max(0.0, math.radians(alt) - 2 * math.atan((SCENA_ORIZZONTE - alto) / (2 * SCENA_F))), x)
+        q = s(alt, az)
+        voto = si_vede(crinale, *q) - 0.12 * i
+        if migliore is None or voto > migliore[2]:
+            migliore = (s, q, voto)
+    return migliore[0], migliore[1]
+
+
+def chiarore_della_scena(siderale, anni, sguardo, buio):
+    """La Via Lattea della scena, come chiarore_della_via() per la home ma con lo sguardo della scena, e più morbida:
+    in un disegno così piccolo la sua trama sembrerebbe fumo."""
+    assi = []
+    for alt, az in ((0, 90), (0, 0), (90, 0)):
+        ar, dec = dal_cielo(alt, az + sguardo.verso - 180, siderale)
+        a, d = math.radians(ar), math.radians(dec)
+        ar, dec = ar - anni * (0.012812 + 0.005567 * math.sin(a) * math.tan(d)), dec - anni * 0.005567 * math.cos(a)
+        l, b = (math.radians(v) for v in in_galattiche(ar, dec))
+        assi.append((math.cos(b) * math.cos(l), math.cos(b) * math.sin(l), math.sin(b)))
+    (ex, ey, ez), (nx, ny, nz), (sx, sy, sz) = assi
+    seno, coseno = math.sin(sguardo.alzo), math.cos(sguardo.alzo)
+    x0, y0, passo, larga, alta = -60, -15, 4, 130, 47
+    punti = bytearray(larga * alta * 4)
+    for py in range(alta):
+        yy = (SCENA_ORIZZONTE - (y0 + (py + 0.5) * passo)) / (2 * SCENA_F)
+        for px in range(larga):
+            xx = (sguardo.cx - (x0 + (px + 0.5) * passo)) / (2 * SCENA_F)
+            avanti = (1 - xx * xx - yy * yy) / (1 + xx * xx + yy * yy)
+            est, sopra = xx * (1 + avanti), yy * (1 + avanti)
+            nord, su = -avanti * coseno + sopra * seno, avanti * seno + sopra * coseno
+            if su <= 0.005:
+                continue
+            gz = est * ez + nord * nz + su * sz
+            if abs(gz) > 0.49:
+                continue
+            luce, caldo = della_via(math.degrees(math.atan2(est * ey + nord * ny + su * sy, est * ex + nord * nx + su * sx)), math.degrees(math.asin(gz)))
+            forza = (1 - math.exp(-luce)) * 0.24 * buio * min(1.0, su / 0.1)
+            i = (py * larga + px) * 4
+            punti[i:i + 4] = (round(204 + 48 * caldo), round(220 + 8 * caldo), round(250 - 62 * caldo), round(255 * forza))
+    return (f'<image x="{x0}" y="{y0}" width="{larga * passo}" height="{alta * passo}" preserveAspectRatio="none" '
+            f'href="data:image/png;base64,{base64.b64encode(png(larga, alta, bytes(punti))).decode("ascii")}"/>')
+
+
+def luna_della_scena(q, luna, jd, siderale, sguardo, notte=True):
+    """La luna nella scena. Di notte: il suo chiarore, la luce cinerea sulla parte buia quando è una falce, e la parte
+    illuminata con i mari; di giorno solo la parte illuminata, pallida. La luce viene dal sole vero, e i mari sono
+    girati come quella sera (vedi luna_vera())."""
+    ar, dec, alt, _, vista = luna
+    x, y = q
+
+    def versore(a, d):
+        return (math.cos(math.radians(d)) * math.cos(math.radians(a)), math.cos(math.radians(d)) * math.sin(math.radians(a)), math.sin(math.radians(d)))
+    scende = 0.95 * math.cos(math.radians(alt))
+    m, s = versore(ar, dec), versore(*dove_sole(jd))
+    prodotto = sum(a * b for a, b in zip(m, s))
+    verso = [b - prodotto * a for a, b in zip(m, s)]
+    lungo = math.sqrt(sum(v * v for v in verso)) or 1.0
+    oltre = [a * math.cos(math.radians(3)) + v / lungo * math.sin(math.radians(3)) for a, v in zip(m, verso)]
+    alt2, az2 = in_cielo(math.degrees(math.atan2(oltre[1], oltre[0])) / 15, math.degrees(math.asin(max(-1.0, min(1.0, oltre[2])))), siderale)
+    alt3, az3 = in_cielo(ar / 15, dec + 3, siderale)
+    q2, q3 = sguardo(alt2 - scende, az2), sguardo(alt3 - scende, az3)
+    verso_il_sole = math.degrees(math.atan2(q2[1] - y, q2[0] - x))
+    nord = math.degrees(math.atan2(q3[1] - y, q3[0] - x)) + 90
+    r = SCENA_LUNA if notte else 12.5
+    if vista > 0.988:
+        lume = f'<circle r="{n(r)}"/>'
+    else:
+        lume = (f'<path transform="rotate({n(verso_il_sole + 180)})" '
+                f'd="M0 {n(-r)}A{n(r)} {n(r)} 0 0 0 0 {n(r)}A{n(r * abs(1 - 2 * vista))} {n(r)} 0 0 {1 if vista < 0.5 else 0} 0 {n(-r)}Z"/>')
+    if not notte:
+        return f'<g mask="url(#sc-m-cielo)"><g class="sc-luna-giorno" transform="translate({n(x)} {n(y)})">{lume}</g></g>'
+    mari = "".join(f'<ellipse cx="{n(a * r)}" cy="{n(b * r)}" rx="{n(c * r)}" ry="{n(d * r)}"' + (f' transform="rotate({e} {n(a * r)} {n(b * r)})"' if e else "") + "/>"
+                   for a, b, c, d, e in MARI)
+    cinerea = max(0.0, 1 - vista / 0.4)
+    return (f'<circle cx="{n(x)}" cy="{n(y)}" r="{n(r * (2.4 + 3.4 * vista))}" fill="url(#sc-g-luna-vera)" opacity="{0.3 + 0.7 * vista:.2f}"/>'
+            f'<g mask="url(#sc-m-cielo)"><g transform="translate({n(x)} {n(y)})">'
+            + (f'<circle class="sc-cinerea" r="{n(r)}" opacity="{0.05 + 0.13 * cinerea:.2f}"/>' if cinerea else "")
+            + f'<clipPath id="sc-c-luna">{lume}</clipPath><g class="sc-luna" clip-path="url(#sc-c-luna)"><circle r="{n(r)}"/>'
+            f'<g class="sc-mari" transform="rotate({n(nord)})">{mari}</g></g></g></g>')
+
+
+def scia_della_luna(x, forza, caso):
+    """La scia della luna sul mare: trattini di luce sotto di lei, fitti e corti all'orizzonte, più lunghi, più radi e più
+    sparsi verso chi guarda. Due gruppi che brillano a tempi diversi."""
+    pezzi, y, i = ([], []), 201.0, 0
+    while y < 284:
+        vicino = (y - 199) / 86
+        largo = 1.6 + 9 * vicino * caso.uniform(0.5, 1.3)
+        sposta = caso.gauss(0, 2 + 13 * vicino)
+        pezzi[i % 2].append(f"M{n(x + sposta - largo / 2)} {n(y)}h{n(largo)}")
+        y += 1.1 + 2.6 * vicino * caso.uniform(0.6, 1.4)
+        i += 1
+    return (f'<g opacity="{forza:.2f}"><path class="sc-scia sc-brilla-0" d="{"".join(pezzi[0])}"/>'
+            f'<path class="sc-scia sc-brilla-2" d="{"".join(pezzi[1])}"/></g>')
+
+
+def via_dal_radiante(alt, az, r_alt, r_az, gradi):
+    """Il punto a «gradi» di distanza da (alt, az), lungo il cerchio massimo che viene dal radiante: dove va una stella
+    cadente che passa di lì."""
+    def versore(a, z):
+        a, z = math.radians(a), math.radians(z)
+        return (math.cos(a) * math.sin(z), math.cos(a) * math.cos(z), math.sin(a))
+    p, r = versore(alt, az), versore(r_alt, r_az)
+    d = sum(a * b for a, b in zip(p, r))
+    t = [a - d * b for a, b in zip(p, r)]
+    lungo = math.sqrt(sum(c * c for c in t)) or 1.0
+    q = [a * math.cos(math.radians(gradi)) + b / lungo * math.sin(math.radians(gradi)) for a, b in zip(p, t)]
+    return math.degrees(math.asin(max(-1.0, min(1.0, q[2])))), math.degrees(math.atan2(q[0], q[1])) % 360
+
+
+def cielo_della_scena(giorno, crinale):
+    """Il cielo della scena quella sera (due ore dopo il tramonto): le stelle, i pianeti, la Via Lattea e le stelle
+    cadenti, la luna; e la sua scia sul mare."""
+    jd = giuliano(a_notte_fatta(giorno))
+    siderale, anni = tempo_siderale(jd), (jd - 2451545.0) / 365.25
+    luna = luna_vista_da_qui(jd, siderale)
+    if luna[2] > 0.5 and luna[4] > 0.03:
+        sguardo, q_luna = guarda_la_luna(luna, POSTI_DI_SERA, crinale, alto=42)
+    else:
+        sguardo, q_luna = Sguardo(), None
+    chiarore = luna[4] if luna[2] > 0 else 0.0                  # con la luna in cielo le stelle deboli non si vedono
+    limite, buio = 5.4 - 1.6 * chiarore, 1 - 0.8 * chiarore
+
+    def nella_scena(q, margine=0):
+        return q is not None and -60 - margine <= q[0] <= 460 + margine and -15 - margine <= q[1] <= 170 + margine
+    gruppi, aloni = {}, []
+    for chiave, (ar, dec, g, colore) in STELLE.items():
+        if g > limite:
+            continue
+        a, d = precessa(ar, dec, anni)
+        alt, az = in_cielo(a / 15, d, siderale)
+        q = sguardo(alt, az) if alt > 0.3 else None
+        if not nella_scena(q, 3) or q_luna and math.hypot(q[0] - q_luna[0], q[1] - q_luna[1]) < SCENA_LUNA + 2:
+            continue
+        misura = 0 if g < 0.5 else 1 if g < 1.5 else 2 if g < 2.5 else 3 if g < 3.3 else 4 if g < 4.0 else 5 if g < 4.7 else 6
+        tinta = ("" if misura > 4 else "b" if colore <= -0.05 else "a" if colore <= 0.25 else "" if colore <= 0.65 else "g" if colore <= 1.0
+                 else "o" if colore <= 1.4 else "r")
+        brilla = sum(map(ord, chiave)) % 4 if misura <= 4 else 3       # tre gruppi brillano, a tempi diversi; il quarto e le deboli no
+        gruppi.setdefault((brilla, misura, tinta), []).append(f"M{n(q[0])} {n(q[1])}h0")
+        if g < 1.0:
+            aloni.append(f'<circle cx="{n(q[0])}" cy="{n(q[1])}" r="{n(6 - 1.6 * g)}" fill="url(#sc-g-stella)" opacity=".5"/>')
+    stelle = "".join((f'<g class="sc-brilla-{b}">' if b < 3 else "<g>") + "".join(f'<path class="sc-s{m}{(" sc-t" + t) if t else ""}" d="{"".join(p)}"/>'
+                                                                              for (b2, m, t), p in sorted(gruppi.items()) if b2 == b) + "</g>" for b in range(4))
+    pianeti = ""
+    for nome in ("Venere", "Marte", "Giove", "Saturno"):
+        ar, dec, _, g = pianeta(nome, jd)
+        a, d = precessa(ar, dec, anni)
+        alt, az = in_cielo(a / 15, d, siderale)
+        q = sguardo(alt, az) if alt > 1 else None
+        if nella_scena(q):
+            r = max(1.3, 2.1 - 0.35 * g)
+            pianeti += (f'<circle cx="{n(q[0])}" cy="{n(q[1])}" r="{n(r * 3.4)}" fill="url(#sc-g-stella)" opacity=".55"/>'
+                        f'<circle class="sc-p-{nome.lower()}" cx="{n(q[0])}" cy="{n(q[1])}" r="{n(r)}"/>')
+    # le stelle cadenti d'agosto e di dicembre: tre scie sottili che vanno via dal loro radiante, come quella sera
+    cadenti = ""
+    classi = stagione(giorno)
+    radiante = (3 + 12 / 60, 58) if "tv-perseidi" in classi else (7 + 28 / 60, 33) if "tv-geminidi" in classi else None
+    if radiante:
+        r_alt, r_az = in_cielo(*radiante, siderale)
+        caso, teste = random.Random(giorno.toordinal() + 13), []
+        for _ in range(40):
+            x0, y0 = caso.uniform(-40, 440), caso.uniform(-5, 95)
+            alt, az = sguardo.indietro(x0, y0)
+            if alt is None or len(teste) == 3 or any(math.hypot(x0 - a, y0 - b) < 70 for a, b, _ in teste):
+                continue
+            q = sguardo(*via_dal_radiante(alt, az, r_alt, r_az, 6))
+            if nella_scena(q) and q[1] < 120:
+                teste.append((x0, y0, q))
+        for x0, y0, (x1, y1) in teste:
+            lungo = math.hypot(x1 - x0, y1 - y0) or 1.0
+            px, py = -(y1 - y0) / lungo * 0.7, (x1 - x0) / lungo * 0.7
+            cadenti += f"M{n(x0)} {n(y0)}L{n(x1 + px)} {n(y1 + py)}L{n(x1 - px)} {n(y1 - py)}Z"
+        cadenti = f'<path class="sc-cadente" d="{cadenti}"/>' if cadenti else ""
+    cielo = (f'<g mask="url(#sc-m-cielo)">{chiarore_della_scena(siderale, anni, sguardo, round(buio, 2))}{"".join(aloni)}{stelle}{pianeti}{cadenti}</g>'
+             + (luna_della_scena(q_luna, luna, jd, siderale, sguardo) if q_luna else ""))
+    scia = ""
+    if q_luna and luna[4] > 0.08 and si_vede(crinale, *q_luna) > 0.3:
+        scia = scia_della_luna(q_luna[0], min(0.95, 0.2 + 0.8 * luna[4]) * max(0.35, 1 - max(0.0, luna[2] - 25) / 40), random.Random(giorno.toordinal()))
+    return cielo, scia
+
+
+def luna_di_giorno_nella_scena(giorno, crinale):
+    """La luna a metà pomeriggio (due ore dopo il mezzogiorno vero, come la carta del giorno della home), se è in cielo e
+    abbastanza lontana dal sole da vedersi."""
+    jd = giuliano(mezzogiorno(giorno) + DOPO_MEZZOGIORNO)
+    siderale = tempo_siderale(jd)
+    luna = luna_vista_da_qui(jd, siderale)
+    if luna[2] < 2 or luna[4] < 0.07:
+        return ""
+    sguardo, q = guarda_la_luna(luna, POSTI_DI_GIORNO, crinale, alto=38)
+    return luna_della_scena(q, luna, jd, siderale, sguardo, notte=False)
+
+
+def cose_della_scena(giorno, monti):
+    """Ciò che la stagione aggiunge alla scena: la neve sul crinale, la nebbia sul mare, i fiori sui due prati, le lucciole
+    di notte, le rondini di giorno."""
+    classi = stagione(giorno)
+    caso = random.Random(giorno.toordinal() + 11)
+    cose = dict.fromkeys(("neve", "nebbia", "fiori", "lucciole", "rondini"), "")
+    if "tv-monti-neve" in classi:
+        cose["neve"] = f'<path class="sc-neve" mask="url(#sc-m-neve)" d="{monti}"/>'
+    if "tv-nebbia" in classi:
+        cose["nebbia"] = '<path class="sc-nebbia" d="' + "".join(f"M{x} {y}Q{n(x + largo / 2)} {n(y - 2 * alto)} {x + largo} {y}Q{n(x + largo / 2)} {n(y + alto)} {x} {y}Z"
+                                                          for x, y, largo, alto in ((-70, 193, 190, 4.5), (60, 188, 230, 3.5), (230, 191, 250, 4.5),
+                                                                                    (330, 184, 170, 3), (-40, 181, 140, 2.5), (150, 179, 120, 2.2))) + '"/>'
+
+    def sul_prato(x):
+        """Un punto sopra l'orlo di uno dei due prati (quello a sinistra fino a x = 70, quello della quercia da 330)."""
+        if x < 100:
+            cima = 194 - 8 * (x + 60) / 60 if x < 0 else 186 - 4 * math.sin(math.pi * x / 50) if x < 50 else 184 + 15 * (x - 50) / 20
+        else:
+            cima = 199 - 11 * (x - 330) / 46 if x < 376 else 188 + 2 * (x - 376) / 24 if x < 400 else 190 + 6 * (x - 400) / 60
+        return caso.uniform(cima + 1.6, 198.2)
+    if "tv-fiori" in classi:
+        bianchi, gialli = [], []
+        for _ in range(46):
+            x = caso.uniform(-58, 66) if caso.random() < 0.62 else caso.uniform(336, 458)
+            (gialli if caso.random() < 0.35 else bianchi).append(f"M{n(x)} {n(sul_prato(x))}h0")
+        cose["fiori"] = f'<path class="sc-fiore" d="{"".join(bianchi)}"/><path class="sc-fiore sc-fiore-giallo" d="{"".join(gialli)}"/>'
+    if "tv-lucciole" in classi:
+        sciami = ([], [])
+        for i in range(16):
+            sciami[i % 2].append(f"M{n(caso.uniform(-55, 75) if i % 2 else caso.uniform(330, 452))} {n(caso.uniform(150, 194))}h0")
+        cose["lucciole"] = "".join(f'<g class="sc-lucciole-{k}"><path class="sc-lucciola-alone" d="{"".join(s)}"/><path class="sc-lucciola" d="{"".join(s)}"/></g>'
+                                   for k, s in enumerate(sciami))
+    if (3, 25) <= (giorno.month, giorno.day) <= (9, 20):            # le stesse settimane delle rondini della home
+        voli = []
+        for _ in range(caso.randint(3, 5)):
+            x, y, s = caso.uniform(-44, 92), caso.uniform(14, 78), caso.uniform(0.75, 1.15)
+            voli.append(f"M{n(x)} {n(y)}q{n(2.4 * s)} {n(-3.1 * s)} {n(4.8 * s)} {n(-0.4 * s)}q{n(2.6 * s)} {n(-2.7 * s)} {n(5.1 * s)} {n(0.6 * s)}")
+        cose["rondini"] = f'<path class="sc-rondini" d="{"".join(voli)}"/>'
+    return cose
+
+
+def velato(colore):
+    """Un colore sotto il velo della notte del disegno."""
+    rgb = [int(colore.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)] if len(colore) == 7 else [int(c * 2, 16) for c in colore.lstrip("#")]
+    return "#" + "".join(f"{round((1 - VELO_FORZA) * a + VELO_FORZA * b):02X}" for a, b in zip(rgb, VELO))
+
+
+def stile_della_scena(stile, giorno):
+    """Lo stile della scena quel giorno: le regole di sempre, quelle della scena, i colori della stagione; e la notte già
+    velata, colore per colore."""
+    a, b = stile.index("@media (prefers-color-scheme: dark) {"), stile.index("@media (prefers-reduced-motion")
+    chiaro, scuro, resto = stile[:a], stile[a:b], stile[b:]
+
+    def regole(testo):
+        return {m.group(1): dict(p.split(": ") for p in m.group(2).rstrip(";").split("; ")) for m in re.finditer(r"^\.(sc-[a-z0-9-]+) \{ (.*?) \}$", testo, re.M)}
+    di_giorno, di_notte = regole(chiaro), regole(scuro)
+    notte = {c: dict(p) for c, p in di_giorno.items()}
+    for c, p in di_notte.items():
+        notte.setdefault(c, {}).update(p)
+    stagione_giorno = {}
+    for classe in stagione(giorno):
+        for nome, (di_g, di_n) in COLORI_SCENA.get(classe, {}).items():
+            prop = "stop-color" if nome.startswith(("sc-cielo", "sc-mare")) else "fill"
+            stagione_giorno[nome] = f"{prop}: {di_g};"
+            if di_n:
+                notte.setdefault(nome, {})[prop] = di_n
+    righe = []
+    for classe, prop in notte.items():
+        if classe in SOPRA_IL_VELO or "display" in prop:
+            continue
+        colori = {k: velato(v) for k, v in prop.items() if k in ("fill", "stroke", "stop-color") and v.startswith("#")}
+        altro = {k: v for k, v in di_notte.get(classe, {}).items() if k not in colori}
+        if colori or altro:
+            righe.append(f".{classe} {{ " + " ".join(f"{k}: {v};" for k, v in {**colori, **altro}.items()) + " }")
+    notte_ = ("@media (prefers-color-scheme: dark) {\n.sc-solo-giorno { display: none; }\n.sc-solo-notte { display: inline; }\n.sc-velo { display: none; }\n"
+              + "\n".join(righe) + "\n" + STILE_SCENA_DI_NOTTE + "}\n")
+    return chiaro + STILE_SCENA + "".join(f".{c} {{ {p} }}\n" for c, p in stagione_giorno.items()) + notte_ + resto
+
+
+def scena(svg, giorno):
+    """img/scena.svg (il suo testo) con il giorno vero."""
+    conta = []
+
+    def cambia(schema, nuovo, flags=0):
+        nonlocal svg
+        svg, fatte = re.subn(schema, nuovo, svg, count=1, flags=flags)
+        conta.append((schema[:40], fatte == 1))
+
+    monti = re.search(r'<path class="sc-monti-lontani" d="([^"]*)"', svg).group(1)
+    crinale = crinale_dei_monti(monti)
+    cielo, scia = cielo_della_scena(giorno, crinale)
+    cose = cose_della_scena(giorno, monti)
+    sole = round(34 + 28 * (23.44 - sole_e_luna(giuliano(mezzogiorno(giorno)))[3]) / 46.88)     # più alto d'estate
+    luna_di_giorno = luna_di_giorno_nella_scena(giorno, crinale)
+    cambia(r"(?<=<style>\n).*?(?=</style>)", lambda m: stile_della_scena(m.group(0), giorno), re.S)
+    cambia(r"</defs>", lambda m: (
+        '<radialGradient id="sc-g-stella"><stop offset="0" stop-color="#DCE6F6"/><stop offset="1" stop-color="#DCE6F6" stop-opacity="0"/></radialGradient>'
+        '<radialGradient id="sc-g-luna-vera">' + "".join(f'<stop offset="{d}" stop-color="#FFF1CC" stop-opacity="{f}"/>' for d, f in ((0, 0.7), (0.22, 0.3), (0.5, 0.09), (1, 0)))
+        + '</radialGradient>'
+        f'<mask id="sc-m-cielo" maskUnits="userSpaceOnUse" x="-60" y="-15" width="520" height="300"><rect x="-60" y="-15" width="520" height="300" fill="#fff"/>'
+        f'<path fill="#000" d="{monti}"/></mask>'
+        f'<mask id="sc-m-neve" maskUnits="userSpaceOnUse" x="-60" y="-15" width="520" height="300"><path fill="#fff" d="{monti}"/>'
+        f'<path fill="#000" transform="translate(0 10)" d="{monti}"/><rect x="-60" y="139" width="520" height="150" fill="#000"/></mask>' + m.group(0)))
+    # il cielo di quella sera al posto delle dodici stelle del disegno
+    cambia(r'<g class="sc-solo-notte">\s*<g class="sc-stelle">.*?</g>\s*</g>\s*</g>', lambda m: f'<g class="sc-solo-notte"><!-- cielo:inizio -->{cielo}<!-- cielo:fine --></g>', re.S)
+    # il sole del giorno, con il suo chiarore
+    cambia(r'(<radialGradient id="sc-g-sole" gradientUnits="userSpaceOnUse" cx="371.6" cy=")54(")', lambda m: f"{m.group(1)}{sole}{m.group(2)}")
+    cambia(r'(<circle fill="url\(#sc-g-sole\)" cx="371.6" cy=")54(" r="58"/>)', lambda m: f"{m.group(1)}{sole}{m.group(2)}")
+    cambia(r'(<circle class="sc-sole" cx="371.6" cy=")54(" r="22"/>)', lambda m: f"{m.group(1)}{sole}{m.group(2)}")
+    # la luna e le rondini di giorno, la neve, la nebbia, i fiori e le lucciole, la scia della luna
+    cambia(r'<path class="sc-monti-lontani"[^>]*/>', lambda m: (f'<g class="sc-solo-giorno">{cose["rondini"]}<!-- cielo:inizio -->{luna_di_giorno}<!-- cielo:fine --></g>'
+                                                                    + m.group(0) + cose["neve"]))
+    cambia(r'<path class="sc-monti-vicini"[^>]*/>', lambda m: m.group(0) + cose["nebbia"])
+    cambia(r'<path class="sc-v-serpente-testa"[^>]*/>', lambda m: m.group(0) + cose["fiori"] + (f'<g class="sc-solo-notte">{cose["lucciole"]}</g>' if cose["lucciole"] else ""))
+    cambia(r'<path class="sc-onda sc-onde-dietro"[^>]*/>', lambda m: m.group(0) + f'<g class="sc-solo-notte"><!-- cielo:inizio -->{scia}<!-- cielo:fine --></g>')
+    # il velo e la luna d'angolo del disegno non servono più: la notte è già velata, e la luna è in cielo
+    cambia(r'<rect class="sc-velo"[^>]*/>\s*<circle fill="url\(#sc-g-luna\)"[^>]*/>\s*<circle class="sc-luna"[^>]*/>', "")
+    mancano = [schema for schema, fatto in conta if not fatto]
+    if mancano:
+        sys.exit(f"tavola.py: nella scena di Argonauta non trovo: {mancano}. img/scena.svg è cambiata: va aggiornato scena().")
+    return svg
+
+
 GIORNI = {"it": ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"],
           "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]}
 MESI_BREVI = {"it": ["gen", "feb", "mar", "apr", "mag", "giu", "lug", "ago", "set", "ott", "nov", "dic"],
@@ -1553,7 +2034,9 @@ def studio(pagina, giorno):
 def senza_cielo(pagina):
     """La pagina senza i disegni del cielo e della luna, che dipendono da conti con seni e coseni: due computer diversi
     possono arrotondarli in modo diverso, e una stella sul bordo può esserci in uno e non nell'altro. Il resto (le
-    parole, la data, la stagione, tutto ciò che non è tavola) deve invece essere uguale lettera per lettera."""
+    parole, la data, la stagione, tutto ciò che non è tavola) deve invece essere uguale lettera per lettera. Vale anche
+    per la scena di Argonauta, dove quelle parti stanno fra due segni."""
+    pagina = re.sub(r'<!-- cielo:inizio -->.*?<!-- cielo:fine -->', "<!-- cielo -->", pagina, flags=re.S)
     pagina = re.sub(r'<g class="volta">.*?(?=<g class="(?:fr-zoom|sg-avvicina)">)', "<!-- cielo -->", pagina, flags=re.S)
     pagina = re.sub(r'<!-- lunario:inizio -->.*?<!-- lunario:fine -->', "<!-- lunario -->", pagina, flags=re.S)   # anche il lunario è fatto di quei conti
     pagina = re.sub(r'<!-- ombre:inizio -->.*?<!-- ombre:fine -->', "<!-- ombre -->", pagina, flags=re.S)         # e le ombre
@@ -1561,15 +2044,25 @@ def senza_cielo(pagina):
     return re.sub(r'<g class="solo-notte" transform="[^"]*">.*?</g>', "<!-- luna -->", pagina, flags=re.S)
 
 
-def scrivi(da, a, giorno):
-    """Legge le pagine in «da» e le scrive, con la tavola di quel giorno, in «a» (la stessa cartella, per il sito già
-    costruito)."""
+def scrivi(da, a, giorno, prova=False):
+    """Legge le pagine e la scena di Argonauta in «da» e le scrive, con il giorno, in «a» (la stessa cartella, per il
+    sito già costruito). Nella prova le due home e le due pagine di Argonauta vanno a prendere la scena scritta lì."""
     for nome in list(PAGINE) + STUDIO:
         testo = (da / nome).read_text(encoding="utf-8")
         testo = tavola(testo, giorno, PAGINE[nome]) if nome in PAGINE else studio(testo, giorno)
         (a / nome).parent.mkdir(parents=True, exist_ok=True)
         (a / nome).write_text(testo, encoding="utf-8")
         print(f"{a / nome}: {len(testo.encode('utf-8')) / 1024:.0f} KB")
+    testo = scena((da / SCENA).read_text(encoding="utf-8"), giorno)
+    (a / SCENA).parent.mkdir(parents=True, exist_ok=True)
+    (a / SCENA).write_text(testo, encoding="utf-8")
+    print(f"{a / SCENA}: {len(testo.encode('utf-8')) / 1024:.0f} KB")
+    if prova:
+        dove = "/" + (a / SCENA).relative_to(SITO).as_posix()
+        for nome in list(PAGINE) + ARGONAUTA:
+            testo = ((a if nome in PAGINE else da) / nome).read_text(encoding="utf-8")
+            (a / nome).parent.mkdir(parents=True, exist_ok=True)
+            (a / nome).write_text(testo.replace('src="/img/scena.svg"', f'src="{dove}"'), encoding="utf-8")
 
 
 def racconta(giorno):
@@ -1662,7 +2155,7 @@ def main():
         una, altra = (senza_cielo(pathlib.Path(f).read_text(encoding="utf-8")) for f in altri)
         return 0 if una == altra else 1
     if "--prova" in sys.argv:
-        scrivi(SITO, SITO / "_lavoro" / "prove" / "tavola", giorno)
+        scrivi(SITO, SITO / "_lavoro" / "prove" / "tavola", giorno, prova=True)
     elif len(altri) == 1:
         cartella = pathlib.Path(altri[0]).resolve()
         if (cartella / ".git").exists():
