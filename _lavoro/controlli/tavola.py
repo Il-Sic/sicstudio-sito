@@ -11,6 +11,8 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
   la forma lunga e quella breve, e il nome per chi non vede le contiene; il lunario c'è, una volta;
 - di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
+- nelle notti delle Perseidi e delle Geminidi le stelle cadenti ci sono nei due cieli, ognuna con la sua sfumatura, e
+  il lunario dice dov'è il loro radiante; nelle altre notti non ci sono;
 - <main> porta la classe tv-tavola, e style.css ha le regole che, dove la pagina non scorre animata, mostrano la
   tavola intera nella seconda scena (la variabile --tv-dopo e l'altezza --soglia-alta);
 - le righe delle parole del frontespizio (parole-fronte.json) ci sono, per le due lingue e le due forme di finestra;
@@ -146,6 +148,14 @@ def main():
                         errori.append(f"il sole della carta del giorno è fuori dalla fascia che si vede ({x:.0f}, {y:.0f})")
                     if testo.count('id="tv-ombra-sole"') != 1 or testo.count('<use href="#tv-ombra-sole"/>') != 2 or testo.count('class="tv-ombra tv-ombra-lontana"') < 3:
                         errori.append("le ombre del sole non ci sono nelle due scene, sopra il sentiero e sotto i boschi")
+                    # le stelle cadenti: solo nelle loro notti, nei due cieli, ognuna con la sua sfumatura
+                    cadenti = re.findall(r'<path class="tv-cadente" fill="url\(#(tv-cadente-[ls]\d)\)"', testo)
+                    sfumature = set(re.findall(r'<linearGradient id="(tv-cadente-[ls]\d)"', testo))
+                    if tavola.sciame(giorno):
+                        if {c[11] for c in cadenti} != {"l", "s"} or set(cadenti) - sfumature or len(lunario) != 1 or ("radiante" if tavola.PAGINE[nome] == "it" else "radiant") not in lunario[0]:
+                            errori.append("nelle notti delle stelle cadenti manca una scia in uno dei due cieli, una sfumatura, o il radiante nel lunario")
+                    elif cadenti or sfumature:
+                        errori.append("ci sono stelle cadenti fuori dalle loro notti")
                     if not re.search(r'<main id="contenuto" class="pagina-casa tv-tavola tv-[a-z]+', testo):
                         errori.append("<main> non porta tv-tavola e la stagione: senza scorrimento animato la tavola non si vedrebbe")
                     if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', testo):
