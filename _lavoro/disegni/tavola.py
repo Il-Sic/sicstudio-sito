@@ -1029,7 +1029,9 @@ def disegna_giorno(giorno, alone, lingua):
         f.append(f'<path class="tv-strada tv-strada-altra" d="{linea(punti)}"/>')
         # il nome lungo la strada, due ore prima del mezzogiorno, dal lato opposto alla strada di oggi; se lì c'è la
         # luna, più vicino al mezzogiorno o più lontano, a passi di 24 minuti. La scritta è misurata a occhio: corsivo
-        # fino a 19 px, girato come la strada.
+        # fino a 19 px, girato come la strada. Un altro posto vale solo se la scritta resta prima del meridiano e
+        # dentro la fascia che si vede al telefono, da x 512 (sui telefoni più alti, 412 per 915; 505 a 390 per 844):
+        # più in là, al telefono, usciva dallo schermo («ugno» per «21 giugno»).
         posti = []
         for ore in (-30, -24, -36, -18, -42, -12, -48, -6, -54):
             tre = [sul_foglio_di_giorno(*in_cielo(0, declinazione, h)) for h in (ore - 4, ore, ore + 4)]
@@ -1039,6 +1041,8 @@ def disegna_giorno(giorno, alone, lingua):
             y, gira = y + (16 if declinazione < oggi else -7), math.degrees(math.atan2(y1 - y0, x1 - x0))
             mezza = 4.6 * len(nome) + 4
             alta = 9 + mezza * abs(math.sin(math.radians(gira)))
+            if posti and not CX_GIORNO - 218 < x - mezza < x + mezza < CX_GIORNO:
+                continue
             posti.append((x, y, gira))
             if not any(x - mezza < b[2] and b[0] < x + mezza and y - 5 - alta < b[3] and b[1] < y - 5 + alta for b in occupati):
                 break
