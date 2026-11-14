@@ -241,9 +241,9 @@ TESTI = {
                      "Fasi fino al vello d’oro.",
            "approdi": ["Pagase", "Lemno", "Cizico", "Simplegadi", "Colchide", "Vello d’oro"],
            "mari": ["Mar Egeo", "Mar Nero"],
-           "fonte": "Le coste vengono da Natural Earth, di pubblico dominio, semplificate. Gli approdi sono nei luoghi "
-                    "di oggi: Pagase vicino a Volo, Cizico sul mar di Marmara, le Simplegadi all’imbocco del Bosforo; il "
-                    "Fasi è il fiume Rioni, in Georgia."},
+           "fonte": 'Le coste vengono da <span lang="en">Natural Earth</span>, di pubblico dominio, semplificate. '
+                    "Gli approdi sono nei luoghi di oggi: Pagase vicino a Volo, Cizico sul mar di Marmara, le "
+                    "Simplegadi all’imbocco del Bosforo; il Fasi è il fiume Rioni, in Georgia."},
     "en": {"titolo": "The chart of the Voyage of Argo: from Pagasae, in Thessaly, to Lemnos, Cyzicus and the Clashing "
                      "Rocks at the mouth of the Black Sea; then along the coast of Anatolia to Colchis and up the river "
                      "Phasis to the golden fleece.",
@@ -257,10 +257,13 @@ PAGINE = {"it": "argonauta/il-mito/index.html", "en": "en/argonauta/the-myth/ind
 
 
 def blocco(lingua):
+    """La figura nella pagina. I nomi sulla carta sono nascosti ai lettori di schermo (14/11): il titolo della carta
+    dice già tutti gli approdi, in ordine, e letti dopo il titolo sarebbero un secondo elenco con in più i mari."""
     svg, nomi = figura(lingua)
     return ('\n  <figure class="carta-viaggio">\n    <div class="carta-pista">\n      <div class="carta-palco">\n'
-            '        <div class="carta-mappa">\n          ' + svg + '\n          <ol class="carta-nomi">'
-            + "".join(nomi) + '</ol>\n        </div>\n      </div>\n    </div>\n'
+            '        <div class="carta-mappa">\n          ' + svg + '\n'
+            '          <ol class="carta-nomi" aria-hidden="true">' + "".join(nomi) + '</ol>\n'
+            '        </div>\n      </div>\n    </div>\n'
             f'    <figcaption class="fonte">{TESTI[lingua]["fonte"]}</figcaption>\n  </figure>\n  ')
 
 
@@ -280,11 +283,14 @@ def css():
     scia = " ".join(f"{fot[i][0]:.2f}% {{ stroke-dashoffset: {1 - fot[i][1]:.4f}; }}" for i in fermi)
     righe.append(f"@keyframes naviga {{ {naviga} }}")
     righe.append(f"@keyframes scia {{ {scia} }}")
-    # La carta, al telefono, scorre con la barca: di quanto ne è passata (x della barca su tutta la larghezza).
+    # La carta, al telefono, scorre con la barca: alla partenza si vede il suo bordo sinistro, all'arrivo il destro, e
+    # in mezzo scorre di quanto la barca è andata verso est (la x cresce sempre lungo la rotta). Fino al 14/11 scorreva
+    # della x della barca su tutta la larghezza: all'arrivo la barca stava a pochi pixel dal bordo dello schermo.
+    x0, x1 = fot[0][2], fot[-1][2]
     soste = []
     for i, (t, s, x, y) in enumerate(fot):
         if i == 0 or i == len(fot) - 1 or abs(s - fot[i - 1][1]) < 1e-9 or (i + 1 < len(fot) and abs(fot[i + 1][1] - s) < 1e-9) or i % 4 == 0:
-            soste.append((t, x / LARGO))
+            soste.append((t, (x - x0) / (x1 - x0)))
     scorri = " ".join(f"{t:.2f}% {{ translate: calc({f:.4f} * (100cqw - 100%)) 0; }}" for t, f in soste)
     righe.append(f"@keyframes scorri {{ {scorri} }}")
     righe.append("/* carta:fine */")
