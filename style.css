@@ -1457,7 +1457,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    linee e i nomi delle costellazioni, e di giorno la carta con la strada del sole (.tv-dopo) compaiono quando le
    parole se ne sono andate. */
 .tv-stretto, .tv-emblema-stretto { display: none; }
-.tv-dopo, .tv-nome { opacity: var(--tv-dopo, 0); }
+.tv-dopo, .tv-nomi { opacity: var(--tv-dopo, 0); }
 /* Senza lo scorrimento animato (i browser che non ce l'hanno, «riduci movimento», le finestre basse) le parole restano
    nella prima scena e un «dopo» non c'è: la tavola intera sta nella seconda, dove parole non ce ne sono. La soglia
    diventa alta quanto lo schermo e la casa sta alla distanza a cui, scorrendo, si leggono i nomi (la misura da cui
@@ -1511,8 +1511,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-luna-giorno { fill: #FFF; stroke: var(--testo); stroke-width: 0.8; stroke-opacity: 0.3; }
 /* Le ombre della casa e degli alberi, coricate sul prato dalla parte opposta al sole (di notte, alla luna). Nella
    soglia sono riprese con <use>, dove una regola come «.tv-neve .tv-ombra» non arriva: il colore sulla neve scende
-   da <main> con una variabile. */
-.tv-ombra { fill: var(--ombra, #3D3220); fill-opacity: var(--ombra-forza, 0.15); }
+   da <main> con una variabile, --ombra-tavola. Fino al 14/11 era --ombra, che è l'ombra dei riquadri: le ombre sul
+   prato venivano nere invece che brune, e nei giorni di neve il quaderno perdeva la sua. */
+.tv-ombra { fill: var(--ombra-tavola, #3D3220); fill-opacity: var(--ombra-forza, 0.15); }
 .tv-ombra-lontana { fill-opacity: calc(var(--ombra-forza, 0.15) * 0.6); }
 /* La luna del giorno e la data stanno nella testata, come la data in quella di un giornale: sul disegno non c'è
    scritto nulla. Sono un pulsante: apre il lunario del giorno, un foglio come quelli delle parole di bordo
@@ -1553,7 +1554,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    300 px non c'è posto nemmeno per quella. */
 @media (max-width: 21.49rem) {
   .tv-oggi { justify-content: center; min-width: 2.75rem; padding: 0; }
-  .tv-oggi-corta { display: none; }
+  /* La data non si vede, ma resta il nome del pulsante. */
+  .tv-oggi-corta { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (max-width: 18.74rem) { .tv-oggi { display: none; } }
 /* Senza i fogli che si aprono il pulsante non aprirebbe nulla. */
@@ -1575,9 +1577,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     /* Il sole dell'angolo (.tv-emblema: uno per le finestre larghe e uno per quelle in piedi, dove le parole lasciano
        libero il foglio) va via con le parole: poi c'è quello della carta del giorno, al suo posto. */
-    .tv-dopo, .tv-nome, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
+    .tv-dopo, .tv-nomi, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
     .tv-dopo { animation-name: tv-dopo; }
-    .tv-nome { animation-name: tv-nomi; }
+    .tv-nomi { animation-name: tv-nomi; }
     /* Le stelle non si allargano con il cielo (volta-via): restano ferme, e i nomi non escono dallo schermo. */
     .tv-largo, .tv-stretto, .tv-carta { transform-box: view-box; transform-origin: 730px 806px; animation-name: tv-ferme; }
     /* Nemmeno il sole dell'angolo: svanisce dov'è. Portato via dal cielo che si allarga, quello in alto finirebbe
@@ -1623,7 +1625,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .tv-inverno { --prato: #AEA78E; }
   .tv-monti-neve :is(.fr-monti, .sg-monti, .bs-monti, .fn-monti) { fill: #E2E8EC; }
   /* la neve fino a casa: il tetto, il lago gelato; il sentiero è battuto, più scuro della neve */
-  .tv-neve { --prato: #E7EBE9; --ombra: #3F6594; --ombra-forza: 0.22; }
+  .tv-neve { --prato: #E7EBE9; --ombra-tavola: #3F6594; --ombra-forza: 0.22; }
   .tv-neve :is(.fr-colli, .sg-colli, .bs-colli) { fill: #D8DFE2; }
   .tv-neve .fn-colli { fill: #DCE3E6; }
   .tv-neve .fn-abeti { fill: #5F7B6D; }
