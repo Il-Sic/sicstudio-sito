@@ -283,14 +283,15 @@ def css():
     scia = " ".join(f"{fot[i][0]:.2f}% {{ stroke-dashoffset: {1 - fot[i][1]:.4f}; }}" for i in fermi)
     righe.append(f"@keyframes naviga {{ {naviga} }}")
     righe.append(f"@keyframes scia {{ {scia} }}")
-    # La carta, al telefono, scorre con la barca: alla partenza si vede il suo bordo sinistro, all'arrivo il destro, e
-    # in mezzo scorre di quanto la barca è andata verso est (la x cresce sempre lungo la rotta). Fino al 14/11 scorreva
-    # della x della barca su tutta la larghezza: all'arrivo la barca stava a pochi pixel dal bordo dello schermo.
+    # La carta, al telefono, scorre con la barca, di quanto è andata verso est (la x cresce sempre lungo la rotta):
+    # all'arrivo si vede il suo bordo destro. Fino al 14/11 scorreva della x della barca su tutta la larghezza, e
+    # all'arrivo la barca stava a pochi pixel dal bordo dello schermo. Alla partenza la carta resta dove stava allora,
+    # con i nomi di destra dentro lo schermo, e comincia a scorrere quando la barca ha fatto abbastanza strada.
     x0, x1 = fot[0][2], fot[-1][2]
     soste = []
     for i, (t, s, x, y) in enumerate(fot):
         if i == 0 or i == len(fot) - 1 or abs(s - fot[i - 1][1]) < 1e-9 or (i + 1 < len(fot) and abs(fot[i + 1][1] - s) < 1e-9) or i % 4 == 0:
-            soste.append((t, (x - x0) / (x1 - x0)))
+            soste.append((t, max(x0 / LARGO, (x - x0) / (x1 - x0))))
     scorri = " ".join(f"{t:.2f}% {{ translate: calc({f:.4f} * (100cqw - 100%)) 0; }}" for t, f in soste)
     righe.append(f"@keyframes scorri {{ {scorri} }}")
     righe.append("/* carta:fine */")
