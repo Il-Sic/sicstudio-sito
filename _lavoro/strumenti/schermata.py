@@ -19,9 +19,10 @@ SCURO = "(prefers-color-scheme: dark)"
 # Quanto è larga una schermata nella pagina, per sizes (misurato il 7/11 con _lavoro/prove/larghezze-schermate.html,
 # da 320 a 1920 px). In style.css il telefono è largo min(19rem, 72vw), con 0,5rem di cornice per lato, e la radice è
 # di 17 px: l'immagine è larga 72vw − 17px fino a 448 px di finestra, poi 306 px. Nei «momenti» della giornata, dai
-# 56rem in su, il telefono segue l'altezza della finestra fino a 21rem: l'immagine è al massimo 340 px.
+# 56rem in su, e con almeno 30rem di altezza (14/11), il telefono segue l'altezza della finestra fino a 21rem: l'immagine
+# è al massimo 340 px. Più in basso, i telefoni in orizzontale, resta in colonna come al telefono.
 SIZES = "(min-width: 449px) 306px, calc(72vw - 17px)"
-SIZES_MOMENTO = "(min-width: 56rem) 340px, " + SIZES
+SIZES_MOMENTO = "(min-width: 56rem) and (min-height: 30rem) 340px, " + SIZES
 
 # Una figura già nella pagina: <picture>, le righe <source>, l'<img> della schermata chiara, </picture>.
 FIGURA = re.compile(r'(?P<a>[ \t]*)<picture>\n(?:[ \t]*<source [^>]*>\n)*(?P<b>[ \t]*)'
