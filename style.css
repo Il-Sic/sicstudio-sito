@@ -418,6 +418,14 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .diario-bordo li { grid-template-columns: 10rem minmax(0, 1fr); }
   .diario-bordo time { text-align: right; padding-top: 0.15rem; }
 }
+/* Nei colori forzati (Contrasto elevato di Windows) gli sfondi spariscono, e con loro le stelle e la linea del
+   giornale: le stelle prendono il colore del testo e la linea diventa un bordo, che resta. */
+@media (forced-colors: active) {
+  .diario-bordo li::before { forced-color-adjust: none; background: CanvasText; z-index: 1; }
+}
+@media (forced-colors: active) and (min-width: 40rem) {
+  .diario-bordo li::after { content: ""; position: absolute; left: 11.25rem; top: 0; bottom: 0; border-left: 1px solid CanvasText; }
+}
 
 .contatti { text-align: left; }
 .contatti-email { font-size: clamp(1.7rem, 1rem + 3.4vw, 3.6rem); letter-spacing: -0.02em; line-height: 1.1; }
@@ -1020,6 +1028,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   padding: 0.5rem 0.9rem; border-radius: 99px; background: var(--carta-2); border: 1px solid var(--riga);
 }
 .stato-app::before { content: ""; flex: none; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--stella); box-shadow: 0 0 0 3px color-mix(in srgb, var(--stella) 25%, transparent); }
+@media (forced-colors: active) { .stato-app::before { forced-color-adjust: none; background: CanvasText; } }
 /* Al telefono la frase va a capo: il pallino sta nella prima riga, attaccato alla prima parola, come un capolettera. */
 @media (max-width: 30rem) {
   .stato-app { display: block; background: none; border: 0; padding: 0; text-wrap: balance; }
