@@ -217,9 +217,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .progetto { font-style: italic; }
 .testata-sep { color: var(--matita); font-weight: 300; }
 /* Con la tastiera, il fuoco su un link della testata, che sta ferma in alto, non fa scorrere la pagina: il browser lo
-   vedeva sotto lo scroll-padding-top e la faceva salire di qualche centinaio di pixel. Resta fuori il foglio del menu,
-   che scorre per conto suo. */
-.testata :is(a, button):not(.menu-telefono *) { scroll-margin-top: calc(-1 * (var(--testata) + var(--s1))); }
+   vedeva sotto lo scroll-padding-top e la faceva salire di qualche centinaio di pixel. Restano fuori i fogli che si
+   aprono dalla testata (il menu del telefono, il lunario della tavola), che scorrono per conto loro. */
+.testata :is(a, button):not([popover] *) { scroll-margin-top: calc(-1 * (var(--testata) + var(--s1))); }
 /* La S del logo con le sue stelle (img/marchio-giorno.svg e -notte.svg): alta quasi il doppio delle maiuscole del
    nome, come nel logo del kit. Sulla copertina di Argonauta è più piccola, solo cielo, disegnata nell'HTML. */
 .marchio { width: auto; height: 1.625rem; flex: none; }
