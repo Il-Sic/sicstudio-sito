@@ -52,7 +52,7 @@ COPPIE = [
 def variabili(css):
     """Le variabili del primo :root (chiaro) e di :root dentro prefers-color-scheme: dark (scuro); i blocchi P3 no."""
     chiaro = dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", re.search(r":root\s*\{([^}]*)\}", css).group(1)))
-    m = re.search(r"@media\s*\(prefers-color-scheme:\s*dark\)\s*\{\s*:root\s*\{([^}]*)\}", css)
+    m = re.search(r"@media\s*(?:screen\s+and\s*)?\(prefers-color-scheme:\s*dark\)\s*\{\s*:root\s*\{([^}]*)\}", css)
     scuro = dict(chiaro)
     scuro.update(dict(re.findall(r"(--[\w-]+)\s*:\s*([^;]+);", m.group(1))))
     return chiaro, scuro
