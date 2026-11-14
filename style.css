@@ -104,6 +104,8 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   hanging-punctuation: first allow-end last;
+  /* Le ancore e il fuoco della tastiera si fermano sotto la testata. Basta questa: con anche scroll-margin-top sugli
+     elementi con un id i due scarti si sommavano, e le sezioni arrivavano 88 px sotto la testata invece di 16. */
   scroll-padding-top: calc(var(--testata) + var(--s1));
 }
 
@@ -137,8 +139,6 @@ a { color: var(--mare); text-decoration-thickness: 1px; text-underline-offset: 0
 }
 :focus-visible { outline: 3px solid var(--mare); outline-offset: 3px; border-radius: 4px; }
 ::selection { background: color-mix(in srgb, var(--stella) 38%, transparent); color: var(--testo); }
-
-[id] { scroll-margin-top: calc(var(--testata) + var(--s1)); }
 
 .salta {
   position: absolute; left: var(--margine); top: -4rem; z-index: 30;
@@ -238,9 +238,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .apri-menu svg { width: 1.5rem; height: 1.5rem; margin: auto; display: block; }
 .apri-menu path { stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; fill: none; }
 
+/* Il foglio non è mai più alto dello schermo: al telefono in orizzontale, o con lo zoom, scorre al suo interno, fino
+   all'ultima voce sopra la barra di casa dell'iPhone, e non fa scorrere la pagina dietro. */
 .menu-telefono {
   inset: 0 0 auto 0; width: 100%; max-width: none; margin: 0;
-  padding: calc(var(--testata) + var(--s1)) var(--margine) var(--s3);
+  max-height: 100svh; overflow-y: auto; overscroll-behavior: contain;
+  padding: calc(var(--testata) + var(--s1)) var(--margine) calc(var(--s3) + env(safe-area-inset-bottom));
   border: 0; border-bottom: 0.5px solid var(--riga);
   background: var(--vetro); color: var(--testo);
   -webkit-backdrop-filter: blur(28px) saturate(170%);

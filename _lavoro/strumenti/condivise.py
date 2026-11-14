@@ -205,11 +205,13 @@ def voci(d):
 
 
 def al_telefono(h, d):
-    """Nel menu del telefono un link a una sezione della stessa pagina ha un «?» vuoto prima del «#» (/?#contatti):
-    così la pagina si ricarica e il menu, che è un popover, si chiude. Il menu del computer resta com'è."""
+    """Nel menu del telefono un link a una sezione della stessa pagina ha il nome della sezione anche prima del «#»
+    (/?contatti#contatti): così la pagina si ricarica e il menu, che è un popover, si chiude. Con un «?» vuoto uguale
+    per tutte le sezioni (/?#contatti) si ricaricava solo la prima volta: dalla seconda cambiava solo il «#» e il menu
+    restava aperto sopra la sezione. Il menu del computer resta com'è."""
     pagina, segno, sezione = h.partition("#")
     if segno and pagina in ("", d["percorso"]):
-        return f'{d["percorso"]}?#{sezione}'
+        return f'{d["percorso"]}?{sezione}#{sezione}'
     return h
 
 
@@ -245,11 +247,15 @@ def testata(file, d):
             '    <div class="menu-telefono" id="menu-telefono" popover>',
             f'      <nav aria-label="{nome_menu}">',
         ]
+        voci_telefono = ["  " + r for r in lista("menu", telefono=True)]
         if casa == "argonauta":
-            righe.append(f'      <p class="menu-casa"><a href="{u["home"]}">← Sic Studio</a></p>')
-            righe.append(f'      <ul class="menu"><li><a href="{u["argonauta"]}"'
-                         f'{" aria-current=" + chr(34) + "page" + chr(34) if d["voce"] == "argonauta" else ""}>Argonauta</a></li></ul>')
-        righe += ["  " + r for r in lista("menu", telefono=True)]
+            # Il ritorno a Sic Studio sta sopra, fuori dalla lista; Argonauta è la prima voce della stessa lista delle
+            # altre, così un lettore di schermo sente una lista sola. La freccia si vede ma non si legge; freccia e nome
+            # stanno in uno span solo perché il link è flex, e lì lo spazio fra due elementi sparirebbe.
+            righe.append(f'        <p class="menu-casa"><a href="{u["home"]}"><span><span aria-hidden="true">←</span> Sic Studio</span></a></p>')
+            attuale = ' aria-current="page"' if d["voce"] == "argonauta" else ""
+            voci_telefono.insert(1, f'          <li><a href="{u["argonauta"]}"{attuale}>Argonauta</a></li>')
+        righe += voci_telefono
         righe += [
             '      </nav>',
             f'      <button class="chiudi-menu" type="button" popovertarget="menu-telefono" popovertargetaction="hide">'
