@@ -1,6 +1,7 @@
 """Scrive le due pagine «Aiuto e domande», italiana e inglese, dai testi di aiuto.toml: l'apertura con l'indice, i
 gruppi di domande con il titolo a lato, le parole di bordo che si aprono nel testo (popover, senza JavaScript) e il
-glossario in fondo. Riscrive tutto ciò che sta dentro <main>: una correzione fatta a mano nella pagina si perde, le
+glossario in fondo. Il foglio di ogni parola sta subito dopo il suo pulsante, con il nome della parola: chi usa un
+lettore di schermo lo trova lì, e non in fondo alla pagina. Riscrive tutto ciò che sta dentro <main>: una correzione fatta a mano nella pagina si perde, le
 parole si cambiano in aiuto.toml.
 
     python3 -I _lavoro/strumenti/aiuto.py          tutte e due le pagine
@@ -55,30 +56,48 @@ def pagina(testi, lingua):
     # provano per primi («viaggio di Argo» prima di «Argo»).
     da_cercare = sorted(((t(v, "parola"), t(v, "cerca")) for v in voci), key=lambda coppia: -len(coppia[1]))
     usate = set()
+    capo, parole = testi["pagina"], testi["parole"]
+    spiegate = [(t(v, "parola"), rientra(t(v, "vuol-dire"), 10, 10).lstrip()) for v in voci]
+
+    def foglio(parola):
+        """Il foglio che si apre sulla parola: elementi di frase, perché sta nel capoverso della risposta. role="group"
+        perché uno span possa avere il nome della parola (aria-labelledby)."""
+        i, spiega = ident(parola), " ".join(dict(spiegate)[parola].split())
+        return (f'<span class="definizione" id="{i}" popover role="group" aria-labelledby="{i}-termine">'
+                f'<span class="definizione-termine" id="{i}-termine">{parola}</span>'
+                f'<span class="definizione-testo">{spiega}</span>'
+                f'<button type="button" class="chiudi-definizione" popovertarget="{i}" popovertargetaction="hide">'
+                f'{t(capo, "chiudi")}</button></span>')
+
+    def con_i_fogli(testo):
+        """Al posto dei segni lasciati da avvolgi(), i fogli delle parole."""
+        return re.sub("\ue000(\\d+)\ue001", lambda m: foglio(da_cercare[int(m.group(1))][0]), testo)
 
     def avvolgi(risposta):
-        """Mette il pulsante della parola alla sua prima comparsa, fuori dai link e dai tag."""
+        """Mette il pulsante della parola alla sua prima comparsa, fuori dai link e dai tag, e dopo il pulsante un segno
+        con il numero della parola: il suo foglio lo mette con_i_fogli(), così il testo del foglio non entra nella
+        ricerca delle parole che vengono dopo."""
         pezzi = re.split(r"(<a\b.*?</a>|<[^>]+>)", risposta, flags=re.S)
         for i, pezzo in enumerate(pezzi):
             if not pezzo or pezzo.startswith("<"):
                 continue
-            for parola, modello in da_cercare:
+            for n, (parola, modello) in enumerate(da_cercare):
                 if parola in usate:
                     continue
                 m = re.search(modello, pezzo)
                 if m:
                     usate.add(parola)
                     bottone = f'<button type="button" class="parola" popovertarget="{ident(parola)}">{m.group(0)}</button>'
+                    segno = f"\ue000{n}\ue001"
                     dopo = re.match(r"[,.;:!?»”)]+", pezzo[m.end():])
-                    if dopo:  # la virgola o il punto restano sulla stessa riga della parola
+                    if dopo:  # la virgola o il punto restano sulla stessa riga della parola; il foglio fuori, a capo libero
                         bottone = f'<span class="parola-legata">{bottone}{dopo.group(0)}</span>'
-                        pezzo = pezzo[:m.start()] + bottone + pezzo[m.end() + len(dopo.group(0)):]
+                        pezzo = pezzo[:m.start()] + bottone + segno + pezzo[m.end() + len(dopo.group(0)):]
                     else:
-                        pezzo = pezzo[:m.start()] + bottone + pezzo[m.end():]
+                        pezzo = pezzo[:m.start()] + bottone + segno + pezzo[m.end():]
             pezzi[i] = pezzo
         return "".join(pezzi)
 
-    capo, parole = testi["pagina"], testi["parole"]
     indice = [(t(g, "id"), t(g, "titolo")) for g in testi["gruppo"]] + [(t(parole, "id"), t(parole, "titolo"))]
     righe = ['<header class="apertura-aiuto fascia">',
              f'  <p class="occhiello">{t(capo, "occhiello")}</p>',
@@ -97,7 +116,7 @@ def pagina(testi, lingua):
             righe += ['      <details class="domanda">',
                       f'          <summary>{t(domanda, "chiede")}</summary>',
                       '          <div class="risposta">',
-                      avvolgi(rientra(t(domanda, "risponde"), 12, 14)),
+                      con_i_fogli(avvolgi(rientra(t(domanda, "risponde"), 12, 14))),
                       '          </div>',
                       '        </details>']
         righe += ['    </div>', '  </div>', '</section>', '']
@@ -107,17 +126,8 @@ def pagina(testi, lingua):
               f'    <p class="sottotitolo misura">{t(parole, "nota")}</p>',
               '  </div>',
               '  <dl class="glossario">']
-    spiegate = [(t(v, "parola"), rientra(t(v, "vuol-dire"), 10, 10).lstrip()) for v in voci]
     righe += [f'    <div><dt>{parola}</dt><dd>{spiega}</dd></div>' for parola, spiega in spiegate]
-    righe += ['  </dl>', '</section>', '', '<div class="definizioni">']
-    for parola, spiega in spiegate:
-        if parola in usate:
-            righe += [f'  <div class="definizione" id="{ident(parola)}" popover>',
-                      f'    <p class="definizione-termine">{parola}</p>',
-                      f'    <p>{spiega}</p>',
-                      f'    <button type="button" class="chiudi-definizione" popovertarget="{ident(parola)}" popovertargetaction="hide">{t(capo, "chiudi")}</button>',
-                      '  </div>']
-    righe.append('</div>')
+    righe += ['  </dl>', '</section>']
     righe = [re.sub(rf"\b{OPERA[lingua]}\b", f"<cite>{OPERA[lingua]}</cite>", apostrofi(r)) for r in righe]
     return "\n".join(righe), [parola for parola, _ in spiegate if parola not in usate]
 
