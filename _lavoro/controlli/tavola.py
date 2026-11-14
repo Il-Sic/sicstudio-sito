@@ -8,7 +8,8 @@ studio, in una cartella di passaggio, e si guarda che ogni pagina resti in regol
 - ogni classe tv- usata nelle pagine è in style.css, e ogni classe tv- di style.css serve ad almeno una data;
 - apostrofi tipografici nelle parole che la tavola aggiunge: la data della testata, i nomi nel cielo, il lunario;
 - la luna del giorno e la data stanno nella testata, una volta, e sono il pulsante che apre il lunario; la data ha
-  la forma lunga e quella breve, e il nome per chi non vede le contiene; il lunario c'è, una volta;
+  la forma lunga e quella breve, che sono il nome del pulsante, e la frase che lo descrive contiene la lunga e l'anno;
+  il lunario c'è, una volta, subito dopo il pulsante;
 - di giorno: la carta con la strada del sole c'è una volta e la soglia la riprende; il suo sole sta nella fascia che
   si vede anche al telefono, sotto la testata; le ombre del sole ci sono nelle due scene e sopra il sentiero;
 - nelle notti delle Perseidi e delle Geminidi le stelle cadenti ci sono nei due cieli, ognuna con la sua sfumatura, e
@@ -66,7 +67,7 @@ def controlla_scena(svg, giorno):
     regole = set(re.findall(r"\.(sc-[a-z0-9-]+)", stile))
     usate = {c for classi in re.findall(r'class="([^"]*)"', svg) for c in classi.split()}
     errori += [f"la classe {c} non ha una regola" for c in sorted(usate - regole)]
-    if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', svg):
+    if re.search(r'[ "MLHVZmlhvz(]-?(?:nan|inf)\b', svg):
         errori.append("un numero non è un numero (nan o inf)")
     if 'class="sc-velo"' in svg or 'fill="url(#sc-g-luna)"' in svg or ".sc-velo { display: none; }" not in stile:
         errori.append("c'è ancora il velo o la luna d'angolo del disegno, o il velo non è spento")
@@ -124,18 +125,19 @@ def main():
                 errori += [f"la classe {c} non è in style.css" for c in sorted(classi - nel_css)]
                 # le parole che la tavola aggiunge: la data della testata, i nomi nel cielo e il lunario
                 aggiunte = re.findall(r'<(?:span class="tv-oggi-[a-z]+"|text class="tv-nome[^"]*"[^>]*)>([^<]*)<', testo)
-                aggiunte += re.findall(r'class="tv-oggi"[^>]*aria-label="([^"]*)"', testo)
+                aggiunte += re.findall(r'<span id="tv-oggi-detto" hidden>([^<]*)</span>', testo)
                 lunario = re.findall(r'<!-- lunario:inizio -->(.*?)<!-- lunario:fine -->', testo, flags=re.S)
                 aggiunte += [pezzo for l in lunario for pezzo in re.findall(r'>([^<]+)<', l)] + [v for l in lunario for v in re.findall(r'aria-label="([^"]*)"', l)]
                 errori += [f"apostrofo dritto in «{a}»" for a in aggiunte if "'" in a]
                 if nome in tavola.PAGINE:
-                    oggi = re.findall(r'<button type="button" class="tv-oggi" popovertarget="lunario" aria-label="([^"]*)"><svg class="tv-sigillo"[^>]*><g[^>]*>'
-                                      r'<circle class="tv-lune-ombra" r="13"/>.*?</g></svg><span class="tv-oggi-lunga">([^<]+)</span><span class="tv-oggi-corta">([^<]+)</span></button>',
+                    oggi = re.findall(r'<button type="button" class="tv-oggi" popovertarget="lunario" aria-describedby="tv-oggi-detto"><svg class="tv-sigillo"[^>]*><g[^>]*>'
+                                      r'<circle class="tv-lune-ombra" r="13"/>.*?</g></svg><span class="tv-oggi-lunga">([^<]+)</span><span class="tv-oggi-corta">([^<]+)</span>'
+                                      r'<span id="tv-oggi-detto" hidden>([^<]+)</span></button>\n\s*<!-- lunario:inizio -->',
                                       testo.split("<!-- testata:fine -->")[0])
                     if len(oggi) != 1 or testo.count('class="tv-oggi"') != 1:
-                        errori.append("nella testata non c'è, una volta, il pulsante con la luna e la data che apre il lunario")
-                    elif oggi[0][1] not in oggi[0][0] or not oggi[0][2][:1].isdigit() or str(giorno.year) not in oggi[0][0]:
-                        errori.append(f"la data della testata non torna con il suo nome: {oggi[0]}")
+                        errori.append("nella testata non c'è, una volta, il pulsante con la luna e la data che apre il lunario, con il lunario subito dopo")
+                    elif oggi[0][0] not in oggi[0][2] or not oggi[0][1][:1].isdigit() or str(giorno.year) not in oggi[0][2]:
+                        errori.append(f"la data della testata non torna con la frase che la descrive: {oggi[0]}")
                     if len(lunario) != 1 or testo.count('id="lunario" popover') != 1:
                         errori.append("il lunario non c'è una volta sola")
                     elif len(re.findall(r'class="tv-lune-giorno"', lunario[0])) != 7 or lunario[0].count("<dt>") != 4:
@@ -158,7 +160,7 @@ def main():
                         errori.append("ci sono stelle cadenti fuori dalle loro notti")
                     if not re.search(r'<main id="contenuto" class="pagina-casa tv-tavola tv-[a-z]+', testo):
                         errori.append("<main> non porta tv-tavola e la stagione: senza scorrimento animato la tavola non si vedrebbe")
-                    if re.search(r'[ "MLHVZ(]-?(?:nan|inf)\b', testo):
+                    if re.search(r'[ "MLHVZmlhvz(]-?(?:nan|inf)\b', testo):
                         errori.append("un numero della tavola non è un numero (nan o inf)")
                 # il confronto di online.sh: tolti i disegni del cielo e della luna non deve restarne traccia
                 spoglia = tavola.senza_cielo(testo)
@@ -170,7 +172,7 @@ def main():
             pesante_scena = max(pesante_scena, len(tavola.scena(disegno, giorno).encode("utf-8")))
     problemi += [f"style.css: la classe {c} non serve a nessuna data" for c in sorted(nel_css - usate)]
     # la tavola ferma: ciò che compare «dopo» si vede nella soglia, alta quanto lo schermo, e non con il sole dell'angolo
-    for regola in (".tv-dopo, .tv-nome { opacity: var(--tv-dopo, 0); }", ".tv-tavola .soglia { --tv-dopo: 1; }", ".tv-tavola .soglia .tv-emblema { display: none; }",
+    for regola in (".tv-dopo, .tv-nomi { opacity: var(--tv-dopo, 0); }", ".tv-tavola .soglia { --tv-dopo: 1; }", ".tv-tavola .soglia .tv-emblema { display: none; }",
                    "height: var(--soglia-alta, "):
         if regola not in css:
             problemi.append(f"style.css: manca «{regola}», che mostra la tavola dove la pagina non scorre animata")

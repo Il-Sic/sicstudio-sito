@@ -627,9 +627,20 @@ def dal_cielo(alt, az, siderale):
 
 
 def png(larga, alta, punti):
-    """Un'immagine PNG a colori con la trasparenza, dai suoi punti (quattro byte l'uno, riga per riga)."""
+    """Un'immagine PNG a colori con la trasparenza, dai suoi punti (quattro byte l'uno, riga per riga). Perché pesi
+    meno nella pagina (14/11: da 18 a 11 KB per i due chiarori di una sera), i punti trasparenti del tutto prendono
+    il colore di quello prima, che tanto non si vede, e la trasparenza va a passi di 3 su 255: ogni punto cambia al
+    più di 1/255, meno di quanto uno schermo sappia mostrare."""
     def pezzo(tipo, dati):
         return struct.pack(">I", len(dati)) + tipo + dati + struct.pack(">I", zlib.crc32(tipo + dati))
+    punti, colore = bytearray(punti), bytes(3)
+    for i in range(0, len(punti), 4):
+        if punti[i + 3]:
+            punti[i + 3] = min(255, round(punti[i + 3] / 3) * 3)
+        if punti[i + 3]:
+            colore = punti[i:i + 3]
+        else:
+            punti[i:i + 3] = colore
     righe, prima = [], bytes(larga * 4)
     for y in range(alta):
         riga = punti[y * larga * 4:(y + 1) * larga * 4]
@@ -1005,15 +1016,35 @@ def disegna_giorno(giorno, alone, lingua):
     def linea(punti):
         return "M" + "L".join(f"{n(x)} {n(y)}" for x, y in punti)
 
+    # la luna, se di giorno si vede, e il suo nome sotto: le scritte delle strade ne stanno lontane (fino al 14/11
+    # potevano finirci sopra, come «21 dicembre» quel giorno)
+    luna = luna_di_giorno(giorno)
+    occupati = [] if not luna else [(luna[0] - 16, luna[1] - 16, luna[0] + 16, luna[1] + 16),
+                                    (luna[0] - 36, luna[1] + 13, luna[0] + 36, luna[1] + 33)]
     # le strade degli altri giorni dell'anno; quella troppo vicina alla strada di oggi si salta
     for declinazione, nome in ((23.44, "21 giugno" if it else "21 June"), (0, "equinozi" if it else "equinoxes"), (-23.44, "21 dicembre" if it else "21 December")):
         if abs(declinazione - oggi) < 3.4:
             continue
         punti = strada_di(declinazione)
         f.append(f'<path class="tv-strada tv-strada-altra" d="{linea(punti)}"/>')
-        # il nome lungo la strada, due ore prima del mezzogiorno: dal lato opposto alla strada di oggi
-        (x0, y0), (x, y), (x1, y1) = (sul_foglio_di_giorno(*in_cielo(0, declinazione, h)) for h in (-34, -30, -26))
-        scritta(x, y + (16 if declinazione < oggi else -7), nome, math.degrees(math.atan2(y1 - y0, x1 - x0)))
+        # il nome lungo la strada, due ore prima del mezzogiorno, dal lato opposto alla strada di oggi; se lì c'è la
+        # luna, più vicino al mezzogiorno o più lontano, a passi di 24 minuti. La scritta è misurata a occhio: corsivo
+        # fino a 19 px, girato come la strada.
+        posti = []
+        for ore in (-30, -24, -36, -18, -42, -12, -48, -6, -54):
+            tre = [sul_foglio_di_giorno(*in_cielo(0, declinazione, h)) for h in (ore - 4, ore, ore + 4)]
+            if None in tre:
+                continue
+            (x0, y0), (x, y), (x1, y1) = tre
+            y, gira = y + (16 if declinazione < oggi else -7), math.degrees(math.atan2(y1 - y0, x1 - x0))
+            mezza = 4.6 * len(nome) + 4
+            alta = 9 + mezza * abs(math.sin(math.radians(gira)))
+            posti.append((x, y, gira))
+            if not any(x - mezza < b[2] and b[0] < x + mezza and y - 5 - alta < b[3] and b[1] < y - 5 + alta for b in occupati):
+                break
+        else:
+            posti.append(posti[0])                           # nessun posto libero: resta dove stava
+        scritta(*posti[-1][:2], nome, posti[-1][2])
     # il meridiano: la riga del sud, dal colmo del tetto fin sopra il sole di giugno
     f.append(f'<path class="tv-strada tv-meridiano" d="M{n(CX_GIORNO)} 806V{n(sul_foglio_di_giorno(90 - LAT + 23.44, 180)[1] - 16)}"/>')
     # la strada di oggi
@@ -1031,7 +1062,6 @@ def disegna_giorno(giorno, alone, lingua):
         ora += datetime.timedelta(hours=1)
     f.append(f'<path class="tv-ora" d="{"".join(grani)}"/>')
     # la luna, quando di giorno si vede: solo la parte illuminata, girata verso il sole
-    luna = luna_di_giorno(giorno)
     if luna:
         x, y, vista, verso, _, _ = luna
         r = 11
@@ -1046,7 +1076,7 @@ def disegna_giorno(giorno, alone, lingua):
     minuti = ora_tavola.hour * 60 + ora_tavola.minute + round(ora_tavola.second / 60)
     h, m = divmod(minuti, 60)
     scritta(x, y + 33, f"{h}:{m:02d}" if it else f"{(h - 1) % 12 + 1}:{m:02d} {'am' if h < 12 else 'pm'}")
-    return "".join(f) + "".join(scritte)
+    return "".join(f) + (f'<g class="tv-nomi">{"".join(scritte)}</g>' if scritte else "")
 
 
 # ---------- Le ombre ----------
@@ -1318,6 +1348,18 @@ def cadenti_della_tavola(giorno, stretto, c):
     return f'<defs>{"".join(sfumi)}</defs>{"".join(pezzi)}' if pezzi else ""
 
 
+def punti(lista):
+    """Un tracciato fatto solo di punti (h0), con i punti a passi relativi: «m5-3h0» invece di «M1043 287h0». Prima
+    li mette in fila a bande di 30, avanti e indietro come chi ara un campo, così i passi sono corti: nello stesso
+    tracciato, di un colore solo, l'ordine dei punti non si vede. Toglie 3-6 KB compressi dalla pagina (14/11)."""
+    fila = sorted(lista, key=lambda p: (p[1] // 30, p[0] if p[1] // 30 % 2 == 0 else -p[0]))
+    d, x0, y0 = [], 0, 0
+    for k, (x, y) in enumerate(fila):
+        d.append(f"M{x} {y}h0" if k == 0 else f"m{x - x0}{'' if y < y0 else ' '}{y - y0}h0")
+        x0, y0 = x, y
+    return "".join(d)
+
+
 def disegna_cielo(giorno, stretto, lingua):
     """Il cielo di una sera, per il computer o (stretto) per il telefono, dove i punti sono un po' più grandi.
     In due gruppi: il primo si vede con le parole del frontespizio; il secondo, tv-dopo (ciò che cadrebbe sulle parole, le linee
@@ -1331,9 +1373,9 @@ def disegna_cielo(giorno, stretto, lingua):
     f = {False: [], True: []}
     x, y, larga, alta, immagine = chiarore_della_via(giorno, stretto, round(c["buio"], 2))
     f[False].append(f'<image x="{x}" y="{y}" width="{larga}" height="{alta}" preserveAspectRatio="none" href="data:image/png;base64,{immagine}"/>')
-    for classe, punti in (("tv-polvere", c["polvere"]), ("tv-velo-stelle", c["velo"])):
+    for classe, lista in (("tv-polvere", c["polvere"]), ("tv-velo-stelle", c["velo"])):
         for quando in (False, True):
-            d = "".join(f"M{round(x)} {round(y)}h0" for x, y in punti if dopo(x, y) == quando)
+            d = punti([(round(x), round(y)) for x, y in lista if dopo(x, y) == quando])
             if d:
                 f[quando].append(f'<path class="{classe}" opacity="{0.3 + 0.7 * c["buio"]:.2f}" d="{d}"/>')
     for tipo, x, y, r, gira in c["profondi"]:
@@ -1358,9 +1400,9 @@ def disegna_cielo(giorno, stretto, lingua):
         quando = dopo(x, y, max(4, 12 + 2 * (5 - misura)))    # al largo dalle parole: di più le stelle più luminose
         if g < 0.95:
             f[quando or dopo(x, y, 14)].append(f'<circle cx="{round(x)}" cy="{round(y)}" r="{n((3.5 - 0.8 * g) * 4.4 * ingrandisci)}" fill="url(#tv-g)" opacity=".3"/>')
-        gruppi.setdefault((quando, misura, tinta), []).append(f"M{round(x)} {round(y)}h0")
-    for (quando, misura, tinta), punti in sorted(gruppi.items()):
-        f[quando].append(f'<path class="tv-s{misura}{tinta}" d="{"".join(punti)}"/>')
+        gruppi.setdefault((quando, misura, tinta), []).append((round(x), round(y)))
+    for (quando, misura, tinta), lista in sorted(gruppi.items()):
+        f[quando].append(f'<path class="tv-s{misura}{tinta}" d="{punti(lista)}"/>')
     if c["luna"]:
         x, y, r, vista, verso_il_sole, nord = c["luna"]
         f[dopo(x, y, r * (3 + 4 * vista) * 0.5)].append(luna_vera(x, y, r, vista, verso_il_sole, nord))
@@ -1371,7 +1413,9 @@ def disegna_cielo(giorno, stretto, lingua):
         mezzo = 4.3 * len(titolo) + 8
         return "tv-nome" + (" tv-nome-pianeta" if peso == 50 else "") + (" tv-bordo" if not stretto and (x - mezzo < 280 or x + mezzo > 1180) else "")
 
-    f[True].append("".join(f'<text class="{classi(x, t, peso)}" x="{n(x)}" y="{n(y)}">{t}</text>' for x, y, t, peso in c["nomi"]))
+    # i nomi stanno in un gruppo, che si anima una volta sola invece di ogni nome (14/11: lo scorrimento perdeva fotogrammi)
+    if c["nomi"]:
+        f[True].append('<g class="tv-nomi">' + "".join(f'<text class="{classi(x, t, peso)}" x="{n(x)}" y="{n(y)}">{t}</text>' for x, y, t, peso in c["nomi"]) + "</g>")
     f[True].append(cadenti_della_tavola(giorno, stretto, c))
     return f'<g>{"".join(f[False])}</g><g class="tv-dopo">{"".join(f[True])}</g>'
 
@@ -1918,7 +1962,8 @@ def luna_piccola(quanta):
 def oggi_in_testata(giorno, lingua):
     """La luna del giorno, nella sua fase, e la data accanto: stanno nella testata, come la data in quella di un
     giornale, e sono il pulsante che apre il lunario. Sul disegno non c'è scritto nulla. La data ha due forme, «giovedì
-    12 novembre» dove c'è posto e «12 nov» al telefono; chi non vede sente la frase intera."""
+    12 novembre» dove c'è posto e «12 nov» al telefono, ed è il nome del pulsante: chi lo chiama a voce dice quello che
+    vede (14/11). Chi non vede sente anche la frase intera, che lo descrive."""
     quanta, cresce, come = fase(giorno)
     mese, settimana = MESI[lingua][giorno.month - 1], GIORNI[lingua][giorno.weekday()]
     if lingua == "en":
@@ -1930,8 +1975,9 @@ def oggi_in_testata(giorno, lingua):
         nome = f"Tavola di {lunga} {giorno.year}, {CON_LA_LUNA[lingua][come]}: apri il lunario"
     luna = (f'<svg class="tv-sigillo" viewBox="-15 -15 30 30" aria-hidden="true" focusable="false"><g{"" if cresce else " transform=" + chr(34) + "scale(-1 1)" + chr(34)}>'
             f'{luna_piccola(quanta)}</g></svg>')
-    return (f'<button type="button" class="tv-oggi" popovertarget="lunario" aria-label="{nome}">{luna}'
-            f'<span class="tv-oggi-lunga">{lunga}</span><span class="tv-oggi-corta">{corta}</span></button>\n    ')
+    return (f'<button type="button" class="tv-oggi" popovertarget="lunario" aria-describedby="tv-oggi-detto">{luna}'
+            f'<span class="tv-oggi-lunga">{lunga}</span><span class="tv-oggi-corta">{corta}</span>'
+            f'<span id="tv-oggi-detto" hidden>{nome}</span></button>\n    ')
 
 
 # ---------- Il lunario: le stesse cose della tavola, dette a parole ----------
@@ -2040,7 +2086,7 @@ def lunario(giorno, lingua):
         giorno_breve = f"{GIORNI[lingua][sera.weekday()][:3]} {sera.day}"
         sere.append(f'<g transform="translate({x} 18){"" if cresce else " scale(-1 1)"}">{luna_piccola(quanta)}</g>'
                     f'<text class="tv-lune-giorno" x="{x}" y="52">{giorno_breve}</text>')
-        dette.append(f"{giorno_breve} {FASI[lingua][come]}")
+        dette.append(f"{GIORNI[lingua][sera.weekday()]} {sera.day} {FASI[lingua][come]}")   # letti, «Sun» e «mar» sono parole
     lune = (f'<svg class="tv-lune" viewBox="0 0 336 60" role="img" aria-label="{"La luna delle prossime sere" if it else "The moon on the coming evenings"}: {", ".join(dette)}">'
             + "".join(sere) + "</svg>")
 
@@ -2085,7 +2131,7 @@ def lunario(giorno, lingua):
     if it:
         apre = f"Il cielo della tavola è quello delle {ora(ora_tavola)}, due ore dopo il tramonto, guardando a sud dalla Calabria."
         voci = (("Il sole", sole), ("La luna", luna + lune), ("I pianeti", pianeti), ("Le stelle", stelle))
-        fonti = ("Le stelle vengono dal Bright Star Catalogue (Hoffleit e Warren, 1991), con i loro colori. Il sole, la luna e i pianeti sono "
+        fonti = ('Le stelle vengono dal <span lang="en">Bright Star Catalogue</span> (Hoffleit e Warren, 1991), con i loro colori. Il sole, la luna e i pianeti sono '
                  "calcolati, e gli orari valgono per un orizzonte libero. La luna è disegnata più grande del vero; le linee delle figure e il "
                  "chiarore della Via Lattea sono un disegno. Di giorno la strada del sole è disegnata più in piccolo del cielo della notte, perché "
                  "ci stia tutta; le ombre vanno dalla parte giusta e sono lunghe il giusto, viste di scorcio.")
@@ -2098,8 +2144,8 @@ def lunario(giorno, lingua):
                  "glow of the Milky Way are a drawing. By day the sun’s path is drawn smaller than the night sky, so that all of it fits; "
                  "the shadows fall the right way and are the right length, seen foreshortened.")
         chiudi = "Close"
-    return ('<!-- lunario:inizio --><div class="definizione tv-lunario" id="lunario" popover>\n'
-            f'  <p class="definizione-termine">{data}</p>\n  <p>{apre}</p>\n  <dl class="tv-voci">\n'
+    return ('<!-- lunario:inizio --><div class="definizione tv-lunario" id="lunario" popover role="group" aria-labelledby="lunario-data">\n'
+            f'  <p class="definizione-termine" id="lunario-data">{data}</p>\n  <p>{apre}</p>\n  <dl class="tv-voci">\n'
             + "".join(f"    <div><dt>{titolo}</dt><dd>{testo}</dd></div>\n" for titolo, testo in voci)
             + f'  </dl>\n  <p class="tv-fonti">{fonti}</p>\n'
             f'  <button type="button" class="chiudi-definizione" popovertarget="lunario" popovertargetaction="hide">{chiudi}</button>\n</div><!-- lunario:fine -->\n')
@@ -2120,9 +2166,9 @@ def tavola(pagina, giorno, lingua):
     # anche la luna che si vede dalla finestra della bottega ha la fase di quella notte
     vista, cresce, _ = fase(giorno)
     cambia(r'<path class="fn-falce solo-notte"[^>]*/>', lambda m: luna_svg(vista, cresce, "translate(214 72) scale(0.56)"))
-    # la luna del giorno e la data stanno nella testata: sono il pulsante che apre il lunario, che sta in fondo a <main>
-    cambia(r'<nav class="menu-largo"', lambda m: oggi_in_testata(giorno, lingua) + m.group(0))
-    cambia(r'</main>', lambda m: lunario(giorno, lingua) + m.group(0))
+    # la luna del giorno e la data stanno nella testata: sono il pulsante che apre il lunario, che gli sta subito dopo,
+    # così chi legge la pagina con un lettore di schermo lo trova lì (fino al 14/11 era in fondo a <main>)
+    cambia(r'<nav class="menu-largo"', lambda m: oggi_in_testata(giorno, lingua) + lunario(giorno, lingua) + "    " + m.group(0))
     cambia(r'<main id="contenuto" class="pagina-casa">', f'<main id="contenuto" class="pagina-casa tv-tavola {" ".join(c for c in stagione(giorno) if c in DI_COLORE)}">')
     dietro, sopra = stagionali(giorno)
     cambia(r'<!-- colle:inizio -->(<path class="fr-collina"[^>]*/>)', lambda m: dietro + "<!-- colle:inizio -->" + m.group(1) + sopra)
