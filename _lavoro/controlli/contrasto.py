@@ -21,7 +21,6 @@ COPPIE = [
     ("--mare", "--carta", 4.5, "link sulla carta", "entrambi"),
     ("--mare", "--carta-2", 4.5, "link sul tavolo", "entrambi"),
     ("--mare", "--scheda", 4.5, "link e «Chiudi» sui fogli", "entrambi"),
-    ("#FFFFFF", "--mare-pieno", 4.5, "scritta dei pulsanti pieni", "entrambi"),
     ("--oro", "--carta", 3.0, "numeri e capilettera d'oro, grandi", "entrambi"),
     ("--oro", "--carta-2", 3.0, "numeri d'oro sul tavolo", "entrambi"),
     ("#F6E7C2", "#0A1828", 4.5, "titolo della copertina sul velo scuro in alto", "entrambi"),

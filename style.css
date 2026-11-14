@@ -17,23 +17,18 @@
   --matita: #8C857A;          /* tratti a matita: solo disegno */
   --riga: rgb(30 27 23 / 0.14);
   --mare: #08739A;            /* AccentColor dell'app: link, la rotta, il mare */
-  --mare-pieno: #08739A;      /* i pulsanti pieni con la scritta bianca */
-  --mare-velo: rgb(8 115 154 / 0.09);
   --oro: #8F5B00;             /* ArgoReward: la stella, le cose conquistate */
   --stella: #D99A1E;          /* l'oro della luna e delle stelle, sulla carta */
-  --rosso: #B3261E;           /* il 112 e gli avvisi */
   --vetro: rgb(250 247 240 / 0.74);
 
   /* La copertina di Argonauta: un libro rilegato in blu notte, uguale di giorno e di notte. */
   --rilegatura: #12283D;
   --rilegatura-testo: #F7EFE2;
-  --rilegatura-testo-2: #D9CCB6;
 
   --libro: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --strumenti: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Una scala sola, ×1,5. */
-  --s-1: 0.25rem;
   --s0: 0.5rem;
   --s1: 1rem;
   --s2: 1.5rem;
@@ -67,11 +62,8 @@
     --matita: #6E6A62;
     --riga: rgb(240 235 225 / 0.14);
     --mare: #5DB9E0;
-    --mare-pieno: #0A7DA6;
-    --mare-velo: rgb(93 185 224 / 0.12);
     --oro: #F2C14E;
     --stella: #F2C14E;
-    --rosso: #FF6B5E;
     --vetro: rgb(12 16 21 / 0.72);
     --rilegatura: #0E2236;
     --ombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px -16px rgb(0 0 0 / 0.7);
@@ -409,9 +401,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .diario-bordo p, .cure p { font-size: var(--t2); line-height: 1.5; max-inline-size: var(--misura); }
 @media (min-width: 40rem) {
   .diario-bordo { border-top: 0; background: linear-gradient(var(--matita), var(--matita)) 11.25rem 0 / 1px 100% no-repeat; }
-  .diario-bordo li { border-bottom: 0; }
+  .diario-bordo li { border-bottom: 0; grid-template-columns: 10rem minmax(0, 1fr); }
   .diario-bordo li::before { content: ""; position: absolute; left: calc(11.25rem - 0.45rem); top: calc(var(--s1) + 0.35rem); width: 0.95rem; height: 0.95rem; background: var(--stella); clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
-  .diario-bordo li { grid-template-columns: 10rem minmax(0, 1fr); }
   .diario-bordo time { text-align: right; padding-top: 0.15rem; }
 }
 
@@ -822,7 +813,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .libro-piatto { position: relative; display: grid; grid-template-rows: auto auto 1fr auto auto; overflow: clip; }
 .libro-piatto img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 42% 78%;
-  view-transition-name: scena-argonauta; z-index: 0;
+  z-index: 0;
 }
 .libro-piatto::before {
   content: ""; position: absolute; inset: 0; z-index: 1;
@@ -998,7 +989,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .apertura-argonauta-scena { order: 2; width: 100%; }
 .apertura-argonauta-scena img {
   width: 100%; height: auto; aspect-ratio: 26 / 13; object-fit: cover; border-radius: var(--r3);
-  box-shadow: var(--ombra); view-transition-name: scena-argonauta;
+  box-shadow: var(--ombra);
 }
 @media (max-width: 47.99rem) { .apertura-argonauta-scena img { aspect-ratio: 26 / 17; border-radius: var(--r2); } }
 .apertura-argonauta-testo { order: 1; display: grid; gap: var(--s1); justify-items: center; max-inline-size: 46rem; }
@@ -1159,7 +1150,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 /* La copertina di Argonauta diventa l'apertura di Argonauta. Il nome della transizione c'è solo mentre l'immagine è
    sullo schermo: se è fuori, prima o dopo (la pagina si apre su #contatti o #territori, i link del menu che ricaricano
-   la pagina), la copertina non attraversa lo schermo in volo: sparisce o compare al suo posto. */
+   la pagina), la copertina non attraversa lo schermo in volo: sparisce o compare al suo posto. Il nome lo dà soltanto
+   l'animazione legata allo scorrimento: Safari 18 ha le transizioni fra pagine ma non quelle animazioni, e con un nome
+   fisso la copertina volava anche da fuori schermo (dal fondo della home, toccando Argonauta nel piede). Lì le pagine
+   si dissolvono l'una nell'altra, senza volo. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
 }
@@ -1539,7 +1533,6 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-lune-giorno { font: 500 12px var(--strumenti); fill: var(--testo-2); text-anchor: middle; }
 .tv-fonti { padding-top: 0.7rem; border-top: 0.5px solid var(--riga); font-size: 0.875rem; line-height: 1.5; color: var(--testo-2); }
 @supports not selector(:popover-open) { .tv-lunario { display: none; } }
-/* Il cielo stretto è per le finestre più alte che larghe. */
 /* Dove il menu è largo ma il posto è poco, e al telefono, la data è quella breve. */
 @media (max-width: 63.99rem) {
   .tv-oggi-lunga { display: none; }
