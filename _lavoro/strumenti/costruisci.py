@@ -19,7 +19,7 @@ SITO = QUI.parents[1]
 # Lo script (dentro _lavoro), i suoi argomenti, e che cosa rifà. L'ordine conta: gli apostrofi per ultimi, perché
 # ripassano il testo che gli altri hanno scritto.
 PASSI = [
-    ("disegni/marchio-3.py", [], "il marchio (img/icona.svg; favicon.ico e apple-touch-icon.png vengono dal kit del logo)"),
+    ("disegni/marchio-3.py", [], "il marchio (img/icona.svg; le icone, le S con le stelle e l'anteprima dei link vengono dal kit del logo)"),
     ("disegni/argo-navis.py", [], "la nave Argo nel cielo, in italiano e in inglese"),
     ("disegni/argonauta.py", [], "il guscio dell'argonauta"),
     ("strumenti/condivise.py", [], "la testa, l'intestazione e il colophon di ogni pagina"),
@@ -31,7 +31,6 @@ PASSI = [
 ]
 A_MANO = [
     ("disegni/png.py", "l'anteprima dei link di Argonauta: servono i disegni originali, che stanno solo sul Mac"),
-    ("disegni/anteprima-studio.py", "l'anteprima dei link dello studio: servono Chrome e il server acceso"),
     ("strumenti/schermate.py", "le copie AVIF e WebP delle schermate: servono Pillow e le schermate originali"),
     ("strumenti/parole-fronte.mjs", "le righe delle parole del frontespizio: servono Node, Chrome e il server acceso"),
     ("disegni/coste.py", "le coste della carta: serve il file di Natural Earth, scaricato a parte"),

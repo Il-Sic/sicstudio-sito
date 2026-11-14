@@ -8,8 +8,10 @@ img/marchio-notte.svg, dalla cartella web/ del kit, con la Via Lattea fine quant
 
 Scrive img/icona.svg, la favicon: l'icona piccola del kit ridisegnata sulla griglia di 16 pixel, così i tre tratti
 cadono su pixel interi e restano netti anche a 32. favicon.ico (16, 32 e 48 px) e apple-touch-icon.png sono quelli
-del kit (cartella web/), come le due S con le stelle: li fanno gli script del kit (kit_g.py e raster.js, con
-Playwright), non si rifanno qui.
+del kit (cartella web/), come le due S con le stelle, la S vista da vicino della pagina dello studio
+(img/marchio-vicino-giorno.svg e -notte.svg) e l'anteprima dei link di home e studio (img/anteprima-logo.jpg, la
+scena con il nome sulla carta): li fanno gli script del kit (kit_g.py e raster.js, con Playwright), non si rifanno
+qui.
 
     python3 -I _lavoro/disegni/marchio-3.py
 """

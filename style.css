@@ -356,8 +356,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @media (min-width: 64rem) {
   .perche-riga, .nome-riga, .manifesto-riga { grid-template-columns: var(--etichette) minmax(0, 1fr); column-gap: var(--s4); }
   .perche-riga > .occhiello, .nome-riga > .occhiello, .manifesto-riga > .occhiello { padding-top: 0.6rem; }
-  .nome-riga .testo { grid-column: 2; }
+  .nome-riga .testo, .nome-riga .nome-marchio { grid-column: 2; }
 }
+
+/* La S del marchio vista da vicino, sotto «Il nome» (img/marchio-vicino-*.svg, dal kit del logo). */
+.nome-marchio { max-inline-size: 32rem; }
+.nome-marchio img { display: block; inline-size: 100%; block-size: auto; }
 
 .parole-di-sic { display: grid; gap: 0.8em; max-inline-size: 46rem; }
 .parole-di-sic p { font-size: clamp(var(--t2), 1rem + 1vw, var(--t3)); line-height: 1.42; }

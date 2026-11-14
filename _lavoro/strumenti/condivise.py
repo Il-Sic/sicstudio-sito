@@ -95,7 +95,7 @@ PAROLE = {
         "crediti": ("I disegni del sito, con la nave, gli eroi e i paesaggi di Argo, sono provvisori. Le schermate "
                     "vengono dall’app: sulle mappe ci sono i loro crediti."),
         "og_locale": "it_IT",
-        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio scritto nel cielo, sopra una casa di tronchi in cima a un sentiero, con un laghetto e il sole."),
+        "og": {"studio": ("anteprima-logo.jpg", "Il logo di Sic Studio: un sentiero a S pieno di stelle sale tra le colline sotto il cielo che gira, con il nome sotto."),
                "argonauta": ("anteprima.jpg", "La nave Argo sul mare, di giorno.")},
     },
     "en": {
@@ -110,7 +110,7 @@ PAROLE = {
         "crediti": ("The site’s drawings, with the ship, the heroes and Argo’s landscapes, are provisional. The "
                     "screenshots come from the app: the maps show their credits."),
         "og_locale": "en_GB",
-        "og": {"studio": ("anteprima-studio.jpg", "Sic Studio written in the sky, above a log cabin at the top of a path, with a small lake and the sun."),
+        "og": {"studio": ("anteprima-logo.jpg", "The Sic Studio logo: an S-shaped path full of stars climbs between the hills under the turning sky, with the name below."),
                "argonauta": ("anteprima.jpg", "The ship Argo at sea, by day.")},
     },
 }
