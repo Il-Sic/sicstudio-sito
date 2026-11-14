@@ -206,9 +206,11 @@ def voci(d):
 
 def al_telefono(h, d):
     """Nel menu del telefono un link a una sezione della stessa pagina ha il nome della sezione anche prima del «#»
-    (/?contatti#contatti): così la pagina si ricarica e il menu, che è un popover, si chiude. Con un «?» vuoto uguale
-    per tutte le sezioni (/?#contatti) si ricaricava solo la prima volta: dalla seconda cambiava solo il «#» e il menu
-    restava aperto sopra la sezione. Il menu del computer resta com'è."""
+    (/?contatti#contatti): passando da una sezione all'altra la pagina si ricarica e il menu, che è un popover, si
+    chiude. Con un «?» vuoto uguale per tutte le sezioni (/?#contatti) si ricaricava solo la prima volta. Se si tocca
+    di nuovo la sezione dell'ultimo salto, anche dopo essere tornati su o arrivando da un link copiato, l'indirizzo
+    è lo stesso: cambia solo il «#» e il menu resta aperto, come prima. Senza JavaScript non si evita. Il menu del
+    computer resta com'è."""
     pagina, segno, sezione = h.partition("#")
     if segno and pagina in ("", d["percorso"]):
         return f'{d["percorso"]}?{sezione}#{sezione}'

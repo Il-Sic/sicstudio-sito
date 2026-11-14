@@ -238,17 +238,25 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .apri-menu svg { width: 1.5rem; height: 1.5rem; margin: auto; display: block; }
 .apri-menu path { stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; fill: none; }
 
-/* Il foglio non è mai più alto dello schermo: al telefono in orizzontale, o con lo zoom, scorre al suo interno, fino
-   all'ultima voce sopra la barra di casa dell'iPhone, e non fa scorrere la pagina dietro. */
+/* Il foglio non è mai più alto dello schermo: al telefono in orizzontale, o con lo zoom, scorre la lista al suo
+   interno, fino all'ultima voce, mentre «Chiudi» resta fermo in alto e la pagina dietro non si muove. */
 .menu-telefono {
   inset: 0 0 auto 0; width: 100%; max-width: none; margin: 0;
-  max-height: 100svh; overflow-y: auto; overscroll-behavior: contain;
-  padding: calc(var(--testata) + var(--s1)) var(--margine) calc(var(--s3) + env(safe-area-inset-bottom));
+  max-height: 100svh; overflow: hidden; overscroll-behavior: contain;
+  padding: calc(var(--testata) + var(--s1)) var(--margine) 0;
   border: 0; border-bottom: 0.5px solid var(--riga);
   background: var(--vetro); color: var(--testo);
   -webkit-backdrop-filter: blur(28px) saturate(170%);
   backdrop-filter: blur(28px) saturate(170%);
   font-family: var(--strumenti);
+}
+/* Scorre la lista, non il foglio. Il margine negativo, pareggiato dal padding, lascia il posto all'anello del fuoco.
+   Lo spazio sotto l'ultima voce sta nella lista: scorrendo, le voci arrivano al bordo dello schermo, così si vede
+   che continua, e alla fine l'ultima resta sopra la barra di casa dell'iPhone. */
+.menu-telefono:popover-open { display: flex; flex-direction: column; }
+.menu-telefono nav {
+  min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block: 8px;
+  margin: -8px -8px 0; padding: 8px 8px max(var(--s3), env(safe-area-inset-bottom));
 }
 .menu-telefono::backdrop { background: rgb(0 0 0 / 0.18); }
 @media (prefers-contrast: more), (prefers-reduced-transparency: reduce) {
