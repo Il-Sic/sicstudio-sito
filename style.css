@@ -47,7 +47,9 @@
   --etichette: 15rem;         /* la colonna delle etichette a sinistra */
   --colonna: max(var(--margine), calc((100% - var(--largo)) / 2));
   --t1: 1.0625rem; --t2: 1.25rem; --t3: 1.625rem; --t4: 2.5rem; --t5: 4rem;  /* i cinque corpi */
-  --margine: max(1.5rem, env(safe-area-inset-left));
+  /* Il margine dei lati, uguale a destra e a sinistra: almeno 1,5rem, e in orizzontale fuori dalla tacca o dal foro
+     della fotocamera, da qualunque lato stiano (su Android il foro è da una parte sola). */
+  --margine: max(1.5rem, env(safe-area-inset-left), env(safe-area-inset-right));
   --testata: 3.25rem;
   --r1: 12px;
   --r2: 18px;
@@ -219,6 +221,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* La S del logo con le sue stelle (img/marchio-giorno.svg e -notte.svg): alta quasi il doppio delle maiuscole del
    nome, come nel logo del kit. Sulla copertina di Argonauta è più piccola, solo cielo, disegnata nell'HTML. */
 .marchio { width: auto; height: 1.625rem; flex: none; }
+/* Nella testata l'elemento flex è il <picture>, non l'immagine: se la riga è piena non si stringe nemmeno lui, o la
+   S si schiacciava (del 7% sugli iPad in verticale). */
+.casa > picture { flex: none; }
 .marchio-via { fill: none; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
 
 .menu-largo { margin-left: auto; }
@@ -263,7 +268,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   border: 0; background: transparent; color: var(--mare); font: 600 1rem/1 var(--strumenti); cursor: pointer;
 }
 
-@media (max-width: 47.99rem) {
+/* Il menu sta nel foglio che si apre dal pulsante fino a 56rem: telefoni e iPad in verticale. Fino al 14/11 era in
+   riga da 48rem, ma fra 48 e 56rem la riga ci stava solo nello studio: con il nome del progetto (Argonauta) o con la
+   data (la home) nomi e voci andavano a capo dentro la barra, «Sic / Studio», «Aiuto e / domande». */
+@media (max-width: 55.99rem) {
   .menu-largo { display: none; }
   .apri-menu { display: block; }
 }
@@ -272,10 +280,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 /* Dove il browser non conosce i fogli che si aprono (popover: Safari prima del 17, Firefox prima del 125, Chrome
    prima del 114) il menu del telefono starebbe sempre aperto dentro la testata e il pulsante non aprirebbe nulla.
-   Lì resta il menu largo, anche al telefono: sulla stessa riga del nome, scorre di lato e sfuma ai due capi. */
+   Lì resta il menu largo: fino a 56rem, sulla stessa riga del nome, scorre di lato e sfuma ai due capi. */
 @supports not selector(:popover-open) {
   .menu-telefono, .apri-menu { display: none; }
-  @media (max-width: 47.99rem) {
+  @media (max-width: 55.99rem) {
     .casa, .testata-sep, .progetto { flex: none; }
     .menu-largo {
       display: block; flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none;
@@ -765,7 +773,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
    ultimo, lo scrittoio, che poggia sul pavimento. La finestra è un disegno, senza niente da leggere o toccare: sta
    sopra lo scrittoio, come sul computer, senza cambiare l'ordine per chi legge o usa la tastiera. Sul computer la
    stanza è disegnata per aree; da quattro progetti in su le mensole prendono tutta la larghezza. */
-.stanza { display: grid; gap: var(--s4); grid-template-areas: "mensole" "cartellino" "finestra" "scrittoio"; }
+.stanza {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s4);
+  grid-template-areas: "mensole" "cartellino" "finestra" "scrittoio";
+}
 .mensole { grid-area: mensole; container-type: inline-size; min-width: 0; }
 .stanza > .cartellino { grid-area: cartellino; }
 @media (min-width: 64rem) {
@@ -931,7 +942,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   box-shadow: var(--ombra);
   rotate: -1.5deg; transform-origin: bottom left;
 }
-.quaderno-titolo { font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); font-style: italic; line-height: 1.15; }
+/* Righe pari, come i titoli: «Your area / inside Argonauta», non «Your area inside / Argonauta». */
+.quaderno-titolo { font-size: clamp(1.6rem, 1.3rem + 1vw, 2rem); font-style: italic; line-height: 1.15; text-wrap: balance; }
 .quaderno-righe { font-size: 1.0625rem; line-height: 2rem; }
 @media (hover: hover) {
   .quaderno-copertina { transition: rotate 0.35s cubic-bezier(.2, .8, .2, 1); }
@@ -1016,6 +1028,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .stato-app { display: block; background: none; border: 0; padding: 0; text-wrap: balance; }
   .stato-app::before { display: inline-block; vertical-align: 0.1em; margin-right: 0.5rem; }
 }
+/* La colonna è larga quanto lo schermo, non quanto la parola più lunga, e sotto i 371 px il titolo si stringe con lo
+   schermo (a 320 px da 61 a 53 px): con un serif più largo, come il Noto Serif di Android, «Argonauta» usciva dalla
+   pagina e la faceva scorrere di lato. */
+.apertura-argonauta { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 23.18rem) { .apertura-argonauta h1 { font-size: 16.5vw; } }
 
 /* ---------- Argonauta: una giornata ---------- */
 
@@ -1034,7 +1051,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .momento-testo { display: grid; gap: var(--s1); max-inline-size: 32rem; }
 .momento h3 { font-size: clamp(2rem, 1.5rem + 2vw, var(--t4)); letter-spacing: -0.02em; }
 .momento-testo p:not(.ora) { font-size: var(--t2); line-height: 1.5; }
-@media (min-width: 56rem) {
+/* Sul computer il telefono sta accanto al testo e lo segue, alto quanto lo schermo. Serve uno schermo alto almeno
+   30rem, come per le scene della casa: sui telefoni grandi in orizzontale (932 per 430) le schermate erano larghe
+   135 px, con le scritte dell'app di 6 px; ora restano in colonna, larghe 306 px. */
+@media (min-width: 56rem) and (min-height: 30rem) {
   .momento { grid-template-columns: minmax(0, 30rem) auto; justify-content: center; column-gap: var(--s6); min-height: 118vh; align-items: start; padding-block: 0; }
   .momento-testo { align-self: center; justify-self: start; }
   .momento .schermata { position: sticky; top: calc(var(--testata) + 5vh); align-self: start; padding-block: 0; }
@@ -1545,10 +1565,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .tv-oggi-lunga { display: none; }
   .tv-oggi-corta { display: inline; }
 }
-@media (max-width: 47.99rem) {
-  .tv-oggi { margin-left: auto; gap: 0.4rem; font-size: 0.95rem; }
+@media (max-width: 55.99rem) {
+  .tv-oggi { margin-left: auto; }
   .tv-oggi ~ .apri-menu { margin-left: 0; }
 }
+@media (max-width: 47.99rem) { .tv-oggi { gap: 0.4rem; font-size: 0.95rem; } }
 /* Sui telefoni più stretti resta la luna sola: con la data il nome dello studio andrebbe su due righe. Sotto i
    300 px non c'è posto nemmeno per quella. */
 @media (max-width: 21.49rem) {
