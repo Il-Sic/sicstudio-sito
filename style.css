@@ -57,7 +57,7 @@
 
 /* ---------- Variabili: scuro, la notte ---------- */
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --carta: #0C1015;
     --carta-2: #141A21;
@@ -78,6 +78,15 @@
   }
 }
 
+/* Con «Aumenta contrasto» le note, i segni a matita e le righe si fanno più scuri di giorno e più chiari di
+   notte. */
+@media (prefers-contrast: more) {
+  :root { --testo-2: #3F3A33; --matita: #6B655B; --riga: rgb(30 27 23 / 0.5); }
+}
+@media screen and (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root { --testo-2: #C9C2B6; --matita: #9A958C; --riga: rgb(240 235 225 / 0.5); }
+}
+
 /* Sugli schermi P3 il mare e l'oro sono più vivi, con la stessa luminosità. */
 @media (color-gamut: p3) {
   :root {
@@ -85,7 +94,7 @@
     --stella: color(display-p3 0.87 0.61 0.16);
   }
 }
-@media (color-gamut: p3) and (prefers-color-scheme: dark) {
+@media screen and (color-gamut: p3) and (prefers-color-scheme: dark) {
   :root {
     --mare: color(display-p3 0.43 0.72 0.88);
     --oro: color(display-p3 0.96 0.77 0.33);
@@ -338,10 +347,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .bs-monti { fill: #DDD4C4; }
 .bs-colli { fill: #C9C2AE; }
 .bs-sentiero { stroke-width: 7; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .bs-cielo { fill: url(#bs-notte); }
 }
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .bs-sentiero { stroke-dasharray: 1; stroke-dashoffset: 1; animation: traccia 1.8s cubic-bezier(.6, 0, .3, 1) .2s forwards; }
   .bottega .cs-vetro, .bs-lume { opacity: 0; animation: accendi-luce .6s ease-out 1.9s forwards; }
   .bs-astro { animation: sorge 1s cubic-bezier(.2, .8, .2, 1) 2.3s both; }
@@ -430,7 +439,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* I colori dei paesaggi della casa (frontespizio, soglia, studio, finestra, laghetto), di giorno e di notte. Il prato
    e la luce della porta servono anche al palco del frontespizio, che dipinge la striscia della barra di Safari. */
 :root { --prato: #A9A891; --luce-soglia: #FFE6B0; }
-@media (prefers-color-scheme: dark) { :root { --prato: #0A111A; --luce-soglia: #D99331; } }
+@media screen and (prefers-color-scheme: dark) { :root { --prato: #0A111A; --luce-soglia: #D99331; } }
 .fr-cielo, .sg-cielo { fill: var(--carta); }
 .volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { fill: #F4EEDC; opacity: 0; }
 .fr-alba-0, .sg-alba-0, .fn-alba-0 { stop-color: #F7E3C8; stop-opacity: 0; }
@@ -441,7 +450,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .fr-sentiero, .bs-sentiero { fill: none; stroke: #F4EDE0; stroke-linecap: round; stroke-linejoin: round; }
 .fr-sentiero { stroke-width: 9; }
 .sg-sentiero { fill: #F4EDE0; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .fr-cielo { fill: url(#fr-notte); }
   .sg-cielo { fill: url(#sg-notte); }
   .volta-stelle, .bs-stelle, .fn-stelle, .lg-stelle { opacity: 1; }
@@ -455,7 +464,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* Di giorno il sole, di notte la luna crescente. Nelle scene della casa (frontespizio, soglia, finestra, «Lo studio»)
    ci sono tutti e due, con lo stesso alone caldo, e il tema del dispositivo sceglie quale si vede. */
 .solo-notte { display: none; }
-@media (prefers-color-scheme: dark) { .solo-giorno { display: none; } .solo-notte { display: inline; } }
+@media screen and (prefers-color-scheme: dark) { .solo-giorno { display: none; } .solo-notte { display: inline; } }
 .volta-sole, .fn-sole, .bs-sole { fill: #F2B640; }
 /* Il cielo, uguale nelle due scene: le stelle (di notte) e il sole o la luna, che al telefono sta più a sinistra. */
 .volta-falce { fill: var(--stella); }
@@ -468,7 +477,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .lg-giunchi { fill: none; stroke: #5F6E3E; stroke-width: 1.6; stroke-linecap: round; }
 .lg-teste { fill: #7A5534; }
 .lg-riflesso { fill: #FFC85A; opacity: 0; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .lg-acqua { fill: #15233A; }
   .lg-luce { fill: #1D2E4A; }
   .lg-sassi { fill: #262A31; }
@@ -488,7 +497,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .frase-terra { color: var(--testo-2); }
 .a-capo { display: none; }
 @media (min-width: 48rem) { .a-capo { display: inline; } }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .frontespizio-parole :is(p, h1) { text-shadow: 0 0 0.4em #0A1322, 0 0 0.15em #0A1322; }
 }
 .frontespizio-nome { margin-top: clamp(1.5rem, 5svh, 3.5rem); }
@@ -560,7 +569,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .cs-ceppo { fill: #7A5534; }
 .cs-faggio { fill: #6F8B4F; }
 .cs-pino { fill: #43603E; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .cs-muro { fill: #3B2A1D; }
   .cs-tronchi { stroke: #2B1E14; }
   .cs-teste { fill: #4A3524; }
@@ -613,7 +622,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .sg-alone-0 { stop-color: #FFF1C9; stop-opacity: 1; }
 .sg-alone-1 { stop-color: #FFD27A; stop-opacity: 0.6; }
 .sg-alone-2 { stop-color: #FFC85A; stop-opacity: 0; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .sg-alone-0 { stop-color: #FFC85A; }
   .sg-alone-1 { stop-color: #E39A35; stop-opacity: 0.55; }
 }
@@ -625,7 +634,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .cs-porta-giu { transform: skewY(-48deg) scaleX(0.15); }
 
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     /* Al telefono la strada fino alla porta è lunga una schermata e mezza, sul computer due (sotto), e il palco finisce
        con lei. La scena sta sopra la bottega, che le sale sotto mentre la luce riempie lo schermo: quando la luce sfuma,
        il titolo e la finestra sono già lì. La sovrapposizione è quella fra l'inizio della sfumatura e la fine del
@@ -682,14 +691,14 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   }
   /* Sui touch, dove c'è la barra, gli ultimi 3rem della scena sfumano nel prato: il sentiero non resta tagliato sulla
      linea della barra. */
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (hover: none) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (hover: none) {
     .frontespizio-fermo::after {
       content: ""; position: absolute; inset: calc(100svh - var(--testata) - 3rem) 0 auto; height: 3rem;
       background: var(--prato); -webkit-mask-image: linear-gradient(transparent, #000); mask-image: linear-gradient(transparent, #000);
       animation: fr-fondo linear both; animation-timeline: --fronte; animation-range: var(--strada);
     }
   }
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (min-width: 48rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (min-width: 48rem) {
     .frontespizio { --strada: contain 36.5% contain 100%; }
     .frontespizio-palco { height: 415svh; }
     .frontespizio + .dentro { margin-top: calc(var(--testata) - 126svh); padding-top: calc(var(--s5) + 26svh); }
@@ -734,12 +743,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 /* Il muro, il legno dello scaffale e del tavolo. La luce della porta finisce nel colore del muro. */
 :root { --muro: #EEDDBF; --asse: rgb(130 88 48 / 0.24); --legno: #A87A4F; --legno-scuro: #7A5332; --legno-chiaro: #C49A6C; --foglio-matita: #FBF7EE; --tratto-matita: #8C857A; --pagine: #E3DACA; --lume: rgb(255 196 100 / 0.16); }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root { --muro: #2A2018; --asse: rgb(0 0 0 / 0.38); --legno: #5C4029; --legno-scuro: #3D2A1B; --legno-chiaro: #74522F; --foglio-matita: #DAD1C0; --tratto-matita: #6E675C; --pagine: #B9AF9E; --lume: rgb(255 180 80 / 0.2); }
 }
 /* Sul muro di legno il blu dei link è un po' più scuro, per leggersi bene (5,6:1). */
 .dentro { --mare: #065F80; }
-@media (prefers-color-scheme: dark) { .dentro { --mare: #5DB9E0; } }
+@media screen and (prefers-color-scheme: dark) { .dentro { --mare: #5DB9E0; } }
 .dentro {
   position: relative; isolation: isolate;
   background: radial-gradient(70% 50% at 28% 40%, var(--lume), transparent 70%), var(--muro);
@@ -838,6 +847,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 .libro-marca { grid-row: 5; display: inline-flex; align-items: center; justify-content: center; gap: 2cqi; padding: 0 0 6cqi; font: 400 max(0.75rem, 5.6cqi)/1 var(--libro); color: #EFE4D0; }
 .libro-marca .marchio { width: 7.5cqi; height: 7.5cqi; }
+/* Il testo selezionato sulla copertina, che ha i suoi colori di giorno e di notte: crema su un velo d'oro, e sulla
+   fascetta d'oro l'inchiostro su un velo blu. */
+.libro-copertina ::selection { color: #F6E7C2; background: rgb(231 196 110 / 0.4); }
+.libro-fascetta::selection { color: #1E1B17; background: rgb(18 40 61 / 0.22); }
 @media (hover: hover) {
   .libro-copertina { transition: translate 0.35s cubic-bezier(.2, .8, .2, 1), box-shadow 0.35s; }
   .libro-copertina:hover { translate: 0 -6px; box-shadow: 0 1px 2px rgb(30 20 10 / 0.25), 0 30px 44px -20px rgb(30 20 10 / 0.6); }
@@ -856,7 +869,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .mt-mina, .mt-ghiera { fill: #77706A; }
 .mt-gomma { fill: #D58A84; }
 .mt-lato { stroke: #F0CF7E; }
-@media (prefers-color-scheme: dark) { .mt-matita { fill: #B88E36; } .mt-legno { fill: #C2A47A; } .mt-gomma { fill: #B0716B; } .mt-lato { stroke: #CFAE62; } }
+@media screen and (prefers-color-scheme: dark) { .mt-matita { fill: #B88E36; } .mt-legno { fill: #C2A47A; } .mt-gomma { fill: #B0716B; } .mt-lato { stroke: #CFAE62; } }
 
 .og-foglia { fill: #6F8A55; }
 .og-foglia-2 { fill: #5A7445; }
@@ -866,7 +879,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .og-vetro { fill: rgb(255 236 190 / 0.55); stroke: #9C8058; stroke-width: 1.5; }
 .og-corpo, .og-base { fill: #8C6A3E; }
 .og-manico { fill: none; stroke: #8C6A3E; stroke-width: 4; stroke-linecap: round; }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .og-foglia { fill: #3E5733; }
   .og-foglia-2 { fill: #31472A; }
   .og-vaso { fill: #6E3A24; }
@@ -889,7 +902,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .fn-abeti { fill: #6E8664; }
 .fn-montanti { fill: none; stroke: var(--legno); stroke-width: 7; }
 .fn-davanzale { fill: var(--legno-chiaro); }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .fn-cielo { fill: url(#fn-notte); }
   .fn-monti { fill: #142033; }
   .fn-colli { fill: #0B131E; }
@@ -957,7 +970,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .pirati-frase { font-size: clamp(2.3rem, 1rem + 5.2vw, var(--t5)); line-height: 1.05; letter-spacing: -0.03em; text-wrap: balance; max-inline-size: 18ch; }
 .pirati-firma { font-style: italic; font-size: 1.125rem; color: var(--testo-2); }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     .pirati-palco { height: 150svh; view-timeline: --pirati block; }
     .pirati-fermo { position: sticky; top: var(--testata); height: calc(100svh - var(--testata)); padding-block: 0; }
     .pirati-frase span { opacity: 0.16; animation: accendi linear both; animation-timeline: --pirati; }
@@ -987,7 +1000,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08), 0 2px 3px rgb(30 20 10 / 0.14), 0 30px 60px -28px rgb(30 20 10 / 0.5);
 }
 .telefono img { width: 100%; height: auto; border-radius: 2.3rem; background: var(--carta-2); }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .telefono { background: #2A2A2D; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12), 0 30px 60px -28px rgb(0 0 0 / 0.8); }
 }
 .schermata figcaption { font: 400 0.875rem/1.45 var(--strumenti); color: var(--testo-2); max-inline-size: 19rem; text-align: center; }
@@ -1023,7 +1036,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   background: linear-gradient(180deg, #FBF0E2 0%, var(--carta) 18%, var(--carta) 55%, #F1EEF0 82%, #E9E6EF 100%);
   padding-bottom: var(--s5);
 }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .giornata { background: linear-gradient(180deg, #17171D 0%, var(--carta) 20%, var(--carta) 55%, #0A1220 85%, #070A12 100%); }
 }
 .giornata > .capo { margin-bottom: 0; }
@@ -1069,7 +1082,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .crescita-numero { display: block; font: 600 0.8125rem/1.4 var(--strumenti); letter-spacing: 0.12em; text-transform: uppercase; color: var(--oro); font-variant-numeric: lining-nums; }
 
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     .crescita-palco { height: 340vh; view-timeline: --crescita block; }
     .crescita-fermo { position: sticky; top: var(--testata); height: calc(100svh - var(--testata)); display: grid; place-items: center; }
     .crescita-stati { display: block; position: relative; width: min(100%, 42rem, calc((100svh - var(--testata)) * 1.05)); aspect-ratio: 44 / 42; margin: 0 auto; }
@@ -1146,7 +1159,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* ---------- Le entrate allo scorrimento ---------- */
 
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
+  @media screen and (prefers-reduced-motion: no-preference) {
     .momento-testo, .eroe, .passi li, .diario-bordo li, .cure li, .manifesto-righe li, .cartellino {
       animation: entra linear both; animation-timeline: view(); animation-range: entry 0% entry 70%;
     }
@@ -1225,7 +1238,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .carta-approdi circle { fill: var(--carta); stroke: var(--mare); stroke-width: 2.5; }
 .carta-approdi .carta-vello { fill: var(--stella); stroke: var(--oro); }
 .carta-barca { fill: var(--testo); }
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .carta-mare { fill: #0F1E2C; }
   .carta-reticolo { stroke: #2E4A5E; }
   .carta-costa { fill: #17304A; stroke: #17304A; }
@@ -1244,10 +1257,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* Il vello è sul bordo destro della carta: il suo nome sta a sinistra del punto, così non esce dalla carta. */
 .carta-sopra.cn-vello { translate: calc(-100% + 0.6rem) calc(-100% - 0.7rem); }
 .carta-mare-nome { translate: -50% -50%; font: italic 400 1.0625rem/1 var(--libro); letter-spacing: 0.12em; color: #46697A; }
-@media (prefers-color-scheme: dark) { .carta-mare-nome { color: #7FA7B8; } }
+@media screen and (prefers-color-scheme: dark) { .carta-mare-nome { color: #7FA7B8; } }
 @media (min-width: 48rem) { .carta-nome { font-size: 0.9375rem; } .carta-mare-nome { font-size: 1.375rem; } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     .carta-pista { height: 220svh; view-timeline: --carta block; }
     .carta-palco { position: sticky; top: var(--testata); height: calc(100svh - var(--testata)); display: grid; place-items: center; }
     .carta-mappa { width: min(100%, (100svh - var(--testata) - var(--s4)) * 1.6515); }
@@ -1257,7 +1270,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .carta-barca { animation-name: naviga; }
   }
   /* Al telefono la carta è alta come lo schermo, più larga, e scorre di lato insieme alla barca. */
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (max-width: 47.99rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) and (max-width: 47.99rem) {
     .carta-pista { height: 260svh; }
     .carta-palco { container-type: inline-size; overflow: clip; margin-inline: calc(-1 * var(--colonna)); justify-items: start; }
     .carta-mappa { width: calc(min(76svh, 40rem) * 1.6515); animation: scorri linear both; animation-timeline: --carta; animation-range: contain 0% contain 100%; }
@@ -1393,7 +1406,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .banco-1 { bottom: 0; }
 .banco-2 { bottom: 28%; opacity: 0.85; }
 .banco-3 { bottom: 52%; opacity: 0.6; }
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
   .banco-1 { animation: deriva 19s ease-in-out infinite alternate; }
   .banco-2 { animation: deriva 26s ease-in-out -8s infinite alternate-reverse; }
   .banco-3 { animation: deriva 33s ease-in-out -15s infinite alternate; }
@@ -1424,6 +1437,27 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   @page { margin: 18mm 16mm; }
 }
 
+/* In stampa la pagina è quella ferma e di giorno. Le regole del movimento e quelle della notte valgono solo per lo
+   schermo (screen and), e i colori del giorno della tavola anche in stampa (print): sulla carta non restano palchi
+   alti e vuoti né parti trasparenti in attesa dello scorrimento, e anche con il tema scuro fogli, scene e inchiostro
+   sono quelli del giorno. Restano scure solo le immagini che hanno una versione per la notte. Le risposte dell'aiuto
+   escono aperte. */
+@media print {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  :root { color-scheme: light; }
+  .domanda::details-content { content-visibility: visible; block-size: auto; }
+  .domanda summary::after { display: none; }
+  .domande, .risposta, .parole-di-sic { display: block; }
+  .risposta > * + * { margin-top: 0.75em; }
+  .parole-di-sic > * + * { margin-top: 0.8em; }
+  .domanda, .glossario > div { break-inside: avoid; }
+  /* I titoli restano con quello che segue: le righe dell'aiuto e i capi diventano blocchi, con gli stessi spazi. */
+  .domande-riga, .capo { display: block; }
+  .domande-riga > * + * { margin-top: var(--s2); }
+  .capo > * + * { margin-top: var(--s1); }
+  .titolo-sezione, .capo { break-after: avoid; }
+}
+
 /* ---------- Al telefono, meno vuoto ---------- */
 
 /* Gli spazi fra le parti e dentro le parti sono un terzo più stretti che sul computer. La nave che cresce resta com'è:
@@ -1442,7 +1476,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 /* Le parole dei pirati, al telefono, si accendono mentre la frase sale nello schermo, senza fermarsi a tutta pagina. */
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (max-width: 47.99rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (max-width: 47.99rem) {
     .pirati-palco { height: auto; view-timeline: none; }
     .pirati-fermo { position: static; height: auto; padding-block: var(--s5); }
     .pirati-frase { view-timeline: --pirati block; }
@@ -1572,7 +1606,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .tv-emblema-stretto { display: inline; }
 }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
+  @media screen and (prefers-reduced-motion: no-preference) and (min-height: 30rem) {
     /* Il sole dell'angolo (.tv-emblema: uno per le finestre larghe e uno per quelle in piedi, dove le parole lasciano
        libero il foglio) va via con le parole: poi c'è quello della carta del giorno, al suo posto. */
     .tv-dopo, .tv-nome, .tv-largo, .tv-stretto, .tv-carta, .tv-emblema { animation: fr-via linear both; animation-timeline: --fronte; animation-range: var(--strada); }
@@ -1596,7 +1630,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-fiore { stroke: #FBF8F1; stroke-width: 3.4; }
 .tv-fiore-giallo { stroke: #F0C24A; }
 .tv-lucciola { stroke: #F2D36B; stroke-width: 3; opacity: 0; }
-@media (prefers-color-scheme: light) {
+@media print, (prefers-color-scheme: light) {
   .tv-primavera { --prato: #A9B68C; }
   .tv-primavera :is(.fr-colli, .sg-colli, .bs-colli) { fill: #CED3B2; }
   .tv-primavera .fn-colli { fill: #BDC89D; }
@@ -1642,7 +1676,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .tv-neve .sg-sentiero { fill: #CFC8BB; }
 }
 /* … e di notte, dove cambia solo ciò che al buio si vede: le foglie, la nebbia, e la neve, che è il chiaro del paesaggio. */
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   .tv-sigillo .tv-lune-ombra { fill: #0D1420; fill-opacity: 1; stroke: var(--matita); stroke-opacity: 0.9; }
   .tv-velo { fill: #2A3B55; fill-opacity: 0.42; }
   .tv-ombra { fill: #01040A; fill-opacity: 0.34; }
