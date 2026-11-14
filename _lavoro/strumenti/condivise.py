@@ -74,7 +74,7 @@ PAGINE = {
         lingua="en", percorso="/en/argonauta/the-myth/", altro="/argonauta/il-mito/", casa="argonauta", voce="mito",
         titolo="The myth of Argo · Argonauta",
         descrizione="Why Argonauta’s guide is called Argo: the ship that spoke, the heroes aboard and the voyage to "
-                    "the golden fleece, with the ancient sources."),
+                    "the Golden Fleece, with the ancient sources."),
     "en/argonauta/help/index.html": dict(
         lingua="en", percorso="/en/argonauta/help/", altro="/argonauta/aiuto/", casa="argonauta", voce="aiuto",
         titolo="Help and questions · Argonauta",

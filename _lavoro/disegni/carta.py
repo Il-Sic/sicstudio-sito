@@ -246,7 +246,7 @@ TESTI = {
                     "Simplegadi all’imbocco del Bosforo; il Fasi è il fiume Rioni, in Georgia."},
     "en": {"titolo": "The chart of the Voyage of Argo: from Pagasae, in Thessaly, to Lemnos, Cyzicus and the Clashing "
                      "Rocks at the mouth of the Black Sea; then along the coast of Anatolia to Colchis and up the river "
-                     "Phasis to the golden fleece.",
+                     "Phasis to the Golden Fleece.",
            "approdi": ["Pagasae", "Lemnos", "Cyzicus", "Clashing Rocks", "Colchis", "Golden Fleece"],
            "mari": ["Aegean Sea", "Black Sea"],
            "fonte": "The coastlines come from Natural Earth, in the public domain, simplified. The landfalls are at "
