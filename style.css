@@ -1440,8 +1440,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* In stampa la pagina è quella ferma e di giorno. Le regole del movimento e quelle della notte valgono solo per lo
    schermo (screen and), e i colori del giorno della tavola anche in stampa (print): sulla carta non restano palchi
    alti e vuoti né parti trasparenti in attesa dello scorrimento, e anche con il tema scuro fogli, scene e inchiostro
-   sono quelli del giorno. Restano scure solo le immagini che hanno una versione per la notte. Le risposte dell'aiuto
-   escono aperte. */
+   sono quelli del giorno. Restano scure solo le immagini che hanno una versione per la notte, tranne la S vista da
+   vicino dello studio: i suoi nomi stanno sulla fascia, che in stampa è chiara. Le risposte dell'aiuto escono
+   aperte. */
 @media print {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   :root { color-scheme: light; }
@@ -1449,13 +1450,21 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .domanda summary::after { display: none; }
   .domande, .risposta, .parole-di-sic { display: block; }
   .risposta > * + * { margin-top: 0.75em; }
-  .parole-di-sic > * + * { margin-top: 0.8em; }
+  .parole-di-sic > * + * { margin-top: 0.8rem; }
+  .parole-di-sic > footer { margin-top: calc(0.8rem + var(--s1)); }
   .domanda, .glossario > div { break-inside: avoid; }
-  /* I titoli restano con quello che segue: le righe dell'aiuto e i capi diventano blocchi, con gli stessi spazi. */
+  /* I titoli restano con quello che segue, e gli occhielli con il loro titolo. Chromium rispetta questi salti di
+     pagina fra blocchi e in una colonna flex, non fra le righe di una griglia: le righe dell'aiuto e i capi diventano
+     blocchi, con gli spazi dello schermo; i capitoli del mito e il cielo colonne flex, con il loro gap. Gli approdi e
+     i passi non si spezzano. */
   .domande-riga, .capo { display: block; }
   .domande-riga > * + * { margin-top: var(--s2); }
   .capo > * + * { margin-top: var(--s1); }
-  .titolo-sezione, .capo { break-after: avoid; }
+  .capo > .misura { margin-top: calc(var(--s1) + var(--s0)); }
+  .capitolo-riga, .cielo-testo { display: flex; flex-direction: column; }
+  .titolo-sezione, .capo, .occhiello { break-after: avoid; }
+  .approdo, .passi li { break-inside: avoid; }
+  .nome-marchio img { content: url("/img/marchio-vicino-giorno.svg"); }
 }
 
 /* ---------- Al telefono, meno vuoto ---------- */
