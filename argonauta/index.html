@@ -69,9 +69,6 @@
 <main id="contenuto" class="pagina-argonauta">
 
 <header class="apertura-argonauta">
-  <div class="apertura-argonauta-scena">
-    <img class="scena-argonauta" src="/img/scena.svg" width="1040" height="600" alt="La nave Argo sul mare, con la vela bianca e blu." decoding="async" fetchpriority="high">
-  </div>
   <div class="apertura-argonauta-testo">
     <p class="occhiello">Un progetto di Sic Studio</p>
     <h1>Argonauta</h1>
@@ -81,6 +78,9 @@
     <p class="stato-app">Oggi Argonauta è in prova, su iPhone e iPad.</p>
     <p><a class="link-freccia" href="mailto:vincenzo@sicstudio.app?subject=Vorrei%20provare%20Argonauta">Scrivimi per
       entrare nella prova</a></p>
+  </div>
+  <div class="apertura-argonauta-scena">
+    <img class="scena-argonauta" src="/img/scena.svg" width="1040" height="600" alt="La nave Argo sul mare, con la vela bianca e blu." decoding="async" fetchpriority="high">
   </div>
 </header>
 
@@ -227,14 +227,14 @@
   </div>
   <div class="crescita-palco">
     <div class="crescita-fermo">
-      <ol class="crescita-stati">
-        <li><img src="/img/nave-stato-1.svg" width="440" height="352" alt="La nave all’inizio: lo scafo e i remi." loading="lazy" decoding="async">
+      <ol class="crescita-stati" role="list">
+        <li><img src="/img/nave-stato-1.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">0 rotte</span> All’inizio: lo scafo e i remi</p></li>
-        <li><img src="/img/nave-stato-2.svg" width="440" height="352" alt="La nave con l’albero." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-2.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">1 rotta</span> Argo ha l’albero</p></li>
-        <li><img src="/img/nave-stato-3.svg" width="440" height="352" alt="La nave con la vela spiegata." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-3.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">3 rotte</span> Argo spiega la vela</p></li>
-        <li><img src="/img/nave-stato-4.svg" width="440" height="352" alt="La nave completa." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-4.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">5 rotte</span> Argo è completa</p></li>
       </ol>
     </div>
@@ -248,7 +248,7 @@
     <p class="sottotitolo misura">Vengono dalle <cite>Argonautiche</cite> di Apollonio Rodio, il poema greco del
       viaggio di Argo. Ognuno sale quando fai qualcosa, e quando sale ti dice una frase sua.</p>
   </div>
-  <ol class="eroi" tabindex="0" aria-labelledby="equipaggio-titolo">
+  <ol class="eroi" tabindex="0" role="list" aria-labelledby="equipaggio-titolo">
     <li class="eroe">
       <img src="/img/eroe-orfeo.svg" width="120" height="120" alt="" loading="lazy" decoding="async">
       <h3>Orfeo <span>il cantore</span></h3>
@@ -305,7 +305,7 @@
       <p class="testo-grande">Argonauta aiuta a orientarsi, ma non è un servizio di soccorso. Non dice mai se un
         sentiero è aperto o in buone condizioni, e non dà il meteo né notizie su rifugi o acqua: non ne avrebbe una
         fonte aggiornata. Ecco quello che fa.</p>
-      <ul class="elenco-cura">
+      <ul class="elenco-cura" role="list">
         <li><strong>«Prima di partire»</strong>, nella pagina della rotta: alba, tramonto, buio e luna, calcolati sul
           telefono, e a che ora arriveresti partendo adesso, con il tempo del CAI.</li>
         <li><strong>Gli avvisi lungo la rotta</strong>: se esci dal percorso te lo dice, anche con lo schermo
@@ -369,7 +369,7 @@
       <h3>Per un problema o una domanda</h3>
       <p>Scrivi a <a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a>. Per aiutarmi a capire,
         dimmi:</p>
-      <ul class="elenco-cura">
+      <ul class="elenco-cura" role="list">
         <li>il modello del tuo iPhone o iPad e la versione di iOS, che trovi in Impostazioni › Generali › Info;</li>
         <li>cosa stavi facendo e cosa è successo, passo per passo;</li>
         <li>se puoi, uno screenshot.</li>
@@ -378,7 +378,7 @@
     </div>
     <div class="supporto-parte">
       <h3>Dove funziona</h3>
-      <ul class="elenco-cura">
+      <ul class="elenco-cura" role="list">
         <li>iPhone e iPad con iOS 26.1 o successivo.</li>
         <li>Sull’iPhone l’app sta in verticale; sull’iPad gira anche in orizzontale.</li>
         <li>In italiano e in inglese, secondo la lingua del dispositivo.</li>

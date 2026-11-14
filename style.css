@@ -172,7 +172,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   display: inline-block; min-height: 2.75rem; padding-block: calc((2.75rem - 1.2em) / 2);
   font: 600 1.0625rem/1.2 var(--strumenti); text-decoration: none;
 }
-.link-freccia::after { content: "→"; display: inline-block; margin-left: 0.4em; transition: translate 0.2s ease; }
+.link-freccia::after { content: "→"; content: "→" / ""; display: inline-block; margin-left: 0.4em; transition: translate 0.2s ease; }
 @media (hover: hover) {
   .link-freccia:hover::after { translate: 0.2em 0; }
   .link-freccia:hover { text-decoration: underline; }
@@ -216,6 +216,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 }
 .progetto { font-style: italic; }
 .testata-sep { color: var(--matita); font-weight: 300; }
+/* Con la tastiera, il fuoco su un link della testata, che sta ferma in alto, non fa scorrere la pagina: il browser lo
+   vedeva sotto lo scroll-padding-top e la faceva salire di qualche centinaio di pixel. Resta fuori il foglio del menu,
+   che scorre per conto suo. */
+.testata :is(a, button):not(.menu-telefono *) { scroll-margin-top: calc(-1 * (var(--testata) + var(--s1))); }
 /* La S del logo con le sue stelle (img/marchio-giorno.svg e -notte.svg): alta quasi il doppio delle maiuscole del
    nome, come nel logo del kit. Sulla copertina di Argonauta è più piccola, solo cielo, disegnata nell'HTML. */
 .marchio { width: auto; height: 1.625rem; flex: none; }
@@ -422,9 +426,11 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 /* ---------- La home: il frontespizio, la terra che scende e il cielo che si apre ---------- */
 
+/* Alta quanto lo schermo sotto la testata (almeno 34rem), ma cresce se il testo cresce, per esempio con le
+   spaziature scelte da chi legge (WCAG 1.4.12): un'altezza fissa tagliava il titolo e la firma. */
 .fr-scena {
   position: relative; display: grid; overflow: clip;
-  height: calc(100svh - var(--testata)); min-height: 34rem;
+  min-height: max(34rem, 100svh - var(--testata));
 }
 .frontespizio-paesaggio, .soglia-disegno { position: absolute; inset: 0; width: 100%; height: 100%; }
 /* I colori dei paesaggi della casa (frontespizio, soglia, studio, finestra, laghetto), di giorno e di notte. Il prato
@@ -633,6 +639,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
     .frontespizio { --strada: contain 43.4% contain 100%; }
     .frontespizio-palco { height: 365svh; view-timeline: --fronte block; }
     .frontespizio + .dentro { position: relative; z-index: 2; margin-top: calc(var(--testata) - 121.5svh); padding-top: calc(var(--s5) + 21.5svh); }
+    /* Quando il fuoco della tastiera entra nella bottega mentre il velo del palco (3) e la scena ferma (4) la coprono
+       ancora, la bottega passa sopra: si vede dov'è il fuoco. Col dito e col mouse :focus-visible non scatta. */
+    .frontespizio + .dentro:has(:focus-visible) { z-index: 5; }
     /* La striscia della barra di Safari. Quando la barra si chiude, lo schermo si allunga di 100lvh - 100svh; ma su
        iPhone (iOS 26) Safari non disegna niente di fermo (sticky o fixed) sotto la linea dove stava la barra (così
        dicono le segnalazioni sui forum di Apple, ed è quello che si vedeva qui), e una scena che scendesse oltre il suo
@@ -995,13 +1004,13 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 /* ---------- Argonauta: l'apertura ---------- */
 
 .apertura-argonauta { padding: var(--s5) var(--colonna) var(--s5); display: grid; gap: var(--s3); justify-items: center; text-align: center; }
-.apertura-argonauta-scena { order: 2; width: 100%; }
+.apertura-argonauta-scena { width: 100%; }
 .apertura-argonauta-scena img {
   width: 100%; height: auto; aspect-ratio: 26 / 13; object-fit: cover; border-radius: var(--r3);
   box-shadow: var(--ombra); view-transition-name: scena-argonauta;
 }
 @media (max-width: 47.99rem) { .apertura-argonauta-scena img { aspect-ratio: 26 / 17; border-radius: var(--r2); } }
-.apertura-argonauta-testo { order: 1; display: grid; gap: var(--s1); justify-items: center; max-inline-size: 46rem; }
+.apertura-argonauta-testo { display: grid; gap: var(--s1); justify-items: center; max-inline-size: 46rem; }
 .apertura-argonauta h1 { font-size: clamp(3.6rem, 1.8rem + 8vw, 8.5rem); letter-spacing: -0.04em; line-height: 0.9; }
 .apertura-argonauta .motto { font-style: italic; font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2.1rem); line-height: 1.25; }
 .apertura-argonauta .idea { font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem); color: var(--testo-2); max-inline-size: 38rem; }
@@ -1372,7 +1381,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .documento { max-inline-size: calc(var(--misura) + 2 * var(--margine)); margin-inline: auto; padding: var(--s5) var(--margine) var(--s6); font: 400 var(--t1)/1.65 var(--libro); }
 .documento article { display: grid; gap: 0.9em; }
 .documento h1, .documento .titolo-pagina { font: 400 clamp(2.4rem, 1.8rem + 3vw, 3.8rem)/1.02 var(--libro); letter-spacing: -0.025em; }
-.documento h2:not(.titolo-pagina) { margin-top: var(--s2); font: italic 400 1.6rem/1.2 var(--libro); }
+/* Le sezioni: h2 nella parte italiana, h3 in quella inglese, che ha il suo titolo in un h2. */
+.documento :is(h2:not(.titolo-pagina), h3) { margin-top: var(--s2); font: italic 400 1.6rem/1.2 var(--libro); }
 .documento ul { padding-left: 1.2rem; display: grid; gap: 0.4em; }
 .documento .lingua { display: flex; justify-content: flex-end; }
 .documento .lingua a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 600; }
@@ -1407,7 +1417,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .fuori-rotta-testi h1, .fuori-rotta-testi .come-h1 { font-size: clamp(2.6rem, 2rem + 3vw, 3.8rem); letter-spacing: -0.025em; }
 .vie { list-style: none; display: grid; }
 .vie a { display: flex; align-items: center; min-height: 2.75rem; border-bottom: 1px solid var(--riga); color: var(--testo); text-decoration: none; }
-.vie a::after { content: "→"; margin-left: auto; color: var(--mare); }
+.vie a::after { content: "→"; content: "→" / ""; margin-left: auto; color: var(--mare); }
 @media (hover: hover) { .vie a:hover { color: var(--mare); } }
 
 /* ---------- Stampa: la privacy pulita, senza menu né disegni ---------- */
@@ -1418,7 +1428,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   body { background-image: none; font-size: 11pt; }
   .documento { max-inline-size: none; padding: 0; font-size: 11pt; }
   .documento h1, .documento .titolo-pagina { font-size: 22pt; }
-  .documento h2:not(.titolo-pagina) { font-size: 14pt; break-after: avoid; }
+  .documento :is(h2:not(.titolo-pagina), h3) { font-size: 14pt; break-after: avoid; }
   .documento a { color: #000000; text-decoration: none; }
   .separa-lingue { break-after: page; border: 0; }
   @page { margin: 18mm 16mm; }
