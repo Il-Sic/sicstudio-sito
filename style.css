@@ -270,6 +270,24 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 @media (max-width: 23rem) {
   .testata-argonauta .casa span { display: none; }
 }
+/* Dove il browser non conosce i fogli che si aprono (popover: Safari prima del 17, Firefox prima del 125, Chrome
+   prima del 114) il menu del telefono starebbe sempre aperto dentro la testata e il pulsante non aprirebbe nulla.
+   Lì resta il menu largo, anche al telefono: sulla stessa riga del nome, scorre di lato e sfuma ai due capi. */
+@supports not selector(:popover-open) {
+  .menu-telefono, .apri-menu { display: none; }
+  @media (max-width: 47.99rem) {
+    .casa, .testata-sep, .progetto { flex: none; }
+    .menu-largo {
+      display: block; flex: 0 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
+      mask-image: linear-gradient(to right, transparent, #000 1.25rem, #000 calc(100% - 1.25rem), transparent);
+    }
+    .menu-largo::-webkit-scrollbar { display: none; }
+    .menu-largo .menu { gap: 0; }
+    .menu-largo .menu a { padding: 0 0.45rem; white-space: nowrap; }
+    .menu-largo .menu::before, .menu-largo .menu::after { content: ""; flex: none; width: 1rem; }
+  }
+}
 
 /* ---------- Il colophon ---------- */
 
@@ -1332,6 +1350,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   .definizione:popover-open { animation: sali-def 0.28s cubic-bezier(.2, .8, .2, 1); }
 }
 @keyframes sali-def { from { opacity: 0; translate: 0 1rem; } }
+/* Senza i fogli che si aprono le definizioni starebbero tutte aperte, una sull'altra, in fondo allo schermo: restano
+   nascoste, e le parole tornano testo, perché spiegate sono nel glossario in fondo alla pagina. */
+@supports not selector(:popover-open) {
+  .definizione { display: none; }
+  .parola, .parola:hover { cursor: auto; color: inherit; text-decoration: none; }
+}
 
 .glossario { display: grid; gap: 0 var(--s4); }
 @media (min-width: 56rem) { .glossario { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -1440,7 +1464,7 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-tavola .soglia { --tv-dopo: 1; }
 .tv-tavola .sg-avvicina { transform: scale(0.406); }
 .tv-tavola .soglia .tv-emblema { display: none; }
-.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7, .tv-polvere, .tv-velo-stelle, .tv-linea, .tv-cadente, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
+.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7, .tv-polvere, .tv-velo-stelle, .tv-linea, .tv-rondini, .tv-fiore, .tv-lucciola { fill: none; stroke: #F4EEDC; stroke-linecap: round; }
 .tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7 { stroke-width: var(--punto); }
 .tv-stretto :is(.tv-s0, .tv-s1, .tv-s2, .tv-s3, .tv-s4, .tv-s5, .tv-s6, .tv-s7) { stroke-width: calc(var(--punto) * 1.3); }
 .tv-s0 { --punto: 8.4px; }
@@ -1462,7 +1486,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .tv-luna { fill: #F8EBC8; }
 .tv-mari { fill: #5E5A50; fill-opacity: 0.3; }
 .tv-linea { stroke-width: 0.9; stroke-opacity: 0.3; }
-.tv-cadente { stroke-width: 1.4; stroke-opacity: 0.8; }
+/* Le stelle cadenti d'agosto e di dicembre vanno via dal loro radiante: ognuna ha la sua sfumatura (in tavola.py),
+   che si accende verso la testa. Qui quanto sono chiare. */
+.tv-cadente { fill-opacity: 0.9; }
 .tv-marte { fill: #F3A07A; }
 .tv-giove { fill: #FBEED0; }
 .tv-saturno { fill: #F2DC9C; }

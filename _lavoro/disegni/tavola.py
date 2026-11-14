@@ -4,7 +4,8 @@ La mano e la coreografia della home restano quelle di casa.py e di style.css. Ca
 - di sera, il cielo verso sud due ore dopo il tramonto, visto dal centro della Calabria: tutte le stelle che si
   vedono a occhio nudo, con il loro colore, le figure e i nomi delle costellazioni, i pianeti, la Via Lattea con la
   sua Grande Fenditura, due nebulose, due ammassi, una galassia, e la luna dove sta davvero quella sera, con la sua
-  fase e la sua faccia (nella finestra della bottega resta il suo segno, con la fase di quella notte);
+  fase e la sua faccia (nella finestra della bottega resta il suo segno, con la fase di quella notte); nelle notti
+  delle Perseidi e delle Geminidi, le loro stelle cadenti;
 - di giorno, la luce di due ore dopo il mezzogiorno vero: la casa e gli alberi fanno ombra dalla parte opposta al
   sole, lunga quanto vuole la sua altezza; e quando le parole del frontespizio se ne vanno il foglio diventa una
   meridiana, con la strada che il sole fa quel giorno, le ore, le strade dei solstizi e degli equinozi, la luna se
@@ -47,6 +48,9 @@ Che cosa è vero e che cosa no:
   illuminata rivolta al sole e la faccia girata come quella sera (senza librazioni); è disegnata sette volte più
   grande del vero, e i suoi mari sono uno schizzo. Se a quell'ora è tramontata o è fuori dal foglio, nel cielo non
   c'è, e il lunario dice quando sorge o tramonta (ai cinque minuti);
+- le stelle cadenti vanno via dal loro radiante, dov'è quella sera, lungo i cerchi del cielo che passano di lì, e
+  sono più lunghe lontano da lui, come accade; quante sono (di più la sera del massimo, di meno con la luna) e dove
+  cadono è un disegno;
 - gli orari del sole nel lunario valgono per un orizzonte libero, entro un paio di minuti;
 - la strada del sole e il suo posto sono calcolati (entro mezzo grado), con la stessa proiezione del cielo della
   notte ma in piccolo e più in alto sul foglio, perché ci stia la strada di ogni stagione; le ore sono quelle
@@ -320,6 +324,31 @@ def sul_foglio(alt, az, fuoco=FUOCO):
         return None
     k = 2 * fuoco / (1 + avanti)
     return CX - k * est, 790 - 2 * fuoco * math.tan(ALZO / 2) - k * (nord * math.sin(ALZO) + su * math.cos(ALZO))
+
+
+def dal_foglio(x, y, fuoco=FUOCO):
+    """Il contrario di sul_foglio: altezza e azimut del punto del cielo che cade in (x, y)."""
+    xx, yy = (CX - x) / (2 * fuoco), (790 - 2 * fuoco * math.tan(ALZO / 2) - y) / (2 * fuoco)
+    avanti = (1 - xx * xx - yy * yy) / (1 + xx * xx + yy * yy)
+    est, sopra = xx * (1 + avanti), yy * (1 + avanti)
+    nord, su = -avanti * math.cos(ALZO) + sopra * math.sin(ALZO), avanti * math.sin(ALZO) + sopra * math.cos(ALZO)
+    return math.degrees(math.asin(max(-1.0, min(1.0, su)))), math.degrees(math.atan2(est, nord)) % 360
+
+
+def via_dal_radiante(alt, az, r_alt, r_az, gradi):
+    """Il punto a «gradi» di distanza da (alt, az), lungo il cerchio massimo che viene dal radiante: dove va una stella
+    cadente che passa di lì."""
+    def versore(a, z):
+        a, z = math.radians(a), math.radians(z)
+        return (math.cos(a) * math.sin(z), math.cos(a) * math.cos(z), math.sin(a))
+    p, r = versore(alt, az), versore(r_alt, r_az)
+    d = sum(a * b for a, b in zip(p, r))
+    # la direzione che in quel punto va via dal radiante, lungo il cerchio massimo: perpendicolare al punto, non al
+    # radiante (le due coincidono solo a 90 gradi da lui; più in là l'altra tornerebbe verso il radiante)
+    w = [d * a - b for a, b in zip(p, r)]
+    lungo = math.sqrt(sum(c * c for c in w)) or 1.0
+    q = [a * math.cos(math.radians(gradi)) + b / lungo * math.sin(math.radians(gradi)) for a, b in zip(p, w)]
+    return math.degrees(math.asin(max(-1.0, min(1.0, q[2])))), math.degrees(math.atan2(q[0], q[1])) % 360
 
 
 # ---------- Le stelle ----------
@@ -869,6 +898,22 @@ def stagione(giorno):
     return classi
 
 
+# Le stelle cadenti d'agosto e di dicembre: il loro radiante, il punto del cielo da cui sembrano venire (ascensione
+# retta in ore e declinazione, come lo dà l'International Meteor Organization per il massimo), e la sera del massimo.
+# Il radiante si sposta di meno di un grado a sera: qui sta fermo.
+SCIAMI = {"tv-perseidi": (3 + 12 / 60, 58, (8, 12)), "tv-geminidi": (7 + 28 / 60, 33, (12, 13))}
+
+
+def sciame(giorno):
+    """Le stelle cadenti di quella sera, se ce ne sono: la classe, il radiante e quante sere ci sono fra quella e la
+    sera del massimo."""
+    for classe in stagione(giorno):
+        if classe in SCIAMI:
+            ore, dec, (mese, di) = SCIAMI[classe]
+            return classe, ore, dec, abs((giorno - datetime.date(giorno.year, mese, di)).days)
+    return None
+
+
 # ---------- Il giorno: la strada del sole ----------
 # Di giorno il foglio è una meridiana: la strada che il sole fa quel giorno nel cielo del sud, con le ore, e il sole
 # dov'è due ore dopo il mezzogiorno vero (come di notte il cielo è quello di due ore dopo il tramonto). La proiezione
@@ -1197,6 +1242,82 @@ def luna_vera(x, y, r, vista, verso_il_sole, nord):
             f'<g transform="translate({n(x)} {n(y)})"><circle class="tv-luna" r="{n(r)}"/><g class="tv-mari" transform="rotate({n(nord)})">{mari}</g>{ombra}</g>')
 
 
+def cadenti_della_tavola(giorno, stretto, c):
+    """Le stelle cadenti d'agosto e di dicembre nel cielo della tavola (c, quello di cielo_di_sera): scie che vanno via
+    dal loro radiante, ognuna lungo il cerchio massimo che passa di lì, come quella sera. Lontano dal radiante si vedono
+    di fianco e sono più lunghe; la sera del massimo sono di più, con la luna di meno. Ogni scia si allarga e si
+    accende verso la testa, dalla parte in cui va, e sfuma dalla parte da cui viene. Stanno nel cielo aperto (in quello
+    stretto, nella fascia del telefono), lontano dalla luna, dai pianeti, dai nomi, dalle stelle più chiare, dalle
+    linee delle figure (di più se ci corrono accanto quasi parallele) e fra loro."""
+    s = sciame(giorno)
+    if not s:
+        return ""
+    _, ore, dec, dal_massimo = s
+    r_alt, r_az = in_cielo(ore, dec, tempo_siderale(giuliano(a_notte_fatta(giorno))))
+    fuoco, mezza, lettera = (FUOCO_STRETTO, 1.15, 5.5) if stretto else (FUOCO, 0.95, 4.3)
+    # con la luna piena se ne vedono meno, ma le più chiare si vedono sempre: almeno una
+    quante = max(1, ((3, 3, 2, 2) if stretto else (5, 4, 3, 2))[min(dal_massimo, 3)] - round(2 * c["chiarore"]))
+    sin_, des_, su_, giu_ = (520, 920, 70, 460) if stretto else (120, 1320, 80, 470)
+    lontano = 105 if stretto else 170                       # fra due teste
+
+    def da_segmento(px, py, x0, y0, x1, y1):
+        dx, dy = x1 - x0, y1 - y0
+        t = max(0.0, min(1.0, ((px - x0) * dx + (py - y0) * dy) / (dx * dx + dy * dy or 1.0)))
+        return math.hypot(px - x0 - t * dx, py - y0 - t * dy)
+
+    def fra_segmenti(a, b):
+        """Quanto sono lontani due segmenti (x0, y0, x1, y1): zero se si incrociano."""
+        def lato(p, q, r):
+            return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+        p, q, r, s = a[:2], a[2:], b[:2], b[2:]
+        if lato(p, q, r) * lato(p, q, s) < 0 and lato(r, s, p) * lato(r, s, q) < 0:
+            return 0.0
+        return min(da_segmento(*p, *b), da_segmento(*q, *b), da_segmento(*r, *a), da_segmento(*s, *a))
+
+    def quasi_parallele(a, b):
+        """Se due segmenti vanno quasi nella stessa direzione (meno di 30 gradi): accanto si confonderebbero."""
+        ax, ay, bx, by = a[2] - a[0], a[3] - a[1], b[2] - b[0], b[3] - b[1]
+        return abs(ax * by - ay * bx) < 0.5 * (math.hypot(ax, ay) * math.hypot(bx, by) or 1.0)
+
+    ostacoli = [(x, y, r * 2.5 + 24) for x, y, r, *_ in ([c["luna"]] if c["luna"] else [])]
+    ostacoli += [(x, y, 24) for x, y, _, _ in c["pianeti"]]
+    # le stelle più chiare, e di più quelle con l'alone (le stesse misure di disegna_cielo)
+    ostacoli += [(x, y, (3.5 - 0.8 * g) * 4.4 * (1.3 if stretto else 1.0) + 8 if g < 0.95 else 10 if g < 1.5 else 6)
+                 for x, y, g, _ in c["stelle"].values() if g < 2.5]
+    figure = [tuple(map(float, re.findall(r"-?\d+", linea))) for linea in c["linee"]]       # le linee delle costellazioni
+    caso, scie = random.Random(giorno.toordinal() * 2 + stretto), []
+    for _ in range(600):
+        if len(scie) >= quante:
+            break
+        x0, y0 = caso.uniform(sin_, des_), caso.uniform(su_, giu_)
+        alt, az = dal_foglio(x0, y0, fuoco)
+        lontana = math.acos(max(-1.0, min(1.0, math.sin(math.radians(alt)) * math.sin(math.radians(r_alt))
+                                          + math.cos(math.radians(alt)) * math.cos(math.radians(r_alt)) * math.cos(math.radians(az - r_az)))))
+        alt1, az1 = via_dal_radiante(alt, az, r_alt, r_az, caso.uniform(8, 14) * max(0.35, math.sin(lontana)))
+        q = sul_foglio(alt1, az1, fuoco) if alt1 > 2 else None
+        if q is None or not (sin_ <= q[0] <= des_ and su_ <= q[1] <= giu_):
+            continue
+        x1, y1 = q
+        punti = [(x0 + (x1 - x0) * k / 12, y0 + (y1 - y0) * k / 12) for k in range(13)]
+        if (any(da_segmento(x, y, x0, y0, x1, y1) < r for x, y, r in ostacoli)
+                or any(fra_segmenti((x0, y0, x1, y1), linea) < (36 if quasi_parallele((x0, y0, x1, y1), linea) else 16) for linea in figure)
+                or any(abs(px - x) < lettera * len(t) + 8 and y - (21 if stretto else 17) < py < y + 6 for x, y, t, _ in c["nomi"] for px, py in punti)
+                or any(math.hypot(x1 - b[2], y1 - b[3]) < lontano or fra_segmenti((x0, y0, x1, y1), b) < 30 for b in scie)):
+            continue
+        scie.append((x0, y0, x1, y1))
+    sfumi, pezzi = [], []
+    for i, (x0, y0, x1, y1) in enumerate(scie):
+        lungo = math.hypot(x1 - x0, y1 - y0)
+        px, py = -(y1 - y0) / lungo * mezza, (x1 - x0) / lungo * mezza
+        nome = f"tv-cadente-{'s' if stretto else 'l'}{i}"
+        sfumi.append(f'<linearGradient id="{nome}" gradientUnits="userSpaceOnUse" x1="{n(x0)}" y1="{n(y0)}" x2="{n(x1)}" y2="{n(y1)}">'
+                     '<stop offset="0" stop-color="#F4EEDC" stop-opacity="0"/><stop offset=".72" stop-color="#F4EEDC" stop-opacity=".5"/>'
+                     '<stop offset="1" stop-color="#FFF" stop-opacity=".95"/></linearGradient>')
+        # la testa è tonda: un mezzo cerchio largo quanto la scia, dalla parte in cui va
+        pezzi.append(f'<path class="tv-cadente" fill="url(#{nome})" d="M{n(x0)} {n(y0)}L{n(x1 + px)} {n(y1 + py)}A{n(mezza)} {n(mezza)} 0 0 0 {n(x1 - px)} {n(y1 - py)}Z"/>')
+    return f'<defs>{"".join(sfumi)}</defs>{"".join(pezzi)}' if pezzi else ""
+
+
 def disegna_cielo(giorno, stretto, lingua):
     """Il cielo di una sera, per il computer o (stretto) per il telefono, dove i punti sono un po' più grandi.
     In due gruppi: il primo si vede con le parole del frontespizio; il secondo, tv-dopo (ciò che cadrebbe sulle parole, le linee
@@ -1251,8 +1372,7 @@ def disegna_cielo(giorno, stretto, lingua):
         return "tv-nome" + (" tv-nome-pianeta" if peso == 50 else "") + (" tv-bordo" if not stretto and (x - mezzo < 280 or x + mezzo > 1180) else "")
 
     f[True].append("".join(f'<text class="{classi(x, t, peso)}" x="{n(x)}" y="{n(y)}">{t}</text>' for x, y, t, peso in c["nomi"]))
-    if {"tv-perseidi", "tv-geminidi"} & set(stagione(giorno)):
-        f[True].append('<path class="tv-cadente" d="M612 150l-74 58M846 338l-52 42M360 260l-40 30"/>')
+    f[True].append(cadenti_della_tavola(giorno, stretto, c))
     return f'<g>{"".join(f[False])}</g><g class="tv-dopo">{"".join(f[True])}</g>'
 
 
@@ -1572,20 +1692,6 @@ def scia_della_luna(x, forza, caso):
             f'<path class="sc-scia sc-brilla-2" d="{"".join(pezzi[1])}"/></g>')
 
 
-def via_dal_radiante(alt, az, r_alt, r_az, gradi):
-    """Il punto a «gradi» di distanza da (alt, az), lungo il cerchio massimo che viene dal radiante: dove va una stella
-    cadente che passa di lì."""
-    def versore(a, z):
-        a, z = math.radians(a), math.radians(z)
-        return (math.cos(a) * math.sin(z), math.cos(a) * math.cos(z), math.sin(a))
-    p, r = versore(alt, az), versore(r_alt, r_az)
-    d = sum(a * b for a, b in zip(p, r))
-    t = [a - d * b for a, b in zip(p, r)]
-    lungo = math.sqrt(sum(c * c for c in t)) or 1.0
-    q = [a * math.cos(math.radians(gradi)) + b / lungo * math.sin(math.radians(gradi)) for a, b in zip(p, t)]
-    return math.degrees(math.asin(max(-1.0, min(1.0, q[2])))), math.degrees(math.atan2(q[0], q[1])) % 360
-
-
 def cielo_della_scena(giorno, crinale):
     """Il cielo della scena quella sera (due ore dopo il tramonto): le stelle, i pianeti, la Via Lattea e le stelle
     cadenti, la luna; e la sua scia sul mare."""
@@ -1631,10 +1737,9 @@ def cielo_della_scena(giorno, crinale):
                         f'<circle class="sc-p-{nome.lower()}" cx="{n(q[0])}" cy="{n(q[1])}" r="{n(r)}"/>')
     # le stelle cadenti d'agosto e di dicembre: tre scie sottili che vanno via dal loro radiante, come quella sera
     cadenti = ""
-    classi = stagione(giorno)
-    radiante = (3 + 12 / 60, 58) if "tv-perseidi" in classi else (7 + 28 / 60, 33) if "tv-geminidi" in classi else None
+    radiante = sciame(giorno)
     if radiante:
-        r_alt, r_az = in_cielo(*radiante, siderale)
+        r_alt, r_az = in_cielo(radiante[1], radiante[2], siderale)
         caso, teste = random.Random(giorno.toordinal() + 13), []
         for _ in range(40):
             x0, y0 = caso.uniform(-40, 440), caso.uniform(-5, 95)
@@ -1958,11 +2063,23 @@ def lunario(giorno, lingua):
         stelle = (f"The plate has {migliaia(len(largo['stelle']))} of them: the ones you can see with the naked eye at that time, looking south "
                   f"{'under this moon' if con_la_luna else 'from a dark place'}. On a phone, where the sheet is narrower, {migliaia(len(stretto['stelle']))}. "
                   f"Named on the plate: {', '.join(nomi)}.")
-    cadenti = set(stagione(giorno)) & {"tv-perseidi", "tv-geminidi"}
+    # le stelle cadenti: di quale sciame, se è la sera del massimo, e dove sta il radiante da cui vanno via le scie
+    cadenti = sciame(giorno)
     if cadenti:
-        perseidi = "tv-perseidi" in cadenti
-        stelle += ((" Sono le notti delle Perseidi, le stelle cadenti d’agosto." if perseidi else " Sono le notti delle Geminidi, le stelle cadenti di dicembre.") if it
-                   else (" These are the nights of the Perseids, August’s shooting stars." if perseidi else " These are the nights of the Geminids, December’s shooting stars."))
+        perseidi, massimo = cadenti[0] == "tv-perseidi", cadenti[3] == 0
+        r_alt, r_az = in_cielo(cadenti[1], cadenti[2], tempo_siderale(giuliano(ora_tavola)))
+        q = sul_foglio(r_alt, r_az) if r_alt > 0 else None
+        fuori = q is None or not (0 <= q[0] <= 1440 and 0 <= q[1] <= 790)
+        if it:
+            stelle += ((" Sono le notti delle Perseidi, le stelle cadenti d’agosto" if perseidi else " Sono le notti delle Geminidi, le stelle cadenti di dicembre")
+                       + (", e questa è quella del loro massimo." if massimo else ".")
+                       + f" Il loro radiante, il punto da cui sembrano venire, all’ora della tavola è {dove(r_alt, r_az)}"
+                       + (", fuori dal foglio," if fuori else "") + " e le scie disegnate vanno via da lì.")
+        else:
+            stelle += ((" These are the nights of the Perseids, August’s shooting stars" if perseidi else " These are the nights of the Geminids, December’s shooting stars")
+                       + (", and this is the night of their peak." if massimo else ".")
+                       + f" At the time of the plate their radiant, the point they seem to come from, is {dove(r_alt, r_az)}"
+                       + (", off the sheet," if fuori else "") + " and the trails on the plate lead away from it.")
 
     data = f"{GIORNI[lingua][giorno.weekday()].capitalize()} {'1º' if it and giorno.day == 1 else giorno.day} {MESI[lingua][giorno.month - 1]} {giorno.year}"
     if it:
