@@ -1379,6 +1379,10 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .documento ul { padding-left: 1.2rem; display: grid; gap: 0.4em; }
 .documento .lingua { display: flex; justify-content: flex-end; }
 .documento .lingua a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 600; }
+/* Nella parte inglese, a sinistra, il ritorno alle pagine inglesi di Argonauta, perché la testata della pagina è
+   italiana. Freccia e nome stanno in uno span solo: nel flex restano una riga di testo, con lo spazio e una
+   sottolineatura sola. */
+.documento .lingua .torna { margin-inline-end: auto; }
 .documento .secondario { color: var(--testo-2); font-size: 0.9375rem; }
 .indice { margin: var(--s1) 0; padding: var(--s2); border-radius: var(--r2); background: var(--carta-2); }
 .indice ol { padding-left: 1.4rem; columns: 2 14rem; column-gap: var(--s3); }
