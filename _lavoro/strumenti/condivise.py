@@ -165,9 +165,11 @@ def testa(file, d):
         it, en = (percorso, altro) if lingua == "it" else (altro, percorso)
         righe += [f'<link rel="canonical" href="{DOMINIO}{percorso}">']
         if "#" not in (altro or ""):
+            # Chi non legge né l'italiano né l'inglese arriva alla pagina inglese: l'app, in ogni altra lingua, parla
+            # inglese (14/11; fino ad allora x-default era l'italiano).
             righe += [f'<link rel="alternate" hreflang="it" href="{DOMINIO}{it}">',
                       f'<link rel="alternate" hreflang="en" href="{DOMINIO}{en}">',
-                      f'<link rel="alternate" hreflang="x-default" href="{DOMINIO}{it}">']
+                      f'<link rel="alternate" hreflang="x-default" href="{DOMINIO}{en}">']
         p = PAROLE[lingua]
         immagine, alt = p["og"][casa]
         righe += [
