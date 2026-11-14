@@ -69,9 +69,6 @@
 <main id="contenuto" class="pagina-argonauta">
 
 <header class="apertura-argonauta">
-  <div class="apertura-argonauta-scena">
-    <img class="scena-argonauta" src="/img/scena.svg" width="1040" height="600" alt="The ship Argo at sea, with its white and blue sail." decoding="async" fetchpriority="high">
-  </div>
   <div class="apertura-argonauta-testo">
     <p class="occhiello">A Sic Studio project</p>
     <h1>Argonauta</h1>
@@ -81,6 +78,9 @@
     <p class="stato-app">Today Argonauta is in testing, on iPhone and iPad.</p>
     <p><a class="link-freccia" href="mailto:vincenzo@sicstudio.app?subject=I%27d%20like%20to%20try%20Argonauta">Write to
       me to become a tester</a></p>
+  </div>
+  <div class="apertura-argonauta-scena">
+    <img class="scena-argonauta" src="/img/scena.svg" width="1040" height="600" alt="The ship Argo at sea, with its white and blue sail." decoding="async" fetchpriority="high">
   </div>
 </header>
 
@@ -220,14 +220,14 @@
   </div>
   <div class="crescita-palco">
     <div class="crescita-fermo">
-      <ol class="crescita-stati">
-        <li><img src="/img/nave-stato-1.svg" width="440" height="352" alt="The ship’s hull with the oars." loading="lazy" decoding="async">
+      <ol class="crescita-stati" role="list">
+        <li><img src="/img/nave-stato-1.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">0 routes</span> At the start: the hull and the oars</p></li>
-        <li><img src="/img/nave-stato-2.svg" width="440" height="352" alt="The ship with the mast." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-2.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">1 route</span> Argo has a mast</p></li>
-        <li><img src="/img/nave-stato-3.svg" width="440" height="352" alt="The ship with the sail unfurled." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-3.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">3 routes</span> Argo unfurls its sail</p></li>
-        <li><img src="/img/nave-stato-4.svg" width="440" height="352" alt="The complete ship." loading="lazy" decoding="async">
+        <li><img src="/img/nave-stato-4.svg" width="440" height="352" alt="" loading="lazy" decoding="async">
           <p><span class="crescita-numero">5 routes</span> Argo is complete</p></li>
       </ol>
     </div>
@@ -241,7 +241,7 @@
     <p class="sottotitolo misura">They come from the <cite>Argonautica</cite> by Apollonius of Rhodes, the Greek poem
       of Argo’s voyage. Each one comes aboard when you do something, and says a line of their own.</p>
   </div>
-  <ol class="eroi" tabindex="0" aria-labelledby="equipaggio-titolo">
+  <ol class="eroi" tabindex="0" role="list" aria-labelledby="equipaggio-titolo">
     <li class="eroe">
       <img src="/img/eroe-orfeo.svg" width="120" height="120" alt="" loading="lazy" decoding="async">
       <h3>Orpheus <span>the singer</span></h3>
@@ -293,7 +293,7 @@
       <p class="testo-grande">Argonauta helps you find your way, but it isn’t a rescue service. It never says whether
         a trail is open or in good condition, and it gives no weather or news about refuges or water: it would have
         no up-to-date source for that. Here’s what it does.</p>
-      <ul class="elenco-cura">
+      <ul class="elenco-cura" role="list">
         <li><strong>“Before You Set Off”</strong>, on the route page: sunrise, sunset, dark and the moon, worked out
           on the phone, and when you’d arrive if you set off now, with the CAI’s walking time.</li>
         <li><strong>Alerts along the route</strong>: if you go off route, it tells you, even with the screen
@@ -334,7 +334,7 @@
     <p class="occhiello">For parks, towns and schools</p>
     <h2 class="titolo-sezione" id="territori-titolo">Your area inside Argonauta</h2>
     <p class="sottotitolo misura">A park, a town or a school can bring into Argonauta the routes, places and stories
-      of its area, each with its sources. They become part of the same app, with the same rules of care.</p>
+      of its area, each with its sources. They become part of the same app, with the same safety rules.</p>
   </div>
   <ol class="passi">
     <li><p>You send trails, places, texts and stories, with their sources.</p></li>
@@ -356,8 +356,8 @@
       <h3>For a problem or a question</h3>
       <p>Write to <a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a>. To help me understand, tell
         me:</p>
-      <ul class="elenco-cura">
-        <li>your iPhone or iPad model and your iOS version, which you’ll find in Settings › General › About;</li>
+      <ul class="elenco-cura" role="list">
+        <li>your iPhone or iPad model and your iOS or iPadOS version, which you’ll find in Settings › General › About;</li>
         <li>what you were doing and what happened, step by step;</li>
         <li>if you can, a screenshot.</li>
       </ul>
@@ -365,8 +365,8 @@
     </div>
     <div class="supporto-parte">
       <h3>Where it works</h3>
-      <ul class="elenco-cura">
-        <li>iPhone and iPad with iOS 26.1 or later.</li>
+      <ul class="elenco-cura" role="list">
+        <li>iPhone and iPad with iOS or iPadOS 26.1 or later.</li>
         <li>On iPhone the app stays in portrait; on iPad it also turns to landscape.</li>
         <li>In Italian and in English, following the device’s language.</li>
         <li>Wi‑Fi‑only iPads don’t have GPS: your location may be missing or inaccurate.</li>
