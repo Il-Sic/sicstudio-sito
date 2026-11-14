@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 270" width="800" height="540" overflow="hidden" stroke-miterlimit="10">
-  <title>Il paesaggio di Colchide, di notte</title>
+  <title>Il paesaggio della Colchide, di notte</title>
   <defs>
     <clipPath id="p-colchide-n-riquadro"><rect x="0" y="0" width="400" height="270"/></clipPath>
     <linearGradient id="p-colchide-n-cielo" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="270"><stop offset="0" stop-color="#0A142E"/><stop offset="0.42" stop-color="#1A2B52"/><stop offset="0.62" stop-color="#12546E"/><stop offset="1" stop-color="#052638"/></linearGradient>
