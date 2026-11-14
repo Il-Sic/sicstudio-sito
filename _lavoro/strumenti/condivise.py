@@ -9,11 +9,15 @@ segni <!-- testa:inizio --> … <!-- testa:fine -->, <!-- testata:inizio --> …
 
 Le pagine sono di due case: quelle dello studio (home e studio), con il menu dello studio, e quelle di Argonauta, con
 il menu di Argonauta e il ritorno allo studio. La 404 non ha menu.
+
+Dal 14/11 scrive anche sitemap.xml, con un indirizzo per ogni pagina di PAGINE che ne ha uno (la 404 no): prima era
+scritta a mano e nessun controllo la teneva allineata alle pagine.
 """
 import html, pathlib, re, sys
 
 SITO = pathlib.Path(__file__).resolve().parents[2]
 DOMINIO = "https://sicstudio.app"
+EMAIL = "vincenzo@sicstudio.app"
 # Il numero di Argonauta sull'App Store (solo le cifre). Vuoto finché l'app non è uscita; da quel giorno le pagine di
 # Argonauta hanno in testa la riga con cui Safari, su iPhone e iPad, mostra la fascia «Apri nell'App Store» (lo
 # Smart App Banner di Apple: funziona senza script).
@@ -161,9 +165,11 @@ def testa(file, d):
         it, en = (percorso, altro) if lingua == "it" else (altro, percorso)
         righe += [f'<link rel="canonical" href="{DOMINIO}{percorso}">']
         if "#" not in (altro or ""):
+            # Chi non legge né l'italiano né l'inglese arriva alla pagina inglese: l'app, in ogni altra lingua, parla
+            # inglese (14/11; fino ad allora x-default era l'italiano).
             righe += [f'<link rel="alternate" hreflang="it" href="{DOMINIO}{it}">',
                       f'<link rel="alternate" hreflang="en" href="{DOMINIO}{en}">',
-                      f'<link rel="alternate" hreflang="x-default" href="{DOMINIO}{it}">']
+                      f'<link rel="alternate" hreflang="x-default" href="{DOMINIO}{en}">']
         p = PAROLE[lingua]
         immagine, alt = p["og"][casa]
         righe += [
@@ -186,6 +192,15 @@ def testa(file, d):
             # script: il browser non li esegue e la CSP non li blocca.
             righe += ['<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", '
                       f'"name": "Sic Studio", "url": "{DOMINIO}/"}}</script>']
+            # Chi c'è dietro il sito, per i motori di ricerca: lo studio, il suo logo (l'icona quadrata, almeno 112 px
+            # e su fondo pieno), l'indirizzo di posta e chi l'ha fondato, gli stessi dati che sono nel colophon
+            # (developers.google.com/search/docs/appearance/structured-data/organization, letto il 14/11/2026).
+            righe += ['<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", '
+                      f'"@id": "{DOMINIO}/#studio", "name": "Sic Studio", "url": "{DOMINIO}/", '
+                      f'"logo": "{DOMINIO}/apple-touch-icon.png", "email": "{EMAIL}", '
+                      '"founder": {"@type": "Person", "name": "Vincenzo Siciliano"}, '
+                      '"address": {"@type": "PostalAddress", "addressRegion": "Calabria", "addressCountry": "IT"}}'
+                      '</script>']
     else:
         righe += ['<meta name="robots" content="noindex">']
     righe += [
@@ -287,7 +302,7 @@ def piede(file, d):
         gruppo("Argonauta", argonauta),
         '    </nav>',
         '    <div class="colophon-nota">',
-        '      <p>© 2026 Vincenzo Siciliano · <a href="mailto:vincenzo@sicstudio.app">vincenzo@sicstudio.app</a> · '
+        f'      <p>© 2026 Vincenzo Siciliano · <a href="mailto:{EMAIL}">{EMAIL}</a> · '
         f'<a href="{altra}" hreflang="{p["altra_lingua"]}" lang="{p["altra_lingua"]}">{p["altra"]}</a></p>',
         f'      <p>{p["colophon"]}</p>',
         f'      <p class="crediti" id="crediti">{p["crediti"]}</p>',
@@ -334,9 +349,29 @@ def aggiorna(file, d, nuove):
     return problemi
 
 
+def mappa():
+    """sitemap.xml: un <loc> per ogni pagina che ha un indirizzo, a coppie (l'italiana, poi l'inglese). Gli hreflang
+    stanno solo nella testa delle pagine: per Google i due modi valgono uguale, e così la fonte è una sola."""
+    indirizzi = []
+    for d in PAGINE.values():
+        for percorso in (d["percorso"], d["altro"]):
+            if percorso and "#" not in percorso and percorso not in indirizzi:
+                indirizzi.append(percorso)
+    testo = "\n".join(['<?xml version="1.0" encoding="UTF-8"?>',
+                       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+                       *(f"  <url><loc>{DOMINIO}{percorso}</loc></url>" for percorso in indirizzi),
+                       "</urlset>"]) + "\n"
+    p = SITO / "sitemap.xml"
+    if not p.exists() or p.read_text(encoding="utf-8") != testo:
+        p.write_text(testo, encoding="utf-8")
+        print("aggiornata sitemap.xml")
+
+
 def main():
     nuove = "--nuove" in sys.argv
     problemi = sum(aggiorna(file, d, nuove) for file, d in PAGINE.items())
+    if not problemi:
+        mappa()
     return 1 if problemi else 0
 
 
