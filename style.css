@@ -1326,6 +1326,8 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 .domanda[open] summary::after { rotate: -135deg; translate: 0 0.15rem; }
 @media (hover: hover) { .domanda summary:hover { color: var(--mare); } }
 .risposta { display: grid; gap: 0.75em; padding: 0 0 var(--s2); font: 400 var(--t1)/1.6 var(--libro); color: var(--testo); max-inline-size: 42rem; }
+/* Un link da solo in fondo a una risposta: alto 44 px da toccare, senza spostare niente. */
+.risposta .vai a { display: inline-block; padding-block: 0.75rem; margin-block: -0.75rem; }
 @media (prefers-reduced-motion: no-preference) {
   .domanda[open] .risposta { animation: apri 0.3s ease-out; }
 }
@@ -1343,8 +1345,12 @@ time { font-variant-numeric: lining-nums tabular-nums; }
   border: 1px solid var(--riga); border-radius: var(--r3);
   background: var(--scheda); color: var(--testo); box-shadow: 0 24px 60px -18px rgb(30 20 10 / 0.45);
   font: 400 1.0625rem/1.55 var(--strumenti);
+  /* Mai più alto dello schermo: con lo zoom o in orizzontale scorre al suo interno, senza muovere la pagina dietro. */
+  max-height: calc(100svh - 2 * var(--s2) - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain;
 }
 .definizione::backdrop { background: rgb(0 0 0 / 0.12); }
+/* Il foglio sta nel capoverso della risposta, subito dopo la sua parola: le sue parti sono span, mostrate a blocchi. */
+.definizione-termine, .definizione-testo { display: block; }
 .definizione-termine { font: italic 400 1.6rem/1.2 var(--libro); margin-bottom: var(--s0); }
 .chiudi-definizione {
   display: block; margin: var(--s1) 0 0 auto; min-height: 2.75rem; padding: 0 0.9rem; border: 0; border-radius: 99px;
@@ -1363,7 +1369,9 @@ time { font-variant-numeric: lining-nums tabular-nums; }
 
 .glossario { display: grid; gap: 0 var(--s4); }
 @media (min-width: 56rem) { .glossario { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.glossario > div { display: grid; gap: 0.2rem; padding: var(--s1) 0; border-top: 1px solid var(--riga); }
+/* align-content: start, perché a due colonne la voce accanto a una più lunga non allarghi lo spazio fra parola e
+   definizione. */
+.glossario > div { display: grid; align-content: start; gap: 0.2rem; padding: var(--s1) 0; border-top: 1px solid var(--riga); }
 .glossario dt { font-size: 1.4rem; font-style: italic; }
 .glossario dd { margin: 0; font: 400 1rem/1.55 var(--strumenti); color: var(--testo-2); }
 

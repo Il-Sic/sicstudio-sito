@@ -219,12 +219,12 @@ chiede.it = "Perché Argo non risponde a tutto?"
 chiede.en = "Why doesn’t Argo answer everything?"
 risponde.it = '''
 <p>Argo risponde solo con quello che c’è nelle schede dell’Atlante, e sotto la risposta ti mostra la
-  scheda da cui viene. Se le schede non lo dicono, risponde «Non lo trovo nelle schede dell’Atlante.».</p>
+  scheda da cui viene. Se le schede non lo dicono, risponde «Non lo trovo nelle schede dell’Atlante».</p>
 <p>Su emergenze, salute, funghi e piante da mangiare, acqua da bere, sentieri e meteo non inventa niente:
   dà sempre la stessa risposta, e per le emergenze ti indica il 112.</p>'''
 risponde.en = '''
 <p>Argo answers only with what’s in the cards of the Atlas, and under the answer it shows you the card it
-  comes from. If the cards don’t say it, it answers “I can’t find it in the Atlas cards.”.</p>
+  comes from. If the cards don’t say it, it answers “I can’t find it in the Atlas cards.”</p>
 <p>On emergencies, health, mushrooms and plants to eat, drinking water, trails and weather it makes nothing
   up: it always gives the same answer, and for emergencies it points you to 112.</p>'''
 
@@ -293,12 +293,12 @@ risponde.it = '''
 <p>È il viaggio delle Argonautiche. Argo parte da Pagase, e ogni rotta completata la porta all’approdo
   dopo: Lemno, Cizico, le Simplegadi, la Colchide e, alla quinta rotta, il vello d’oro. Ogni approdo ha
   il suo episodio, con l’etichetta «Mito» e la fonte.</p>
-<p><a href="/argonauta/il-mito/">Leggi il mito di Argo</a></p>'''
+<p class="vai"><a href="/argonauta/il-mito/">Leggi il mito di Argo</a></p>'''
 risponde.en = '''
 <p>It’s the voyage of the Argonautica. Argo sets off from Pagasae, and every route you complete brings it to
   the next landfall: Lemnos, Cyzicus, the Clashing Rocks, Colchis and, at the fifth route, the Golden Fleece.
   Every landfall has its episode, with the label “Myth” and its source.</p>
-<p><a href="/en/argonauta/the-myth/">Read the myth of Argo</a></p>'''
+<p class="vai"><a href="/en/argonauta/the-myth/">Read the myth of Argo</a></p>'''
 
 [[gruppo.domanda]]
 chiede.it = "Come funzionano badge e livelli?"
@@ -327,10 +327,10 @@ chiede.it = "Come cancello i miei dati?"
 chiede.en = "How do I delete my data?"
 risponde.it = '''
 <p>«I dati sul dispositivo sono solo tuoi: per cancellarli basta togliere l'app.»</p>
-<p><a href="/argonauta/privacy/">Leggi l’informativa sulla privacy</a></p>'''
+<p class="vai"><a href="/argonauta/privacy/">Leggi l’informativa sulla privacy</a></p>'''
 risponde.en = '''
 <p>“The data on your device is yours alone: to delete it, just remove the app.”</p>
-<p><a href="/argonauta/privacy/#en">Read the privacy policy</a></p>'''
+<p class="vai"><a href="/argonauta/privacy/#en">Read the privacy policy</a></p>'''
 
 [[gruppo.domanda]]
 chiede.it = "L’app c’è in inglese?"
@@ -521,8 +521,10 @@ Nella pagina della rotta: la luce del giorno, la luna, l’ora d’arrivo con il
 vuol-dire.en = '''
 On the route page: daylight, the moon, your arrival time with the CAI’s
   walking time, and tips.'''
-cerca.it = 'Prima di partire'
-cerca.en = '\b[Bb]efore [Yy]ou [Ss]et [Oo]ff\b'
+# Solo il nome della sezione dell'app, come «Sicurezza»: la frase comune «Prima di partire chiedi…» del consiglio sui
+# sentieri non è la sezione, e la parola lì faceva pensare che l'app sappia se un sentiero è aperto.
+cerca.it = '«Prima di partire»'
+cerca.en = '\bBefore You Set Off\b'
 
 [[parole.voce]]
 parola.it = "Sicurezza"
