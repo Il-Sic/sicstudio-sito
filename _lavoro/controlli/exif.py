@@ -1,7 +1,13 @@
 """Nessuna immagine del sito porta metadati: niente EXIF (con l'eventuale GPS), XMP o IPTC nei JPEG, niente blocchi
 eXIf, iTXt o tEXt nei PNG, niente blocchi EXIF o XMP nei WebP, niente elementi Exif o XMP negli AVIF (dal 7/11, con le
 copie delle schermate). Le foto di Sic vanno rifatte da zero (qlmanage, poi sips) prima di entrare nel sito; le copie
-delle schermate le fa strumenti/schermate.py, che non scrive metadati."""
+delle schermate le fa strumenti/schermate.py, che non scrive metadati.
+
+Dal 14/11 anche le credenziali del contenuto (C2PA: un manifesto firmato con il certificato, il programma che ha fatto
+il file, identificativi e orari), che hanno tutti i file del kit del logo: nei JPEG stanno nei segmenti APP11, nei PNG
+nel blocco caBX, negli altri formati in scatole loro, e si riconoscono dalle etichette. E gli SVG: niente <metadata>,
+RDF o XMP, niente attributi di Inkscape, niente commento di Illustrator, niente percorsi del Mac con il nome
+dell'utente. Le copie che sono nel sito ne sono già prive; una copia nuova dal kit va pulita prima di entrare."""
 import pathlib, struct, sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from comune import file_del_sito, nome, scatola, scatole
@@ -22,6 +28,8 @@ def jpeg(dati):
             trovati.append("XMP")
         elif marca == 0xED:
             trovati.append("IPTC")
+        elif marca == 0xEB:  # APP11: le scatole JUMBF, dove stanno le credenziali C2PA
+            trovati.append("APP11 (C2PA)")
         i += 2 + lung
     return trovati
 
@@ -33,6 +41,8 @@ def png(dati):
         lung, tipo = struct.unpack(">I4s", dati[i:i + 8])
         if tipo in (b"eXIf", b"iTXt", b"tEXt", b"zTXt"):
             trovati.append(tipo.decode())
+        elif tipo == b"caBX":  # le credenziali C2PA
+            trovati.append("caBX (C2PA)")
         i += 12 + lung
     return trovati
 
@@ -70,11 +80,30 @@ def avif(dati):
     return trovati
 
 
+# Le etichette di un manifesto C2PA, in qualunque formato.
+C2PA = (b"urn:c2pa:", b"c2pa.claim", b"c2pa.signature")
+# Nel testo di un SVG: il segno e che cosa è.
+SVG = (("<metadata", "<metadata>"), ("c2pa", "C2PA"), ("<rdf:", "RDF"), ("adobe:ns:meta", "XMP"),
+       ("sodipodi:", "Inkscape"), ("inkscape:", "Inkscape"), ("Adobe Illustrator", "Illustrator"),
+       ("/Users/", "un percorso del Mac"))
+
+
+def svg(dati):
+    testo = dati.decode("utf-8", "replace")
+    trovati = []
+    for segno, cosa in SVG:
+        if segno in testo and cosa not in trovati:
+            trovati.append(cosa)
+    return trovati
+
+
 def main():
     problemi, visti = 0, {}
-    for p in file_del_sito(".jpg", ".jpeg", ".png", ".webp", ".avif"):
+    for p in file_del_sito(".jpg", ".jpeg", ".png", ".webp", ".avif", ".svg"):
         dati = p.read_bytes()
-        if dati[:2] == b"\xff\xd8":
+        if p.suffix.lower() == ".svg":
+            formato, trovati = "SVG", svg(dati)
+        elif dati[:2] == b"\xff\xd8":
             formato, trovati = "JPEG", jpeg(dati)
         elif dati[:8] == b"\x89PNG\r\n\x1a\n":
             formato, trovati = "PNG", png(dati)
@@ -84,6 +113,8 @@ def main():
             formato, trovati = "AVIF", avif(dati)
         else:
             formato, trovati = "?", ["formato che non riconosco"]
+        if formato != "SVG" and not any("C2PA" in t for t in trovati) and any(e in dati for e in C2PA):
+            trovati.append("C2PA")
         visti[formato] = visti.get(formato, 0) + 1
         if trovati:
             print(f"METADATI {nome(p)}: {', '.join(trovati)}")
